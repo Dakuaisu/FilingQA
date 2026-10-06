@@ -3303,3 +3303,37 @@ so no number on them is a final result.
 Rejected: label the model-free retrieval runs `real`, on the ground that no
 development backend is involved. A `real` label would present a measurement on
 an unreviewed, unfrozen item set as a final result.
+
+## DEC-003 Contract re-approved by the owner
+- Decided by: owner
+- Status: OWNER DECISION (agent-bridge approve)
+
+Changed since the last approval: bridge.toml.
+
+- docs/PRD.md: sha256 d5d9d46da95210afe88dc3eec8fce4cabdabbb18c290775e5495bd4e03baf1c3
+- CLAUDE.md: sha256 19198428f4c57c31243bb200b057163be53e40c920dbeac345048648a38229ae
+- bridge.toml: sha256 f5aafadbe1faa6f83ba7b02f6d5865ad2951f47bc3aaae8c0f7aada905bfd698
+
+## DEC-004 Phase 1 — Ingestion, parsing, XBRL (20–26h) complete before agent-bridge
+- Decided by: owner
+- Status: OWNER DECISION (agent-bridge approve --done)
+
+Recorded by agent-bridge at 2026-10-06T15:45:22+05:30. The owner states this phase was complete before the project moved to agent-bridge; the supervisor has not verified it under agent-bridge.
+
+Evidence given by the owner: README status: Phases 1-3 are complete. WORKLOG: Phase 1 exit accepted at 8f9faed; 2026-10-01 OWNER DECISION: Phase 2 exit met on the claude_cli dev backend (dev run); 2026-10-01 Phase 3 exit statement.
+
+## DEC-005 Phase 2 — Chunking, indexing, naive baseline (12–16h) complete before agent-bridge
+- Decided by: owner
+- Status: OWNER DECISION (agent-bridge approve --done)
+
+Recorded by agent-bridge at 2026-10-06T15:45:22+05:30. The owner states this phase was complete before the project moved to agent-bridge; the supervisor has not verified it under agent-bridge.
+
+Evidence given by the owner: README status: Phases 1-3 are complete. WORKLOG: Phase 1 exit accepted at 8f9faed; 2026-10-01 OWNER DECISION: Phase 2 exit met on the claude_cli dev backend (dev run); 2026-10-01 Phase 3 exit statement.
+
+## DEC-006 Phase 3 — Eval harness ⭐ (32–42h — plan around this, don't squeeze it) complete before agent-bridge
+- Decided by: owner
+- Status: OWNER DECISION (agent-bridge approve --done)
+
+Recorded by agent-bridge at 2026-10-06T15:45:22+05:30. The owner states this phase was complete before the project moved to agent-bridge; the supervisor has not verified it under agent-bridge.
+
+Evidence given by the owner: README status: Phases 1-3 are complete. WORKLOG: Phase 1 exit accepted at 8f9faed; 2026-10-01 OWNER DECISION: Phase 2 exit met on the claude_cli dev backend (dev run); 2026-10-01 Phase 3 exit statement.
