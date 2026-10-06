@@ -3274,3 +3274,13 @@ the 50 fallbacks were single-query items that this difference does not explain.
 A further dev-backend run yields no baseline and no gated number. The fallback
 flag is the mechanism that surfaces this, and it did. Diagnosing F-114 is on no
 PRD 14 checklist; the project is at the owner-blocked boundary.
+
+## DEC-001 Existing contract adopted by the owner
+- Decided by: owner
+- Status: OWNER DECISION (agent-bridge approve)
+
+Recorded by agent-bridge at 2026-10-06T15:03:12+05:30.
+
+- docs/PRD.md: sha256 d5d9d46da95210afe88dc3eec8fce4cabdabbb18c290775e5495bd4e03baf1c3
+- CLAUDE.md: sha256 19198428f4c57c31243bb200b057163be53e40c920dbeac345048648a38229ae
+- bridge.toml: sha256 927cf6d2f2f6a5f3e4c626dccc2b9b93c28dec7022576773e2aa93aabd27d465
