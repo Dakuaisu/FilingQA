@@ -3284,3 +3284,22 @@ Recorded by agent-bridge at 2026-10-06T15:03:12+05:30.
 - docs/PRD.md: sha256 d5d9d46da95210afe88dc3eec8fce4cabdabbb18c290775e5495bd4e03baf1c3
 - CLAUDE.md: sha256 19198428f4c57c31243bb200b057163be53e40c920dbeac345048648a38229ae
 - bridge.toml: sha256 927cf6d2f2f6a5f3e4c626dccc2b9b93c28dec7022576773e2aa93aabd27d465
+
+## DEC-002 Model-free retrieval runs are `development` in the results register
+- Decided by: supervisor
+- Status: AUTONOMOUS DECISION - owner to review
+
+`docs/RESULTS.md` labels every row `development`. Eval runs are development by
+the project's own rule (OWNER DECISION - Max subscription as dev generator,
+2026-10-01; checked in code by `api/metrics.py` `is_development`): their meta or
+report says `development_run` or a development backend (`claude_cli`). The
+supervisor's instruction cited the HTTP API entry; that entry only names the
+`development` response field, so the citation here is the defining entry. The model-free
+retrieval runs (`*.retrieval.json`) make no model call, but they are labelled
+`development` too, with the note "model-free, unreviewed candidates, not gated":
+the candidates are unreviewed (F-104) and the golden set is not frozen (F-106),
+so no number on them is a final result.
+
+Rejected: label the model-free retrieval runs `real`, on the ground that no
+development backend is involved. A `real` label would present a measurement on
+an unreviewed, unfrozen item set as a final result.

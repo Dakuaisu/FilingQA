@@ -5838,3 +5838,32 @@ Dashboard, README, `/metrics`: `eval/dashboard.yaml` unchanged
 development runs by id and files only. No dev-run figure in the README metrics
 table. `docs/OWNER_REVIEW.md` boxes left to the owner; this entry is the record
 of completion.
+
+## 2026-10-06 — Results register `docs/RESULTS.md` (bridge contract); DEC-001, DEC-002
+
+- **DEC-001** (recorded by agent-bridge): `docs/PRD.md`, `CLAUDE.md` and
+  `bridge.toml` hashes checked with `shasum -a 256`, all three match; committed
+  as the bridge wrote them (`50c46d7`).
+- **`docs/RESULTS.md`**, 201 rows, every one `development`: the four model-free
+  retrieval runs `/metrics` publishes (7fa009acac95, the README and dashboard
+  run; 5b3c3ac13e5e; 188304ccaf94; 01019ff395ec), hybrid Sufficiency@10 per
+  source and aggregate, 4 rows each; the five full eval runs (19693d4aa874,
+  f2e616e0a7d7, 63cf35c328e2, a4e39a65c2c8, 7a079fe7abfe), 37 rows each: the
+  nine gated metrics of `eval/thresholds.yaml` times four scopes, plus
+  `natural_phrasing_gap` on the aggregate. 36 rows hold a number; the rest hold
+  the report's string verbatim (`pending NLI threshold (F-125)`,
+  `n/a: no claims`, `cost n/a (dev backend)`), `null`, or `absent`.
+- **How the values were copied:** a throwaway script outside the repository
+  (`/tmp/results_gen/gen.py`, not committed) read each committed run file
+  through the fields `eval/compare.py` reads and printed the rows; the commit
+  column is `git log --diff-filter=A --format=%h` of the run file. Checked
+  against a separate `jq` read of the Sufficiency@10 fields of all nine runs:
+  identical. No run, no recomputation. Thresholds are not restated (CLAUDE.md
+  rule 4).
+- **DEC-002** (supervisor): model-free retrieval runs are `development`. The
+  instruction cited the TRADEOFFS HTTP API entry for the development rule; that
+  entry only names the response field, so DEC-002 cites the OWNER DECISION on
+  the dev generator (2026-10-01) and `api/metrics.is_development`.
+- `make test`: 505 passed, 3 snapshots passed, 12 e2e passed; `make lint`: All
+  checks passed. README, dashboard, thresholds, run files, PRD, CLAUDE.md and
+  bridge.toml untouched.
