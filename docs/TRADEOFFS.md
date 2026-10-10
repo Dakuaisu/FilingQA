@@ -3337,3 +3337,15 @@ Evidence given by the owner: README status: Phases 1-3 are complete. WORKLOG: Ph
 Recorded by agent-bridge at 2026-10-06T15:45:22+05:30. The owner states this phase was complete before the project moved to agent-bridge; the supervisor has not verified it under agent-bridge.
 
 Evidence given by the owner: README status: Phases 1-3 are complete. WORKLOG: Phase 1 exit accepted at 8f9faed; 2026-10-01 OWNER DECISION: Phase 2 exit met on the claude_cli dev backend (dev run); 2026-10-01 Phase 3 exit statement.
+
+## DEC-007 Engines changed by the owner
+- Decided by: owner
+- Status: OWNER DECISION (agent-bridge engines)
+
+Engines: planner: claude-code claude-fable-5-1 -> opencode anthropic/claude-fable-5-1; supervisor: claude-code claude-fable-5-1 -> opencode anthropic/claude-fable-5-1; builder: claude-code claude-opus-5-5 -> opencode anthropic/claude-opus-5-5.
+
+Changed since the last approval: bridge.toml.
+
+- docs/PRD.md: sha256 d5d9d46da95210afe88dc3eec8fce4cabdabbb18c290775e5495bd4e03baf1c3
+- CLAUDE.md: sha256 19198428f4c57c31243bb200b057163be53e40c920dbeac345048648a38229ae
+- bridge.toml: sha256 ee4310ef2fb27b7577b97bbc108479be36034bd18fa3214fc97bba8f48184e7c
