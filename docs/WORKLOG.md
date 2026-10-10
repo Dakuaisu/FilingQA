@@ -5867,3 +5867,17 @@ of completion.
 - `make test`: 505 passed, 3 snapshots passed, 12 e2e passed; `make lint`: All
   checks passed. README, dashboard, thresholds, run files, PRD, CLAUDE.md and
   bridge.toml untouched.
+
+## 2026-10-10 — DEC-007 (engines changed by the owner) committed
+
+- Decided by: supervisor; Status: AUTONOMOUS DECISION - owner to review. A
+  records decision, not a new DEC: the owner's engine change and the DEC-007
+  entry agent-bridge wrote were left uncommitted, and the supervisor directed
+  that they be committed together, following `50c46d7` (DEC-001) and `99ab817`
+  (DEC-003).
+- Checked before committing: the only uncommitted paths were `bridge.toml`
+  and `docs/TRADEOFFS.md`; the ledger diff was only the DEC-007 block; the
+  `docs/PRD.md`, `CLAUDE.md` and `bridge.toml` hashes (`shasum -a 256`) all
+  match DEC-007. `bridge.toml` moves planner, supervisor and builder to
+  opencode with `[opencode] port = 4100`. Committed as the bridge wrote them
+  (`af22218`); neither file modified.
