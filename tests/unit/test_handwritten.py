@@ -6,7 +6,7 @@ import json
 
 from api.config import REPO_ROOT, eval_handwritten
 from eval.generate.handwritten import check
-from eval.generate.schema import FIELDS
+from eval.generate.schema import FIELDS, validate_item
 
 CHUNK = "0000909832-25-000015:68.1:68.1"  # a real chunk (tests/fixtures/seed_chunks.json)
 TARGETS = {"unanswerable": 1, "adversarial": 1, "natural_phrasing": 1, "comparison": 1}
@@ -96,16 +96,25 @@ def test_near_duplicates_of_candidates_and_within_the_file():
     assert "hw_n_0001: near-duplicate of an existing candidate" in text
 
 
-def test_templates_hold_no_items_and_match_the_schema():
+def test_populated_items_match_targets_and_templates():
     targets = eval_handwritten()["targets"]
+    item_ids = set()
     for t in targets:
         doc = json.loads((REPO_ROOT / f"eval/handwritten/templates/{t}.json").read_text())
         assert doc["target_count"] == targets[t] and tuple(doc["item"]) == FIELDS
         assert doc["item"]["source"] == "handwritten" and doc["item"]["question_type"] == t
-        assert (REPO_ROOT / f"eval/handwritten/{t}.jsonl").read_text() == ""
-    assert targets == {
-        "unanswerable": 50,
-        "adversarial": 20,
-        "natural_phrasing": 30,
-        "comparison": 20,
-    }
+        rows = [
+            json.loads(line)
+            for line in (REPO_ROOT / f"eval/handwritten/{t}.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+        ]
+        assert len(rows) == targets[t]
+        assert all(
+            tuple(row) == FIELDS and row["question_type"] == t and validate_item(row) == []
+            for row in rows
+        )
+        ids = [row["item_id"] for row in rows]
+        assert len(ids) == len(set(ids))
+        assert item_ids.isdisjoint(ids)
+        item_ids.update(ids)
