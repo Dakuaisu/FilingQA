@@ -1102,3 +1102,23 @@ This information is found in the consolidated balance sheet in Part I, Item 1: F
 
 For comparison, this represented a decrease from the December 31, 2023 balance of $31,539 million.
 ```
+
+<!-- replaces seed_0020 (excluded: item rejected in review: the reference uses the December 2025 comparative ($20,255 million), the question asks for June 2026 ($19,496 million)); drawn with seed 20261005 -->
+
+## seed_0028 (llm_seeded, table)
+
+- Question: What was NVIDIA Corp's revenue for the three months ended Oct 27, 2024 (Q3 FY2025)?
+- Reference: $35,082
+- Answer:
+
+```
+# NVIDIA Corp Revenue for Q3 FY2025
+
+Based on the SEC filing excerpts provided, **NVIDIA Corp's total revenue for the three months ended October 27, 2024 (Q3 FY2025) was $35,082 million ($35.082 billion)**.
+
+This comprised:
+- **Compute & Networking**: $31,036 million
+- **Graphics**: $4,046 million
+
+This represented a **94% increase** compared to the same quarter in the prior year (three months ended October 29, 2023: $18,120 million).
+```

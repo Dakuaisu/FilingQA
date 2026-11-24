@@ -11,7 +11,7 @@ from eval.judge import judge as judge_mod
 from eval.judge.agreement import cohens_kappa
 from eval.judge.judge import JudgeParseError, family, parse
 from eval.judge.rubrics import RUBRIC, render
-from scripts.judge import draw
+from scripts.judge import active, draw, replacement
 
 
 def test_kappa_on_synthetic_label_pairs():
@@ -66,3 +66,18 @@ def test_label_draw_is_seeded_and_proportional_by_source():
     assert a == draw(list(reversed(results)), items, 7, 50)
     assert sum(i.startswith("x") for i in a) == 35 and sum(i.startswith("s") for i in a) == 15
     assert a != draw(results, items, 8, 50)
+
+
+def test_replacement_keeps_the_source_and_skips_drawn_and_rejected_items():
+    sources = {"s1": "llm_seeded", "s2": "llm_seeded", "s3": "llm_seeded", "x1": "xbrl_auto"}
+    items = {i: {"source": s} for i, s in sources.items()}
+    results = [{"item_id": i} for i in items]
+    for seed in range(20):
+        assert replacement(results, items, {"s1"}, {"s2"}, "llm_seeded", seed) == "s3"
+    assert replacement(results, items, set(), set(), "llm_seeded", 7) == replacement(
+        results, items, set(), set(), "llm_seeded", 7
+    )
+    with pytest.raises(ValueError):
+        replacement(results, items, {"s1", "s3"}, {"s2"}, "llm_seeded", 1)
+    entries = [{"item_id": "a", "excluded": "reference wrong"}, {"item_id": "b"}]
+    assert [e["item_id"] for e in active(entries)] == ["b"]

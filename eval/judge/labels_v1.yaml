@@ -11,7 +11,9 @@ labels:
 - item_id: seed_0015
   label: 5
 - item_id: seed_0020
-  label: null  # Withheld: reference uses the December 2025 comparative, not June 2026.
+  label: null
+  excluded: 'item rejected in review: the reference uses the December 2025 comparative
+    ($20,255 million), the question asks for June 2026 ($19,496 million)'
 - item_id: seed_0036
   label: 5
 - item_id: seed_0037
@@ -102,3 +104,7 @@ labels:
   label: 1
 - item_id: xbrl_0153
   label: 5
+- item_id: seed_0028
+  label: null
+  replaces: seed_0020
+  draw_seed: 20261005
