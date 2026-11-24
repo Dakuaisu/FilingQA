@@ -3349,3 +3349,34 @@ Changed since the last approval: bridge.toml.
 - docs/PRD.md: sha256 d5d9d46da95210afe88dc3eec8fce4cabdabbb18c290775e5495bd4e03baf1c3
 - CLAUDE.md: sha256 19198428f4c57c31243bb200b057163be53e40c920dbeac345048648a38229ae
 - bridge.toml: sha256 ee4310ef2fb27b7577b97bbc108479be36034bd18fa3214fc97bba8f48184e7c
+
+## 2026-11-25 — Review rules: currency, unit scale, judge pair replacement
+
+- Decided by: owner
+- Status: OWNER DECISION
+
+**Currency.** A cited chunk from a US filer's financial statements that states
+"in millions" but not "USD" or "dollars" is sufficient evidence for a dollar
+figure. The filers report in US dollars and the question names the filer, so
+requiring the currency word in the chunk would reject correct evidence for a
+caption convention (mostly Exxon Mobil's). Applied in review to `cmp_0036`,
+`cmp_0040`, `xbrl_0145`, `xbrl_0146`, `xbrl_0158`, `xbrl_0160` and `seed_0047`,
+whose only open point was the currency. `cmp_0040` and `xbrl_0158` ask for
+"total stockholders' equity", which is XBRL `StockholdersEquity` (ExxonMobil's
+share, excluding noncontrolling interests); their references are that line.
+
+**Unit scale.** A review decision (`accept` or `edit_evidence`) may carry
+`unit_scale` (`thousands` | `millions` | `billions`) for an item tagged
+`unit_scale_unknown`. The overlay replaces that tag with `unit_scale_<scale>`;
+the candidates file is not edited. The reviewer sets it only after checking the
+scale of the specific row the question asks about, not the table caption
+(F-90: a caption scale does not cover per-share, share-count or percent rows).
+Without it, `eval/metrics/numeric.py` excludes the item from numeric accuracy.
+
+**Judge pair replacement.** A judge-validation pair whose item was rejected in
+review is excluded (kept in `eval/judge/labels_v1.yaml` with its reason) and
+replaced by one same-source pair drawn with a recorded seed from items neither
+drawn nor rejected (`python -m scripts.judge replace`). This keeps PRD 11.3's
+50 labelled pairs and the source proportions. `seed_0020` (reference used the
+December 2025 comparative for a June 2026 question) was replaced by `seed_0028`,
+seed 20261005; `seed_0028` waits on the owner's label.

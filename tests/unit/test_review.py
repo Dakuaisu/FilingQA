@@ -64,3 +64,29 @@ def test_sheet_ids_are_read_from_headings():
         "# Sheet\n\n## xbrl_0002\n\n### chunk\n\n## seed_0001 (table, x)\n\n## xbrl_0002\n## nope\n"
     )
     assert sheet_item_ids(text, set(BY_ID)) == ["xbrl_0002", "seed_0001"]
+
+
+def test_unit_scale_replaces_only_the_unknown_tag_and_only_on_accepts():
+    seeded = {
+        "item_id": "seed_0002", "gold_evidence_sets": [[CHUNK]], "gold_accessions": [ACC],
+        "reviewed_by_human": False, "tags": ["PFE", "kind:factual", "unit_scale_unknown"],
+    }  # fmt: skip
+    items = {**BY_ID, "seed_0002": seeded}
+    d = rec("seed_0002", "accept")
+    d["unit_scale"] = "millions"
+    out, changes = effective([seeded], [d])
+    assert out[0]["tags"] == ["PFE", "kind:factual", "unit_scale_millions"]
+    assert seeded["tags"][-1] == "unit_scale_unknown"
+    assert changes[-1] == "seed_0002: unit_scale_unknown -> unit_scale_millions (owner)"
+
+    ws = worksheet("s.md", ["seed_0002", "xbrl_0001"])
+    ws["decisions"][0].update(decision="accept", unit_scale="millions")
+    recs, errors = records(ws, "owner", "t", items, {CHUNK})
+    assert errors == [] and recs[0]["unit_scale"] == "millions"
+    ws["decisions"][0]["unit_scale"] = "lakhs"
+    assert "unit_scale 'lakhs'" in records(ws, "owner", "t", items, {CHUNK})[1][0]
+    ws["decisions"][0].update(decision="reject", unit_scale="millions")
+    assert "only goes with accept" in records(ws, "owner", "t", items, {CHUNK})[1][0]
+    ws["decisions"][0]["decision"] = None
+    ws["decisions"][1].update(decision="accept", unit_scale="millions")
+    assert "item has none" in records(ws, "owner", "t", items, {CHUNK})[1][0]

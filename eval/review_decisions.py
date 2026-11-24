@@ -11,6 +11,8 @@ import copy
 import re
 
 DECISIONS = ("accept", "reject", "edit_evidence")
+UNIT_SCALES = ("thousands", "millions", "billions")
+UNKNOWN_SCALE = "unit_scale_unknown"
 SHEET_ITEM = re.compile(r"^## (\S+)", re.M)
 
 
@@ -30,7 +32,9 @@ def worksheet(sheet: str, item_ids: list[str]) -> dict:
         "instructions": (
             "For each item set decision to accept, reject or edit_evidence. For edit_evidence "
             "give evidence_sets as a list of lists of chunk ids (every alternative sufficient "
-            "set, F-84). Leave decision null to skip. Import with "
+            "set, F-84). For an item tagged unit_scale_unknown, an accept or edit_evidence may "
+            "add unit_scale (thousands, millions or billions), checked against the row the "
+            "question asks about, not the caption (F-90). Leave decision null to skip. Import with "
             "`python -m scripts.review import <this file> --reviewer <name>`."
         ),
         "decisions": [
@@ -55,6 +59,14 @@ def check_entry(entry: dict, items: dict, known_chunks: set[str]) -> list[str]:
                        for s in sets for c in s if c not in known_chunks]  # fmt: skip
     elif sets:
         errors.append(f"{iid}: evidence_sets only go with edit_evidence")
+    scale = entry.get("unit_scale")
+    if scale is not None:
+        if d not in ("accept", "edit_evidence"):
+            errors.append(f"{iid}: unit_scale only goes with accept or edit_evidence")
+        elif scale not in UNIT_SCALES:
+            errors.append(f"{iid}: unit_scale {scale!r} not in {UNIT_SCALES}")
+        elif iid in items and UNKNOWN_SCALE not in items[iid].get("tags", []):
+            errors.append(f"{iid}: unit_scale only replaces {UNKNOWN_SCALE}; item has none")
     return errors
 
 
@@ -68,10 +80,12 @@ def records(sheet: dict, reviewer: str, decided_at: str, items: dict, known_chun
         if e.get("decision") is None:
             continue
         errors += check_entry(e, items, known_chunks)
-        out.append({"item_id": e["item_id"], "decision": e["decision"],
-                    "evidence_sets": e.get("evidence_sets"), "note": e.get("note", ""),
-                    "reviewer": reviewer, "decided_at": decided_at,
-                    "sheet": sheet["sheet"]})  # fmt: skip
+        rec = {"item_id": e["item_id"], "decision": e["decision"],
+               "evidence_sets": e.get("evidence_sets"), "note": e.get("note", ""),
+               "reviewer": reviewer, "decided_at": decided_at, "sheet": sheet["sheet"]}  # fmt: skip
+        if e.get("unit_scale") is not None:
+            rec["unit_scale"] = e["unit_scale"]
+        out.append(rec)
     return ([], errors) if errors else (out, [])
 
 
@@ -100,5 +114,9 @@ def effective(items: list[dict], decisions: list[dict]) -> tuple[list[dict], lis
                            f"{new['gold_evidence_sets']} ({d['reviewer']})")  # fmt: skip
         else:
             changes.append(f"{it['item_id']}: accepted ({d['reviewer']})")
+        if d.get("unit_scale"):
+            tag = f"unit_scale_{d['unit_scale']}"
+            new["tags"] = [tag if t == UNKNOWN_SCALE else t for t in new["tags"]]
+            changes.append(f"{it['item_id']}: {UNKNOWN_SCALE} -> {tag} ({d['reviewer']})")
         out.append(new)
     return out, changes
