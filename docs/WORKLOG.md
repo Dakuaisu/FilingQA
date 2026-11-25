@@ -5881,3 +5881,43 @@ of completion.
   match DEC-007. `bridge.toml` moves planner, supervisor and builder to
   opencode with `[opencode] port = 4100`. Committed as the bridge wrote them
   (`af22218`); neither file modified.
+
+## 2026-11-22 - Isolated cache-only development rebuild (completed)
+
+New Docker Desktop container `filingqa-rebuild-_5s7eu2d`, volume
+`filingqa-rebuild-_5s7eu2d-data`, loopback port 51835. PG18 image digest
+`sha256:38681dc6eaf55308e2a4c6de392d131652dcfac70e1263e35cd9b5ea3fe39782`.
+Private run directory: `/var/folders/m7/n050zbyj61zf21wxj8z41plm0000gn/T/opencode/filingqa-rebuild-_5s7eu2d`.
+Background runner: `rebuild.py` in that directory, PID 16268, log `rebuild.log`.
+The runner logged `STAGE COMPLETE final counts`: 96 filings, 90 parsed,
+6 quarantined, and all 22,354 chunks embedded, with zero quarantine leaks in
+the read-only check. The database container later reportedly stopped with exit
+255 (`OOMKilled=false`), not the rebuild job's exit; retained Docker events
+did not independently confirm the historical exit.
+The read-only verification recorded a reconciled PASS against the rebuild:
+240 fact-ID references required mapping (99 absent IDs, 141 collisions; F-78).
+`scratch/rebuild-overlay/VERIFY.md` records 27 passing tests and zero verification
+failures or missing expected errors. The scratch overlay does not authenticate
+the original snapshot or its retrieval behavior. Database-backed development
+runs use the rebuild from 2026-11-25, as recorded by `4b5036b69ca0`.
+
+## 2026-11-25/26 - Golden v1 and evaluation follow-through
+
+- `fe02fa1` — Ignored `scratch/` in Git and excluded it from lint discovery.
+- `0b2e733` — Added the OpenCode CLI judge backend and selected `openai/gpt-6.2-sol`, a different family from the Claude generator.
+- `0a73914` — Recorded judge verdicts and the replacement label for `seed_0028` after excluding `seed_0020`.
+- `328e3ec` — Recorded the owner review worksheets and decisions: 136 unique outcomes, 120 accepts, 11 rejects, and 5 evidence edits.
+- `db3235a` — Set the NLI threshold to `0.0010178742231801152` (AUC 0.766) and saved the rescore of `a4e39a65c2c8`.
+- `ecf7543` — Recorded the owner decisions on the nearly open NLI gate and the different-family judge (κ 0.818 on 50 pairs).
+- `48d3ebe` — Updated the findings register to 78 open and 66 resolved; independently handwritten provenance remained open.
+- `12ad7de` — Added the golden freeze tool with dry-run default and `--require-decision`; this commit did not write the freeze.
+- `e91bcbe` — Froze `golden_v1` and its manifest: 392 items (200 XBRL-generated, 72 seeded, 120 model-drafted handwritten), including 147 undecided XBRL items.
+- `2097949` — Saved local F-112 run `4b5036b69ca0`: five floors from 0.10 to 0.50, with 29 of 175 reranker timeouts.
+- `c709220` — Set the calibrated floor to 0.50: 3 of 50 unanswerable lists emptied, with no newly lost gold or empty lists among 125 answerable items.
+- `a6a0ae5` — Added `--dataset PATH` for a frozen JSONL, recording its path and SHA-256 and rejecting changed inputs on resume.
+- `5b6b55f` — Added judging over saved answers and wired the normalized mean into comparison only for complete eligible slices.
+- `5a33ca6` — Documented mean judge score divided by 5 as an autonomous decision for owner review; the share scoring at least 4 is descriptive.
+- `b14c203` — Added a portable CPU retrieval ablation and a verifier for its saved artifact.
+- `8481fb4` — Saved CPU ablation `373f11f1949c`; reviewed aggregate equal-weight hybrid at depth 50 had 79 sufficient of 125 scored at cutoff 10.
+- `afe2b54` — Appended 120 count rows (`R-202`–`R-321`) to the results register without recomputing rates.
+- `8ddf786` — Added PRD 11.7 XBRL-off re-verification of stored claims, with corpus identity checks and no model calls; no ablation result was added.
