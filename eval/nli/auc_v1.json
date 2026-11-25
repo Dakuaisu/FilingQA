@@ -1,0 +1,411 @@
+{
+ "run_id": "a4e39a65c2c8",
+ "seed": 20261006,
+ "nli_revision": "6c749ce3425cd33b46d187e45b92bbf96ee12ec7",
+ "auc": 0.7662337662337663,
+ "auc_min": 0.75,
+ "nli_kept": true,
+ "threshold_youden": 0.0010178742231801152,
+ "pairs": [
+  {
+   "pair": "p01",
+   "item_id": "seed_0070",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000078003-24-000039:239.0:246.0",
+   "claim": "Pfizer characterizes the trend in formulary placement of its branded products by managed care organizations as increasingly being placed on higher tiers or in non-preferred status.",
+   "supports": true,
+   "entail": 0.009317627176642418
+  },
+  {
+   "pair": "p02",
+   "item_id": "seed_0051",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000320193-26-000013:270.0:272.0",
+   "claim": "Apple is currently subject to a court order in the U.S. preventing it from imposing any commission or fee on certain purchases that consumers make.",
+   "supports": true,
+   "entail": 0.0012144544161856174
+  },
+  {
+   "pair": "p03",
+   "item_id": "seed_0081",
+   "claim_id": "3",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000034088-23-000056:132.0:133.0",
+   "claim": "Earnings excluding Identified Items is not meant to be viewed in isolation or as a substitute for net income (loss) attributable to ExxonMobil as prepared in accordance with U.S. GAAP.",
+   "supports": true,
+   "entail": 0.008312624879181385
+  },
+  {
+   "pair": "p04",
+   "item_id": "seed_0059",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000909832-23-000065:143.0:146.0",
+   "claim": "In the Yesenia Murillo matter, Costco Wholesale Corporation is named as an alleged joint employer.",
+   "supports": true,
+   "entail": 0.021607812494039536
+  },
+  {
+   "pair": "p05",
+   "item_id": "seed_0083",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000034088-26-000067:231.0:253.0",
+   "claim": "Exxon Mobil Corporation identifies the ability to maintain near-term cost reductions as ongoing efficiencies without impairing competitive positioning as a risk factor in its Q1 FY2026 10-Q.",
+   "supports": true,
+   "entail": 0.994872510433197
+  },
+  {
+   "pair": "p06",
+   "item_id": "seed_0071",
+   "claim_id": "2",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000078003-24-000039:743.0:746.0",
+   "claim": "These charges primarily represented product liability and other legal expenses related to products discontinued and/or divested by Pfizer.",
+   "supports": true,
+   "entail": 0.00792761892080307
+  },
+  {
+   "pair": "p07",
+   "item_id": "seed_0054",
+   "claim_id": "6",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-25-000268:656.0:664.0",
+   "claim": "The market multiplier approach utilized various market multiples, primarily pricing multiples, from comparable publicly-traded companies in industries similar to the reporting unit, with a control premium factored in based on observed comparable premiums for change-in-control transactions for financial institutions.",
+   "supports": true,
+   "entail": 0.0010178742231801152
+  },
+  {
+   "pair": "p08",
+   "item_id": "seed_0075",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000027419-24-000032:392.0:395.0",
+   "claim": "Management characterizes the risk of inaccurate self-insurance liability estimates by stating that liabilities could be significantly affected if future occurrences or loss developments differ from the assumptions used in their estimates.",
+   "supports": true,
+   "entail": 0.00038358100573532283
+  },
+  {
+   "pair": "p09",
+   "item_id": "seed_0056",
+   "claim_id": "2",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-25-000200:433.0:438.0",
+   "claim": "The deterioration in commercial credit quality was primarily driven by commercial real estate due to the sustained high interest rate environment.",
+   "supports": true,
+   "entail": 0.003843440907076001
+  },
+  {
+   "pair": "p10",
+   "item_id": "seed_0072",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000078003-26-000026:511.0:512.0",
+   "claim": "Pfizer characterizes patent litigation settlements and judgments as potentially having a material adverse effect on its revenues.",
+   "supports": true,
+   "entail": 0.9953418970108032
+  },
+  {
+   "pair": "p11",
+   "item_id": "seed_0079",
+   "claim_id": "2",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000034088-23-000056:75.0:77.0",
+   "claim": "The company identifies specific examples of political and regulatory impacts, including forced divestiture of assets, restrictions on production, imports and exports, price controls, tax increases and retroactive tax claims, expropriation of property, cancellation of contract rights, sanctions and environmental regulations.",
+   "supports": true,
+   "entail": 0.015424945391714573
+  },
+  {
+   "pair": "p12",
+   "item_id": "seed_0081",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000034088-23-000056:132.0:133.0",
+   "claim": "Management uses earnings excluding Identified Items to improve comparability of the underlying business across multiple periods by isolating and removing significant non-operational events from business results.",
+   "supports": true,
+   "entail": 0.018396299332380295
+  },
+  {
+   "pair": "p13",
+   "item_id": "seed_0073",
+   "claim_id": "4",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000078003-26-000095:150.0:154.0",
+   "claim": "The dividend income was recorded in Other (income)/deductions\u2014net.",
+   "supports": false,
+   "entail": 0.005593436770141125
+  },
+  {
+   "pair": "p14",
+   "item_id": "seed_0049",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000320193-24-000069:105.0:112.0",
+   "claim": "As of March 30, 2024, two vendors each individually represented 10% or more of total vendor non-trade receivables, accounting for 47% and 19%.",
+   "supports": true,
+   "entail": 0.012172657996416092
+  },
+  {
+   "pair": "p15",
+   "item_id": "seed_0052",
+   "claim_id": "claim_1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-24-000122:1193.0:1195.0",
+   "claim": "Bank of America applies less reliance to broker quotes in less active markets because such quotes may only be indicative and therefore are less reliable than more directly observable market data.",
+   "supports": true,
+   "entail": 0.010168907232582569
+  },
+  {
+   "pair": "p16",
+   "item_id": "seed_0048",
+   "claim_id": "2",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000320193-25-000079:478.0:485.0",
+   "claim": "These deferred gains and losses from cash flow hedges are subsequently reclassified into earnings when the hedged transaction affects earnings.",
+   "supports": true,
+   "entail": 0.0023142253048717976
+  },
+  {
+   "pair": "p17",
+   "item_id": "seed_0056",
+   "claim_id": "4",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-25-000200:433.0:438.0",
+   "claim": "With the exception of the office property type, credit quality of commercial borrowers remained relatively stable since December 31, 2024.",
+   "supports": true,
+   "entail": 0.49541211128234863
+  },
+  {
+   "pair": "p18",
+   "item_id": "seed_0053",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-24-000122:1445.0:1453.0",
+   "claim": "The Corporation enters into International Swaps and Derivatives Association, Inc. (ISDA) master netting agreements or similar agreements with substantially all of the Corporation's derivative counterparties.",
+   "supports": true,
+   "entail": 0.40448325872421265
+  },
+  {
+   "pair": "p19",
+   "item_id": "seed_0083",
+   "claim_id": "3",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000034088-26-000067:231.0:253.0",
+   "claim": "These cautionary statements suggest the company recognizes a significant risk that its cost reductions may not prove to be sustainable over time and that maintaining them could potentially compromise competitive positioning.",
+   "supports": false,
+   "entail": 0.009692034684121609
+  },
+  {
+   "pair": "p20",
+   "item_id": "seed_0058",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000909832-24-000049:704.0:704.0",
+   "claim": "Costco Wholesale Corp is a named defendant in the Wei and Henry bodily injury actions related to Real Water.",
+   "supports": true,
+   "entail": 0.0007423704373650253
+  },
+  {
+   "pair": "p21",
+   "item_id": "seed_0068",
+   "claim_id": "3",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0001045810-25-000230:354.0:360.0",
+   "claim": "One AI research and deployment company contributed a meaningful amount of NVIDIA's revenue through cloud services purchases from NVIDIA's customers in the third quarter of fiscal year 2026.",
+   "supports": false,
+   "entail": 0.0007676173117943108
+  },
+  {
+   "pair": "p22",
+   "item_id": "seed_0066",
+   "claim_id": "2",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0001045810-25-000023:1199.0:1205.0",
+   "claim": "The certifications will not be deemed 'filed' for purposes of Section 18 of the Exchange Act.",
+   "supports": true,
+   "entail": 0.9597771763801575
+  },
+  {
+   "pair": "p23",
+   "item_id": "seed_0063",
+   "claim_id": "2",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0001628280-25-048859:1284.0:1301.0",
+   "claim": "The transfers occurred as a result of an increase in observability and a decrease in the significance of unobservable inputs.",
+   "supports": true,
+   "entail": 0.6066102385520935
+  },
+  {
+   "pair": "p24",
+   "item_id": "seed_0055",
+   "claim_id": "3",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-25-000405:253.0:260.0",
+   "claim": "The decline in return on average allocated capital occurred due to an increase in allocated capital, which was only partially offset by the higher net income.",
+   "supports": true,
+   "entail": 0.05608730763196945
+  },
+  {
+   "pair": "p25",
+   "item_id": "seed_0048",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000320193-25-000079:478.0:485.0",
+   "claim": "Gains and losses arising from amounts included in the assessment of cash flow hedge effectiveness are initially deferred in accumulated other comprehensive income/(loss).",
+   "supports": true,
+   "entail": 0.0017772024730220437
+  },
+  {
+   "pair": "p26",
+   "item_id": "seed_0076",
+   "claim_id": "4",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000027419-25-000018:704.0:708.0",
+   "claim": "The statement that accumulated benefit obligation (which excludes assumed future salary growth) is materially consistent with the projected benefit obligation suggests that the effect of assumed future salary growth on the plan's obligations is immaterial, despite the 3.00% compensation increase assumption.",
+   "supports": false,
+   "entail": 0.0006259902147576213
+  },
+  {
+   "pair": "p27",
+   "item_id": "seed_0054",
+   "claim_id": "2",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-25-000268:991.0:993.0",
+   "claim": "The Corporation concluded that none of its reporting units are at risk of impairment.",
+   "supports": true,
+   "entail": 0.99552983045578
+  },
+  {
+   "pair": "p28",
+   "item_id": "seed_0083",
+   "claim_id": "3",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000034088-26-000067:323.0:335.0",
+   "claim": "These cautionary statements suggest the company recognizes a significant risk that its cost reductions may not prove to be sustainable over time and that maintaining them could potentially compromise competitive positioning.",
+   "supports": false,
+   "entail": 0.0008257150766439736
+  },
+  {
+   "pair": "p29",
+   "item_id": "seed_0053",
+   "claim_id": "4",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-24-000122:1445.0:1453.0",
+   "claim": "For purposes of the Consolidated Balance Sheet, the Corporation offsets derivative assets and liabilities with the same counterparty where it has a legally enforceable ISDA master netting agreement.",
+   "supports": true,
+   "entail": 0.027653463184833527
+  },
+  {
+   "pair": "p30",
+   "item_id": "seed_0074",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000078003-25-000114:498.0:503.0",
+   "claim": "The increase in Medicare rebates in the first quarter of 2025 was primarily driven by the impact of higher manufacturer discounts as a result of IRA Medicare Part D Redesign.",
+   "supports": true,
+   "entail": 0.989810585975647
+  },
+  {
+   "pair": "p31",
+   "item_id": "seed_0053",
+   "claim_id": "3",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000070858-24-000122:1445.0:1453.0",
+   "claim": "Where legally enforceable, these ISDA master netting agreements also give the Corporation the right to offset receivables and payables with the same counterparty.",
+   "supports": false,
+   "entail": 0.26305505633354187
+  },
+  {
+   "pair": "p32",
+   "item_id": "seed_0073",
+   "claim_id": "4",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000078003-26-000095:107.0:110.0",
+   "claim": "The dividend income was recorded in Other (income)/deductions\u2014net.",
+   "supports": true,
+   "entail": 0.0007123434916138649
+  },
+  {
+   "pair": "p33",
+   "item_id": "seed_0068",
+   "claim_id": "4",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0001045810-25-000230:354.0:360.0",
+   "claim": "NVIDIA characterizes its revenue as concentrated among a limited number of direct, indirect and cloud service purchasers, and suggests this trend may continue into the future.",
+   "supports": true,
+   "entail": 0.0027966175694018602
+  },
+  {
+   "pair": "p34",
+   "item_id": "seed_0063",
+   "claim_id": "1",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0001628280-25-048859:1284.0:1301.0",
+   "claim": "For the three months ended September 30, 2025, JPMorgan Chase & Co reported significant transfers from level 3 into level 2 of $914 million of gross equity derivative receivables and $1.2 billion of gross equity derivative payables.",
+   "supports": true,
+   "entail": 0.9715799689292908
+  },
+  {
+   "pair": "p35",
+   "item_id": "seed_0060",
+   "claim_id": "3",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000909832-26-000051:204.0:215.0",
+   "claim": "Membership fee increases drove membership fee revenue growth in Q3 FY2026",
+   "supports": true,
+   "entail": 0.017247093841433525
+  },
+  {
+   "pair": "p36",
+   "item_id": "seed_0081",
+   "claim_id": "2",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000034088-23-000056:132.0:133.0",
+   "claim": "The Corporation believes that earnings excluding Identified Items provides investors increased transparency into business results and trends and provides investors with a view of the business as seen through the eyes of management.",
+   "supports": true,
+   "entail": 0.02489554136991501
+  },
+  {
+   "pair": "p37",
+   "item_id": "seed_0048",
+   "claim_id": "4",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000320193-25-000079:478.0:485.0",
+   "claim": "For derivative instruments designated as cash flow hedges, amounts excluded from the assessment of hedge effectiveness are recognized on a straight-line basis over the life of the hedge in the Consolidated Statements of Operations line item to which the hedge relates.",
+   "supports": true,
+   "entail": 0.002208208665251732
+  },
+  {
+   "pair": "p38",
+   "item_id": "seed_0077",
+   "claim_id": "3",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000027419-26-000022:131.0:131.0",
+   "claim": "The filing directs readers to Note 3 for additional information about these interchange fee settlements.",
+   "supports": true,
+   "entail": 0.9903678894042969
+  },
+  {
+   "pair": "p39",
+   "item_id": "seed_0060",
+   "claim_id": "4",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000909832-26-000051:225.0:226.0",
+   "claim": "Upgrades to Executive Membership drove membership fee revenue growth in Q3 FY2026",
+   "supports": true,
+   "entail": 0.20544162392616272
+  },
+  {
+   "pair": "p40",
+   "item_id": "seed_0049",
+   "claim_id": "6",
+   "stratum": "llm_seeded/other checks pass",
+   "chunk_id": "0000320193-24-000069:105.0:112.0",
+   "claim": "Interpretation: concentration eased modestly but remained high, with the top two vendors together at 66% (47%+19%) versus 71% (48%+23%) previously. This suggests continued significant exposure to a small number of vendors, especially the largest, though the absolute balance fell.",
+   "supports": false,
+   "entail": 0.0004466230166144669
+  }
+ ]
+}
