@@ -395,7 +395,9 @@ eval_handwritten:
 
 # LLM judge (PRD 11.3). The label set is drawn by seed from a dev run's answers.
 eval_judge:
-  tier: tier_large
+  backend: opencode_cli     # owner decision 2026-11-25: a non-Claude judge (F-14)
+  model: openai/gpt-6.2-sol
+  tier: tier_large          # used only when backend is the generator's
   label_seed: 20261005
   label_n: 50
   label_run: 19693d4aa874

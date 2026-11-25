@@ -140,6 +140,9 @@ def main() -> None:
             raise SystemExit(f"labels {len(labels)} of {len(ids)}: the judge runs only on a "
                              "fully labelled set, with --run")  # fmt: skip
         gen = generation()
+        if cfg.get("backend") == "opencode_cli":
+            gen = {"backend": "opencode_cli", "judge_model": cfg["model"]}
+            cfg["tier"] = "judge_model"
         done = {v["item_id"] for v in read_jsonl(VERDICTS)}
         for i in ids:
             if i in done:

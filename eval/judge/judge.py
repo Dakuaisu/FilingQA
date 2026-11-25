@@ -42,7 +42,13 @@ def parse(text: str) -> tuple[int, str]:
 
 
 def judge(item: dict, answer: str, cfg: dict, tier: str, generator_model: str) -> dict:
-    a = complete(render(item["question"], item["reference_answer"], answer), cfg, tier)
+    prompt = render(item["question"], item["reference_answer"], answer)
+    if cfg["backend"] == "opencode_cli":
+        from eval.judge import opencode_cli
+
+        a = opencode_cli.run(prompt, cfg[tier])
+    else:
+        a = complete(prompt, cfg, tier)
     score, rationale = parse(a.text)
     return {
         "item_id": item["item_id"], "score": score, "rationale": rationale,

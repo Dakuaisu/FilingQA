@@ -81,3 +81,16 @@ def test_replacement_keeps_the_source_and_skips_drawn_and_rejected_items():
         replacement(results, items, {"s1", "s3"}, {"s2"}, "llm_seeded", 1)
     entries = [{"item_id": "a", "excluded": "reference wrong"}, {"item_id": "b"}]
     assert [e["item_id"] for e in active(entries)] == ["b"]
+
+
+def test_opencode_events_give_text_and_tokens():
+    from eval.judge.opencode_cli import OpencodeError, parse_events
+
+    lines = [
+        '{"type": "step_start", "part": {}}',
+        '{"type": "text", "part": {"text": "{\\"score\\": 3, \\"rationale\\": \\"x\\"}"}}',
+        '{"type": "step_finish", "part": {"tokens": {"input": 10, "output": 4}}}',
+    ]
+    assert parse_events(lines) == ('{"score": 3, "rationale": "x"}', 10, 4)
+    with pytest.raises(OpencodeError):
+        parse_events(['{"type": "step_start", "part": {}}'])
