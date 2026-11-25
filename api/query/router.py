@@ -123,7 +123,7 @@ def filters(
     tickers, unresolvable periods and other forms are dropped, never guessed."""
     if route["confidence"] < min_confidence:
         return None
-    tk = sorted({e.get("ticker", "").upper() for e in route["entities"]
+    tk = sorted({(e.get("ticker") or "").upper() for e in route["entities"]
                  if isinstance(e, dict)} & tickers)  # fmt: skip
     periods, unresolved = [], []
     for p in route["fiscal_periods"]:

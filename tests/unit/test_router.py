@@ -88,6 +88,8 @@ def test_filters_are_gated_on_confidence_and_drop_what_they_cannot_use():
     tgt = route(entities=[{"ticker": "TGT"}], fiscal_periods=["fiscal year ended January 31, 2026"])
     f = filters(tgt, TICKERS, 0.6, ENDS)
     assert f["periods"] == [[2025, None]]
+    walmart = route(entities=[{"name": "Walmart", "ticker": None}], form_types=["10-K"])
+    assert filters(walmart, TICKERS, 0.6, ENDS)["tickers"] == []
 
 
 def test_allowed_chunks_and_filtered_bm25():
