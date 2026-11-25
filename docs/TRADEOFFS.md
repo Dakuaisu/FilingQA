@@ -3380,3 +3380,45 @@ drawn nor rejected (`python -m scripts.judge replace`). This keeps PRD 11.3's
 50 labelled pairs and the source proportions. `seed_0020` (reference used the
 December 2025 comparative for a June 2026 question) was replaced by `seed_0028`,
 seed 20261005; `seed_0028` waits on the owner's label.
+
+## 2026-11-25 — NLI threshold set (F-125)
+
+- Decided by: owner
+- Status: OWNER DECISION
+
+PRD 7.5's check on the owner's 40 labels (`eval/nli/labels_v1.yaml`, 33
+supporting): AUC 0.766 with `cross-encoder/nli-deberta-v3-base` at revision
+6c749ce3425cd33b46d187e45b92bbf96ee12ec7, at or above 0.75, so NLI stays, at
+the Youden threshold 0.0010178742231801152 (`eval_run.nli_threshold`).
+
+The PRD rule is followed as written, with three limits stated rather than
+tuned away:
+- The threshold is nearly an open gate: 27 of the 33 supported claims score
+  under 0.06, and claims under 0.001 include supported ones (p08, p20, p32). In
+  practice prose claims are checked by citation validity and entity match.
+- The margin is fragile: 7 negatives, 231 positive/negative pairs; about 4
+  swapped pairs would put AUC under 0.75.
+- All 40 pairs are seeded prose claims (the xbrl_auto stratum rounded to zero),
+  so the check validates NLI on that slice only.
+
+Scored from the chunk text printed in `eval/nli/label_sheet_v1.md` (copied
+from the database when the sheet was drawn) while no database was reachable.
+`python -m scripts.nli_auc --score` must be re-run against the database to
+write `eval/nli/auc_v1.json` and confirm the same AUC and threshold.
+
+## 2026-11-25 — Judge model and validation (F-14, F-105)
+
+- Decided by: owner
+- Status: OWNER DECISION
+
+The answer-correctness judge is `openai/gpt-6.2-sol`, called through the
+`opencode` CLI (`eval/judge/opencode_cli.py`; `eval_judge.backend:
+opencode_cli`), run with --pure in an empty temp directory so it cannot read
+the label files. Its family (gpt) differs from the generator's (claude), as
+PRD 11.3 asks. Calls go through a subscription, not an API key.
+
+Validation on the owner's 50 labels (`seed_0020` excluded and replaced by
+`seed_0028`): Cohen's kappa 0.818, at or above 0.6, so the judge is reliable
+by PRD 11.3. Exact agreement 44 of 50, within one point 49 of 50; the one
+two-point gap is xbrl_0057 (owner 4, judge 2). Verdicts in
+`eval/judge/verdicts_v1.jsonl`.
