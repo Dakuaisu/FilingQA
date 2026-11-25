@@ -80,53 +80,46 @@ below are model-free retrieval measurements, not this table.
 
 ## Status
 
-**Built up to the items that wait on the owner. The CI eval gate fails.** Phases
-1–3 are complete; Phases 4 and 5 are built up to the owner-blocked items below.
+**As of 2026-11-26: a development evaluation on `golden_v1` was in progress.**
+It uses the subscription-backed `claude_cli` and cannot establish a CI baseline
+or pass the gate. See [`docs/RESULTS.md`](docs/RESULTS.md) for recorded results;
+no metrics from the in-progress evaluation are reported here.
 
 ### Where the gate stands
 
-The gate (`eval/compare.py` against `eval/thresholds.yaml`, PRD 11.5) does not
-pass, and no number in this README describes it as passing:
-
-- **No gated run exists.** Every generation run so far used a development
-  backend (the `claude` CLI on a subscription); those runs are not results, are
-  not quoted here, and cannot pass the gate by construction. A gated run needs
-  `ANTHROPIC_API_KEY` in CI (F-59).
-- **Retrieval sufficiency misses its thresholds.** The model-free hybrid
-  retrieval measurement (BM25 + exact dense search, RRF; retrieval run
-  `7fa009acac95`, Config 3 of PRD 11.6, no router, on unreviewed candidates)
-  reaches Sufficiency@10 0.537 aggregate against 0.82, 0.375 on the
-  XBRL-templated slice against 0.90, and 0.928 on the LLM-seeded slice against
-  0.80 (that slice is inflated by lexical overlap with its source chunk, F-110). The specified pipeline adds the
-  router and metadata filters; its numbers come from development runs and are
-  not reported here. Why the XBRL slice misses: `docs/OPEN.md` F-138.
-- **Every gated metric is pending,** and pending fails the gate: there is no
-  gated run (F-59). Even once one exists, these stay pending:
-  - faithfulness, claim retention, citation coverage and the abstention rates
-    (the NLI threshold needs 40 owner labels, F-125);
-  - answer correctness (judge labels, F-105);
-  - the natural-phrasing gap and every handwritten-slice threshold (hand-written
-    items, F-103);
-  - cost per query (needs a priced run, F-134).
+- **No gated run exists.** The CI gate (`eval/compare.py` against
+  `eval/thresholds.yaml`) does not pass with pending metrics. A gated run
+  requires `anthropic_api`, `ANTHROPIC_API_KEY` in CI, and the hosted corpus
+  snapshot (F-59, F-135).
+- Candidate worksheet review is complete. The frozen `golden_v1` dataset has
+  **392 items** (`eval/datasets/golden_v1_manifest.json`). The `handwritten`
+   slice contains model-drafted items, so the freeze does not resolve the
+   independent-authorship requirement (F-103). The [retrieval ablation](docs/RESULTS.md#retrieval-ablation--373f11f1949c)
+   reports all answerable items and the reviewed subset separately.
+- The `openai/gpt-6.2-sol` judge reached **Cohen's kappa of 0.818** against the
+  owner labels (`eval/judge/verdicts_v1.jsonl`, `eval/judge/labels_v1.yaml`).
+- NLI was retained at **AUC 0.766** (`eval/nli/auc_v1.json`), but the selected
+  threshold leaves the prose gate nearly open. The validation sample contains
+  only seeded prose and few negative pairs; this is not evidence of a strong
+  filter or a passing CI gate.
+- The rerank score floor is **0.50**, calibrated on reviewed items in a local
+  retrieval-only run (`eval/runs/4b5036b69ca0.f112.json`). Timeout fallback uses
+  hybrid ordering without applying the floor.
 
 **PASS is a faithfulness verdict, never a correctness claim.** The verifier
 checks each claim against the evidence it cites (PRD 7.5); whether the answer
-addresses the question is measured separately (numeric accuracy, and the judge
-once validated). Reports print the two side by side (F-133).
+addresses the question is measured separately by numeric accuracy and the
+validated judge. Reports print the two side by side (F-133).
 
 ### What waits on the owner
 
 | Item | Finding |
 |---|---|
-| API key for CI runs, the fast-eval baseline, a priced run, the deliberate-regression PR and its screenshot | F-59, F-134 |
-| Hand-written eval items (unanswerable, adversarial, natural phrasing, comparison) | F-103 |
-| Human review of the candidates; the golden-set freeze; ablations run only on reviewed items | F-104, F-106 |
-| Judge validation labels | F-105 |
-| NLI gate labels (40 pairs, `eval/nli/label_sheet_v1.md`) | F-125 |
-| Rerank score-floor calibration | F-112 |
+| `ANTHROPIC_API_KEY` for CI, the `anthropic_api` fast-eval baseline, the first priced run, and the deliberate-regression PR with its failing-check and PR-comment screenshot | F-59, F-134 |
+| Independently authored handwritten items and their provenance (unanswerable, adversarial, natural phrasing, comparison); the frozen model-drafted items do not meet this requirement | F-103 |
 | Hosting the corpus snapshot for CI (exact command in the finding) | F-135 |
-| Review of the XBRL concept synonym map | F-127 |
-| Deploy: Fly.io and Vercel accounts, LangFuse keys, the deploy itself and the public URL (exact commands in the finding) | F-143 |
+| Non-blocking owner review of the XBRL concept synonym map | F-127 |
+| Deploy: hosted snapshot, pgvector Postgres, Fly.io and Vercel accounts, `ANTHROPIC_API_KEY`, LangFuse keys, deployment, first live trace verification, and public URL (exact commands in the finding) | F-143 |
 
 Dense search is exact, so any run is reproducible from the corpus snapshot
 (F-136). The reranker runs on whatever device is present; a run where it hit
