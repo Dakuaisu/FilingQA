@@ -8,6 +8,7 @@ Metrics are broken out by `source` and aggregated (PRD 11.2).
 from __future__ import annotations
 
 from collections import Counter
+from dataclasses import asdict
 
 from api.generate.generator import DEV_BACKENDS
 from eval.metrics.abstention import rates, two_by_two
@@ -48,11 +49,15 @@ def _generation(results: list[dict], nli_threshold) -> dict:
 def _abstention(rows: list[tuple[bool, str]]) -> dict:
     """The 2x2 rates; all pending while any verdict in the column waits on the NLI
     threshold, since the pending items are exactly those with prose claims."""
-    if any(v == "PENDING_NLI" for _, v in rows):
+    known = [(expected, verdict) for expected, verdict in rows if verdict != "PENDING_NLI"]
+    counts = asdict(two_by_two(known))
+    counts.pop("partial")
+    counts["pending"] = len(rows) - len(known)
+    if counts["pending"]:
         keys = ("partial_rate", "false_answer_rate", "over_abstention_rate",
                 "abstention_precision", "abstention_recall", "abstention_f1")  # fmt: skip
-        return dict.fromkeys(keys, PENDING_NLI)
-    return rates(two_by_two(rows))
+        return {**dict.fromkeys(keys, PENDING_NLI), "counts": counts}
+    return {**rates(two_by_two(rows)), "counts": counts}
 
 
 def xbrl_summary(results: list[dict]) -> dict | None:
@@ -162,6 +167,10 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
     served model; `meta`: backend, run_id, dataset files, retrieval stage."""
     by_source = {s: [r for r in results if items[r["item_id"]]["source"] == s] for s in SOURCES}
     dev = meta["backend"] in DEV_BACKENDS
+    handwritten: dict[str, list[dict]] = {}
+    for result in by_source["handwritten"]:
+        kind = items[result["item_id"]]["question_type"]
+        handwritten.setdefault(kind, []).append(result)
     return {
         **meta,
         "development_run": meta["backend"] in DEV_BACKENDS,
@@ -171,6 +180,11 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
         "retrieval_latency_s": stage_latency(results),
         "intent_matrix": intent_matrix(items, results),
         "verdict_by_correctness": verdict_by_correctness(items, results),
+        "natural_phrasing_gap": "pending definition (F-20)",
+        "handwritten_question_types": {
+            kind: _slice(items, rs, k, nli_threshold, dev)
+            for kind, rs in sorted(handwritten.items())
+        },
         "xbrl": xbrl_summary(results),
         "meta_disagreements": depth_disagreements(meta, results, items)
         if "retrieve_depth" in meta and "generator_top_k" in meta
@@ -347,6 +361,16 @@ def format_report(report: dict) -> str:
     for name, get in rows:
         cells = [_fmt(get(cols[c])) if cols[c] else "-" for c in COLUMNS]
         lines.append(f"{name:32}" + "".join(f"{x:>17}" for x in cells))
+    gap = report.get("natural_phrasing_gap", "pending definition (F-20)")
+    lines.append(f"natural_phrasing_gap: {gap}")
+    for source in COLUMNS:
+        if cols[source]:
+            lines.append(f"abstention 2x2 {source}: {cols[source]['abstention'].get('counts')}")
+    for kind, data in report.get("handwritten_question_types", {}).items():
+        lines.append(
+            f"handwritten {kind}: items {data['items']}; "
+            f"abstention 2x2 {data['abstention']['counts']}"
+        )
     agg = cols["aggregate"]["numeric"]
     lines.append(f"figures per numeric answer (aggregate): {agg['figure_count_distribution']}")
     lines.append(f"excluded from numeric accuracy (aggregate): {agg['excluded']}")

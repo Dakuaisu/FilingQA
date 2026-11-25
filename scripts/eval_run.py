@@ -2,6 +2,7 @@
 
 python -m scripts.eval_run                     # plan only: no retrieval, no model call
 python -m scripts.eval_run --run [--limit N]   # new run
+python -m scripts.eval_run --dataset PATH       # use only this JSONL dataset
 python -m scripts.eval_run --resume RUN_ID     # continue a run from its results file
 python -m scripts.eval_run --report RUN_ID     # a finished run's report, stdout only (F-144)
 python -m scripts.eval_run --rescore RUN_ID T   # derived report at nli_threshold T (F-125)
@@ -67,6 +68,35 @@ def read_jsonl(path) -> list[dict]:
     return [json.loads(x) for x in path.read_text(encoding="utf-8").split("\n") if x]
 
 
+def load_datasets(selected: str | None, saved: dict[str, str] | None) -> tuple[dict, dict]:
+    """Load and hash the same bytes, preserving historical filename-only metadata."""
+    if selected:
+        paths = [Path(selected).resolve()]
+        keys = [str(paths[0])]
+    elif saved and all(Path(key).is_absolute() for key in saved):
+        keys = list(saved)
+        paths = [Path(key) for key in keys]
+    else:
+        paths = DATASETS
+        keys = [path.name for path in paths]
+    items, identity = {}, {}
+    for key, path in zip(keys, paths, strict=True):
+        try:
+            raw = path.read_bytes()
+        except OSError as exc:
+            raise SystemExit(f"cannot read dataset {path}: {exc}") from exc
+        identity[key] = hashlib.sha256(raw).hexdigest()
+        for line in raw.decode("utf-8").split("\n"):
+            if line:
+                item = json.loads(line)
+                if item["item_id"] in items:
+                    raise SystemExit(f"duplicate item_id {item['item_id']!r} in dataset {path}")
+                items[item["item_id"]] = item
+    if saved is not None and identity != saved:
+        raise SystemExit("dataset path or SHA-256 changed since the run began")
+    return items, identity
+
+
 STAGES = {
     "config_1_dense": "dense top-k (no fusion, no rerank)",
     "config_3_hybrid": "BM25 + dense, RRF-fused pre-rerank list (no rerank)",
@@ -76,7 +106,7 @@ STAGES = {
 }
 
 
-def current_meta(gen: dict, run_cfg: dict) -> dict:
+def current_meta(gen: dict, run_cfg: dict, datasets: dict | None = None) -> dict:
     """Everything a resumed run must match. Names the PRD 11.6 pipeline (F-61)."""
     from api.db import connect
     from api.query.rerank import machine
@@ -93,7 +123,8 @@ def current_meta(gen: dict, run_cfg: dict) -> dict:
         "hnsw_ef_search": rc["hnsw_ef_search"], "k_dense": rc["k_dense"],
         "dense_search": rc.get("dense_search", "exact"),
         "parser_version": freeze["parser_version"], "chunker_version": freeze["chunker_version"],
-        "datasets": {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in DATASETS},
+        "datasets": datasets if datasets is not None else
+                    {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in DATASETS},
     }  # fmt: skip
     if pipeline != "config_1_dense":
         meta["retrieval"] = rc
@@ -363,7 +394,7 @@ def smoke_items(items: dict, seed: int) -> list[str]:
     return out
 
 
-def smoke(items: dict, gen: dict, run_cfg: dict, seed: int) -> None:
+def smoke(items: dict, gen: dict, run_cfg: dict, seed: int, datasets: dict | None = None) -> None:
     """A pipeline check, not a measurement: runs the seeded subset end to end,
     checks the records, builds and formats the report, and stores only what
     broke. No metric is written."""
@@ -371,7 +402,7 @@ def smoke(items: dict, gen: dict, run_cfg: dict, seed: int) -> None:
 
     runs = REPO_ROOT / run_cfg["runs_dir"]
     run_id, order = uuid.uuid4().hex[:12], smoke_items(items, seed)
-    meta = {**current_meta(gen, run_cfg), "run_id": run_id, "k": run_cfg["k"]}
+    meta = {**current_meta(gen, run_cfg, datasets), "run_id": run_id, "k": run_cfg["k"]}
     print(f"smoke {run_id}: {len(order)} items (seed {seed}): {order}", flush=True)
     results, failure = [], None
     with connect() as conn:
@@ -435,13 +466,13 @@ def main() -> None:
     baseline_out = arg("--baseline-out")
     if baseline_out:
         refuse_dev_baseline(gen["backend"], baseline_out)
-    items = {}
-    for p in DATASETS:
-        for it in read_jsonl(p):
-            items[it["item_id"]] = it
     runs = REPO_ROOT / run_cfg["runs_dir"]
-    meta = current_meta(gen, run_cfg)
+    prior_id = arg("--resume") or arg("--report") or arg("--rescore") or arg("--reverify")
+    saved = (json.loads((runs / f"{prior_id}.meta.json").read_text(encoding="utf-8"))
+             if prior_id else None)  # fmt: skip
+    items, datasets = load_datasets(arg("--dataset"), saved.get("datasets") if saved else None)
     subset = None
+    subset_meta = None
     if arg("--subset"):
         path = REPO_ROOT / arg("--subset")
         doc = yaml.safe_load(path.read_text(encoding="utf-8"))
@@ -449,9 +480,25 @@ def main() -> None:
         missing = [i for i in subset if i not in items]
         if missing:
             raise SystemExit(f"subset {path.name} names items not in the candidates: {missing[:5]}")
-        meta["subset"] = {"file": arg("--subset"), "items": len(subset),
-                          "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}  # fmt: skip
+        subset_meta = {"file": arg("--subset"), "items": len(subset),
+                       "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}  # fmt: skip
 
+    if not prior_id and "--run" not in sys.argv and not arg("--smoke"):
+        print(f"datasets: {datasets}")
+        chosen = [items[i] for i in subset] if subset is not None else list(items.values())
+        if arg("--limit"):
+            chosen = chosen[: int(arg("--limit"))]
+        print(f"items {len(chosen)}; sources {dict(Counter(i['source'] for i in chosen))}; "
+              f"question types {dict(Counter(i['question_type'] for i in chosen))}")  # fmt: skip
+        print("plan only: pass --run to retrieve and generate")
+        return
+
+    if arg("--smoke"):
+        smoke(items, gen, run_cfg, int(arg("--smoke")), datasets)
+        return
+    meta = current_meta(gen, run_cfg, datasets)
+    if subset_meta is not None:
+        meta["subset"] = subset_meta
     if arg("--reverify"):
         reverify_run(items, run_cfg, arg("--reverify"), sys.argv[sys.argv.index("--reverify") + 2])
         return
@@ -460,22 +507,19 @@ def main() -> None:
             items, run_cfg, arg("--rescore"), float(sys.argv[sys.argv.index("--rescore") + 2])
         )
         return
-    if arg("--smoke"):
-        smoke(items, gen, run_cfg, int(arg("--smoke")))
-        return
     if arg("--report"):
         print(format_report(rebuild_report(runs, arg("--report"), items, run_cfg)))
         return
     if arg("--resume"):
         run_id = arg("--resume")
-        saved = json.loads((runs / f"{run_id}.meta.json").read_text(encoding="utf-8"))
         diff = {k for k in meta if meta[k] != saved.get(k)}
         if diff:
             raise SystemExit(f"run {run_id} cannot resume: {sorted(diff)} changed since it began")
         order = saved["item_order"]
+        meta = {k: v for k, v in saved.items() if k not in ("item_order", "run_id", "k")}
     elif "--run" in sys.argv:
         run_id = uuid.uuid4().hex[:12]
-        order = subset or list(items)
+        order = subset if subset is not None else list(items)
         order = order[: int(arg("--limit"))] if arg("--limit") else order
         runs.mkdir(parents=True, exist_ok=True)
         (runs / f"{run_id}.meta.json").write_text(
