@@ -89,8 +89,13 @@ class Gate:
                        printed_interval(claim["figure"]))  # fmt: skip
         return {**base, **out, "period_ends": [e.isoformat() for e in ends]}
 
-    def figure_checks(self, claims: list[dict], given: list[str],
-                      given_texts: dict[str, str]) -> list[dict]:  # fmt: skip
+    def figure_checks(
+        self,
+        claims: list[dict],
+        given: list[str],
+        given_texts: dict[str, str],
+        xbrl_enabled: bool = True,
+    ) -> list[dict]:
         """Grounding for every claim, XBRL for figure claims: the checks that need
         no model. One dict per claim."""
         grounding = ground_answer(claims, given_texts, self.zero_span_chunks(given))
@@ -102,7 +107,8 @@ class Gate:
                  "xbrl_contradiction": False, "period_ok": None}  # fmt: skip
             if c.get("figure"):
                 k["citations_supporting"] = g["citations_supporting"]
-                x = self.xbrl_check(c)
+                x = (self.xbrl_check(c) if xbrl_enabled
+                     else {"status": "not_checked", "period_ok": None})  # fmt: skip
                 k.update({"xbrl": x, "xbrl_contradiction": x["status"] == "contradiction",
                           "period_ok": x["period_ok"]})  # fmt: skip
                 if k["unit_ok"] == "unknown" and x["status"] in ("verified", "restatement"):
@@ -142,12 +148,15 @@ class Gate:
         v, post = verdict(pre, nli_threshold)
         return {"claims_pre": pre, "claims_post": post, "verify_verdict": v}
 
-    def recheck(self, claims_pre: list[dict], given: list[str], texts: dict[str, str]) -> list:
+    def recheck(self, claims_pre: list[dict], given: list[str], texts: dict[str, str],
+                xbrl_enabled: bool = True) -> list:  # fmt: skip
         """Stored claims with the model-free checks recomputed; citation validity,
         entity match and every NLI field kept as stored (TRADEOFFS, F-128)."""
         pre = copy.deepcopy(claims_pre)
         given_texts = {c: texts[c] for c in given if c in texts}
-        for c, f in zip(pre, self.figure_checks(pre, given, given_texts), strict=True):
+        for c, f in zip(
+            pre, self.figure_checks(pre, given, given_texts, xbrl_enabled), strict=True
+        ):
             if not c.get("figure"):
                 f.pop("citations_supporting", None)
             c["checks"].update(f)

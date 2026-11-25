@@ -64,7 +64,7 @@ def test_saved_mode_refuses_when_corpus_preflight_fails(tmp_path, monkeypatch, m
     before = {p.name: p.read_bytes() for p in tmp_path.iterdir()}
     monkeypatch.setattr(eval_run, "eval_run", lambda: {"runs_dir": str(tmp_path)})
 
-    def fail_preflight(gen, run_cfg, datasets):
+    def fail_preflight(gen, run_cfg, datasets, **kwargs):
         assert datasets == identity
         raise SystemExit("corpus preflight failed")
 
@@ -102,7 +102,7 @@ def test_saved_run_loads_selected_dataset_before_work(tmp_path, monkeypatch, mod
     monkeypatch.setattr(
         eval_run, "eval_run", lambda: {"runs_dir": str(tmp_path), "k": 10, "nli_threshold": None}
     )
-    monkeypatch.setattr(eval_run, "current_meta", lambda *args: {"datasets": args[2]})
+    monkeypatch.setattr(eval_run, "current_meta", lambda *args, **kwargs: {"datasets": args[2]})
     seen = []
     monkeypatch.setattr(
         eval_run, "rebuild_report", lambda runs, run_id, items, cfg: seen.append(items)

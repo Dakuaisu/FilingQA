@@ -106,7 +106,8 @@ STAGES = {
 }
 
 
-def current_meta(gen: dict, run_cfg: dict, datasets: dict | None = None) -> dict:
+def current_meta(gen: dict, run_cfg: dict, datasets: dict | None = None,
+                 replay: bool = False) -> dict:  # fmt: skip
     """Everything a resumed run must match. Names the PRD 11.6 pipeline (F-61)."""
     from api.db import connect
     from api.query.rerank import machine
@@ -134,8 +135,10 @@ def current_meta(gen: dict, run_cfg: dict, datasets: dict | None = None) -> dict
     if pipeline in ("config_4_rerank", "config_4_routed"):
         from api.query.rerank import resolve_device
 
-        meta["rerank"] = {**rerank(), "device_used": resolve_device(rerank()["device"])}
-        meta["machine"] = machine()
+        meta["rerank"] = rerank() if replay else {
+            **rerank(), "device_used": resolve_device(rerank()["device"])}  # fmt: skip
+        if not replay:
+            meta["machine"] = machine()
     if gen.get("structured"):
         from api.generate import claims
 
@@ -264,10 +267,18 @@ def rescore_results(results: list[dict], nli_threshold: float) -> list[dict]:
     return out
 
 
+def finished_results(runs: Path, run_id: str, saved: dict) -> list[dict]:
+    results = read_jsonl(runs / f"{run_id}.results.jsonl")
+    ids, order = [r["item_id"] for r in results], saved["item_order"]
+    if len(ids) != len(set(ids)) or len(order) != len(set(order)) or set(ids) != set(order):
+        raise SystemExit(f"run {run_id} has {len(results)} of {len(order)} items")
+    return results
+
+
 def rescore_run(items: dict, run_cfg: dict, run_id: str, nli_threshold: float) -> None:
     runs = REPO_ROOT / run_cfg["runs_dir"]
     saved = json.loads((runs / f"{run_id}.meta.json").read_text(encoding="utf-8"))
-    results = rescore_results(read_jsonl(runs / f"{run_id}.results.jsonl"), nli_threshold)
+    results = rescore_results(finished_results(runs, run_id, saved), nli_threshold)
     meta = {k: v for k, v in saved.items() if k != "item_order"}
     meta = {**meta, "derived": f"re-score of run {run_id} at nli_threshold {nli_threshold}",
             "source_run": run_id, "nli_threshold": nli_threshold}  # fmt: skip
@@ -315,18 +326,32 @@ def reverify_run(items: dict, run_cfg: dict, run_id: str, tag: str) -> None:
 
     runs = REPO_ROOT / run_cfg["runs_dir"]
     saved = json.loads((runs / f"{run_id}.meta.json").read_text(encoding="utf-8"))
-    before = read_jsonl(runs / f"{run_id}.results.jsonl")
+    before = finished_results(runs, run_id, saved)
     threshold = saved.get("verification", {}).get("nli_threshold")
     names = yaml.safe_load(TEMPLATES.read_text(encoding="utf-8"))["company_names"]
     after = []
     with connect() as conn:
+        if tag == "xbrl_off":
+            from api.query.bm25 import corpus_key
+
+            freeze = yaml.safe_load(FREEZE_FILE.read_text(encoding="utf-8"))
+            if any(saved.get(k) != freeze[k] for k in ("parser_version", "chunker_version")):
+                raise SystemExit("saved run and current corpus freeze differ")
+            if not saved.get("bm25_index_key"):
+                raise SystemExit("saved run has no corpus text identity; cannot reverify")
+            rows = conn.execute("SELECT chunk_id, text FROM chunks ORDER BY chunk_id").fetchall()
+            if corpus_key(saved["chunker_version"], rows) != saved["bm25_index_key"]:
+                raise SystemExit("saved run and current corpus text differ")
         gate = Gate(conn, names)
         for r in before:
             if r.get("claims_pre") is None:
                 after.append(r)
                 continue
             texts = texts_for(conn, r["generator_input"])
-            pre = gate.recheck(r["claims_pre"], r["generator_input"], texts)
+            if tag == "xbrl_off" and set(texts) != set(r["generator_input"]):
+                raise SystemExit(f"run {run_id}: generator input chunks are missing")
+            pre = gate.recheck(r["claims_pre"], r["generator_input"], texts,
+                               xbrl_enabled=tag != "xbrl_off")  # fmt: skip
             gv, post = verdict(pre, threshold)
             v, why = item_verdict(bool(r["answer"].get("abstained")), gv, pre)
             new = {**r, "claims_pre": pre, "claims_post": post, "gate_verdict": gv, "verdict": v}
@@ -335,10 +360,17 @@ def reverify_run(items: dict, run_cfg: dict, run_id: str, tag: str) -> None:
                 new["abstain_reason"] = why
             after.append(new)
     meta = {k: v for k, v in saved.items() if k != "item_order"}
-    meta = {**meta, "derived": f"re-verification of run {run_id} ({tag}): grounding and XBRL "
-                               "checks recomputed over stored claims, no model call",
+    xbrl_mode = "disabled" if tag == "xbrl_off" else "recomputed"
+    meta = {**meta, "derived": f"re-verification of run {run_id} ({tag}): grounding recomputed, "
+                               f"XBRL {xbrl_mode}, no model call",
             "source_run": run_id}  # fmt: skip
     report = build_report(items, after, meta, saved["k"], threshold)
+    if tag == "xbrl_off":
+        for col in [*report["columns"].values(), *report["handwritten_question_types"].values()]:
+            if col and col["generation"].get("status") == "ok":
+                col["generation"]["xbrl_contradiction_rate"] = None
+                col["generation"]["period_accuracy"] = None
+                col["generation"]["period_accuracy_checkable"] = None
     changed = [
         {"item_id": a["item_id"], "verdict_before": b["verdict"], "verdict_after": a["verdict"]}
         for b, a in zip(before, after, strict=True)
@@ -454,11 +486,7 @@ def smoke(items: dict, gen: dict, run_cfg: dict, seed: int, datasets: dict | Non
 def rebuild_report(runs: Path, run_id: str, items: dict, run_cfg: dict) -> dict:
     # Read-only: run files are records; derived output goes to stdout or a suffix file (F-144).
     saved = json.loads((runs / f"{run_id}.meta.json").read_text(encoding="utf-8"))
-    results = read_jsonl(runs / f"{run_id}.results.jsonl")
-    ids = [r["item_id"] for r in results]
-    order = saved["item_order"]
-    if len(ids) != len(set(ids)) or len(order) != len(set(order)) or set(ids) != set(order):
-        raise SystemExit(f"run {run_id} has {len(results)} of {len(saved['item_order'])} items")
+    results = finished_results(runs, run_id, saved)
     report_meta = {k: v for k, v in saved.items() if k != "item_order"}
     report = build_report(items, results, report_meta, saved["k"], run_cfg["nli_threshold"])
     from eval.judge.run import aggregate, eligible, identity, validate_records
@@ -519,7 +547,9 @@ def main() -> None:
     if arg("--smoke"):
         smoke(items, gen, run_cfg, int(arg("--smoke")), datasets)
         return
-    meta = current_meta(gen, run_cfg, datasets)
+    replay = bool(arg("--rescore") or arg("--reverify"))
+    meta = (current_meta(gen, run_cfg, datasets, replay=True) if replay
+            else current_meta(gen, run_cfg, datasets))  # fmt: skip
     if arg("--report"):
         report = rebuild_report(runs, arg("--report"), items, run_cfg)
         print(format_report(report))
