@@ -245,8 +245,8 @@ rerank:
   revision: 2cfc18c9415c912f9d8155881c133215df768a70
   top_n: 8                  # PRD 7.3; synthesis items take top_n_synthesis
   top_n_synthesis: 10
-  score_floor: 0.30         # sigmoid-normalized; calibration PENDING: on reviewed items only (F-104)
-  floor_calibration: pending
+  score_floor: 0.50         # sigmoid-normalized (F-112)
+  floor_calibration: calibrated  # eval/runs/4b5036b69ca0.f112.json
   # Over it, fall through to RRF order (PRD 7.3). 3000 ms by OWNER DECISION D1,
   # overriding PRD 7.3's 800 ms; re-measured in WORKLOG (F-111).
   timeout_ms: 3000

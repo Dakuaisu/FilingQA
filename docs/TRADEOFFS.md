@@ -3449,3 +3449,28 @@ it is tagged `unit_scale_unknown`. The 120 items labelled `handwritten` were
 model-drafted in chat, not independently handwritten. Their inclusion is
 approved for this freeze; independent authoring and provenance remain open
 under F-103.
+
+## 2026-11-26 — Rerank score floor (F-112)
+
+- Decided by: owner
+- Status: OWNER DECISION
+
+Set the sigmoid-normalized floor to 0.50, the highest threshold tested in
+`eval/runs/4b5036b69ca0.f112.json`. This local retrieval-only rebuild run
+used 125 reviewed answerable items and 50 model-drafted unanswerable items;
+it is not a gated baseline. Thresholds above 0.50 were not tested.
+
+| Floor | Unanswerable lists emptied (of 50) | Answerable items newly losing any gold (of 125) | Answerable lists newly emptied (of 125) |
+|---:|---:|---:|---:|
+| 0.10 | 0 | 0 | 0 |
+| 0.20 | 1 | 0 | 0 |
+| 0.30 | 1 | 0 | 0 |
+| 0.40 | 2 | 0 | 0 |
+| 0.50 | 3 | 0 | 0 |
+
+The fallback-aware run had 29 of 175 hardware-dependent timeouts at the
+3-second budget on Apple M1 Pro/MPS. Those items use hybrid order without a
+floor. The standalone uncapped reranker produced the same five rows.
+Without a floor, 35 answerable items already had zero gold in fallback-aware
+mode (38 uncapped). These are pre-existing retrieval misses, not floor-induced
+losses; no answerable item newly lost a complete evidence set either.
