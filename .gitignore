@@ -1,6 +1,7 @@
 # Corpus. Raw filings are re-downloadable and large; never commit them.
 # Test fixtures under tests/fixtures/filings/ ARE committed -- see CLAUDE.md rule 2.
 data/
+scratch/
 
 .env
 .venv/

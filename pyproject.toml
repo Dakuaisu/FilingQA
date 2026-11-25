@@ -35,7 +35,7 @@ line-length = 100
 target-version = "py311"
 # ruff format rewrites Python blocks inside markdown. docs/PRD.md is the spec and
 # must not be reformatted by a linter.
-extend-exclude = ["docs", "data"]
+extend-exclude = ["docs", "data", "scratch"]
 
 [tool.ruff.format]
 # tools/ is operator tooling owned by the project owner, not project code: never
