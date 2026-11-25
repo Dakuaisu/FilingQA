@@ -1,0 +1,69 @@
+sheet: adnan_pending_2026-11-25
+instructions: >-
+  Incremental transcription of Adnan's prior candidate reviews and subsequent
+  instruction to apply the seven millions-scale corrections. Evidence sets
+  contain jointly required chunks within each set and alternatives between sets.
+decisions:
+  - item_id: seed_0004
+    decision: accept
+    unit_scale: millions
+    note: Owner rechecked the accumulated-deficit repurchase figure; apply the requested monetary scale overlay.
+  - item_id: seed_0012
+    decision: edit_evidence
+    evidence_sets:
+      - ['0000909832-23-000042:501.0:503.0', '0000909832-23-000042:504.0:504.0']
+    note: The preceding passage identifies goodwill by segment; the table supplies the 2023 total.
+  - item_id: seed_0016
+    decision: edit_evidence
+    evidence_sets:
+      - ['0000909832-23-000065:33.0:33.0']
+    unit_scale: millions
+    note: Owner specified the net-sales statement chunk with the millions caption, plus the scale correction.
+  - item_id: seed_0024
+    decision: edit_evidence
+    evidence_sets:
+      - ['0001045810-25-000023:1113.0:1121.0', '0001045810-25-000023:1122.0:1122.0']
+    note: The preceding passage identifies the gross unrecognized-tax-benefits reconciliation; the table gives the ending balance.
+  - item_id: seed_0027
+    decision: accept
+    unit_scale: millions
+    note: Owner rechecked the repurchase effect on equity and requested the scale overlay.
+  - item_id: seed_0028
+    decision: accept
+    unit_scale: millions
+    note: Owner rechecked the revenue figure and requested the scale overlay; this is not a judge label.
+  - item_id: seed_0032
+    decision: edit_evidence
+    evidence_sets:
+      - ['0000078003-26-000054:209.0:209.0', '0000078003-26-000054:209.1:209.1']
+    note: Include preceding table rows with the unlabeled total; the OCI components sum to 267 million.
+  - item_id: seed_0033
+    decision: accept
+    unit_scale: millions
+    note: Owner rechecked the monetary total-equity figure and requested the scale overlay.
+  - item_id: seed_0035
+    decision: accept
+    unit_scale: millions
+    note: Owner rechecked total investment in share repurchases and requested the monetary scale overlay.
+  - item_id: seed_0038
+    decision: accept
+    unit_scale: millions
+    note: Owner rechecked the six-month monetary investment in share repurchases and requested the scale overlay.
+  - item_id: xbrl_0044
+    decision: edit_evidence
+    evidence_sets:
+      - ['0000909832-26-000029:29.0:32.0', '0000909832-26-000029:33.0:33.0']
+    note: Pair the statement with its indexed caption, which excepts per-share data from the millions scale.
+  - item_id: xbrl_0017
+    decision: edit_evidence
+    evidence_sets:
+      - ['0000320193-24-000123:416.0:416.0']
+    note: Per owner's instruction retain only the balance-sheet chunk explicitly dated September 28, 2024.
+  - item_id: xbrl_0123
+    decision: edit_evidence
+    evidence_sets:
+      - ['0000027419-25-000126:36.0:36.0']
+      - ['0000027419-25-000126:40.0:40.0']
+      - ['0000027419-25-000126:142.0:142.0']
+      - ['0000027419-25-000126:229.0:229.0']
+    note: Keep the two complete statement alternatives, add the two owner-identified dated alternatives, and drop the three truncated equity continuations.

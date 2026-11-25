@@ -1,0 +1,23 @@
+sheet: adnan_corrections_2026-11-25
+instructions: >-
+  Adnan's subsequent instructions for the three changed candidate reviews;
+  unchanged decisions and unit-scale overlays are not repeated.
+decisions:
+  - item_id: seed_0032
+    decision: accept
+    note: >-
+      The preceding table and continuation support the final OCI figure as a
+      total: -48 + 12 + 240 + 47 + 18 - 2 = 267 million. Accepted per the
+      owner's conditional instruction; the row itself has no label.
+  - item_id: xbrl_0044
+    decision: accept
+    note: >-
+      Per owner's instruction accept the original diluted EPS evidence without
+      a unit-scale override; the amount is dollars per share, not millions.
+  - item_id: xbrl_0123
+    decision: edit_evidence
+    evidence_sets:
+      - ['0000027419-25-000126:36.0:36.0']
+      - ['0000027419-25-000126:40.0:40.0']
+    note: >-
+      Per owner's instruction retain only the two dated statement alternatives.
