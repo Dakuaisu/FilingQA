@@ -3474,3 +3474,21 @@ floor. The standalone uncapped reranker produced the same five rows.
 Without a floor, 35 answerable items already had zero gold in fallback-aware
 mode (38 uncapped). These are pre-existing retrieval misses, not floor-induced
 losses; no answerable item newly lost a complete evidence set either.
+
+## 2026-11-26 — Answer correctness aggregation
+
+- Status: AUTONOMOUS DECISION - owner to review
+
+PRD 11.2/11.3 call for a judge-based correctness metric and a 1–5 rubric but
+do not specify how to aggregate the grades. Use the arithmetic mean judge
+score divided by 5 (`normalized_mean`), a continuous normalized metric that
+retains differences between grades. Report the share scoring at least 4
+separately as descriptive only. The `-0.03` tolerance in `eval/thresholds.yaml`
+is the allowed aggregate regression against a same-subset baseline, not an
+item-grade cutoff.
+
+Eligibility is unchanged: an item needs a reference answer and must have
+neither an abstained answer nor an `ABSTAIN` verdict. For both the report and
+baseline, `eval.compare` uses the normalized mean only when the slice has at
+least one eligible answer and all eligible answers have judge scores. An
+empty or incomplete slice leaves the metric pending, not passing.
