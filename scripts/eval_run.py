@@ -455,10 +455,33 @@ def rebuild_report(runs: Path, run_id: str, items: dict, run_cfg: dict) -> dict:
     # Read-only: run files are records; derived output goes to stdout or a suffix file (F-144).
     saved = json.loads((runs / f"{run_id}.meta.json").read_text(encoding="utf-8"))
     results = read_jsonl(runs / f"{run_id}.results.jsonl")
-    if len(results) != len(saved["item_order"]):
+    ids = [r["item_id"] for r in results]
+    order = saved["item_order"]
+    if len(ids) != len(set(ids)) or len(order) != len(set(order)) or set(ids) != set(order):
         raise SystemExit(f"run {run_id} has {len(results)} of {len(saved['item_order'])} items")
     report_meta = {k: v for k, v in saved.items() if k != "item_order"}
-    return build_report(items, results, report_meta, saved["k"], run_cfg["nli_threshold"])
+    report = build_report(items, results, report_meta, saved["k"], run_cfg["nli_threshold"])
+    from eval.judge.run import aggregate, eligible, identity, validate_records
+
+    records = read_jsonl(runs / f"{run_id}.judge.jsonl")
+    expected = {
+        r["item_id"]: identity(run_id, items[r["item_id"]], r)
+        for r in results
+        if eligible(items[r["item_id"]], r)
+    }
+    validate_records(records, expected, run_id)
+    if len({r.get("judge_config_sha256") for r in records}) > 1:
+        raise ValueError("judge records use different configurations")
+    correctness = aggregate(items, results, records)
+    report["answer_correctness"] = correctness
+    for scope, column in report["columns"].items():
+        if column is not None:
+            column["answer_correctness"] = (
+                correctness["aggregate"]
+                if scope == "aggregate"
+                else correctness["by_source"].get(scope)
+            )
+    return report
 
 
 def main() -> None:
@@ -497,6 +520,14 @@ def main() -> None:
         smoke(items, gen, run_cfg, int(arg("--smoke")), datasets)
         return
     meta = current_meta(gen, run_cfg, datasets)
+    if arg("--report"):
+        report = rebuild_report(runs, arg("--report"), items, run_cfg)
+        print(format_report(report))
+        if arg("--report-out"):
+            out = REPO_ROOT / arg("--report-out")
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
+        return
     if subset_meta is not None:
         meta["subset"] = subset_meta
     if arg("--reverify"):
@@ -506,9 +537,6 @@ def main() -> None:
         rescore_run(
             items, run_cfg, arg("--rescore"), float(sys.argv[sys.argv.index("--rescore") + 2])
         )
-        return
-    if arg("--report"):
-        print(format_report(rebuild_report(runs, arg("--report"), items, run_cfg)))
         return
     if arg("--resume"):
         run_id = arg("--resume")

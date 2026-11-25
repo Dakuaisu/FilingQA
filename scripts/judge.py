@@ -4,6 +4,7 @@ python -m scripts.judge labels          # seeded 50-item label sheet + empty lab
 python -m scripts.judge run --run       # judge the pairs (only once all 50 are labelled)
 python -m scripts.judge kappa           # Cohen's kappa (refuses until labels and verdicts exist)
 python -m scripts.judge replace ITEM --reason TEXT   # exclude a pair, draw a same-source one
+python -m scripts.judge score RUN_ID [--dataset PATH]  # score saved eligible answers
 
 The pairs are (item, answer) from the dev run `eval_judge.label_run`; the owner
 labels them 1-5 with the rubric in eval/judge/rubrics.py. A judge whose family
@@ -24,7 +25,7 @@ from collections import Counter
 
 import yaml
 
-from api.config import REPO_ROOT, eval_judge, generation
+from api.config import REPO_ROOT, eval_judge, eval_run, generation
 from eval.generate.seeding import allocate
 from eval.judge.agreement import RELIABLE, cohens_kappa
 from eval.judge.judge import family, judge
@@ -86,6 +87,40 @@ def sheet_section(it: dict, answer: str) -> list[str]:
 def main() -> None:
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
     cfg = eval_judge()
+    if cmd == "score":
+        import argparse
+
+        from eval.judge.run import score_run
+        from scripts.eval_run import load_datasets
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument("run_id")
+        parser.add_argument("--dataset")
+        args = parser.parse_args(sys.argv[2:])
+        if not args.run_id.isalnum():
+            raise SystemExit("invalid run id")
+        runs = REPO_ROOT / eval_run()["runs_dir"]
+        saved = json.loads((runs / f"{args.run_id}.meta.json").read_text(encoding="utf-8"))
+        items, _ = load_datasets(args.dataset, saved["datasets"])
+        results = read_jsonl(runs / f"{args.run_id}.results.jsonl")
+        order = saved["item_order"]
+        ids = [r["item_id"] for r in results]
+        if len(order) != len(set(order)) or len(ids) != len(set(ids)) or set(ids) != set(order):
+            raise SystemExit("run is incomplete or contains duplicate or foreign results")
+        if not set(order) <= set(items):
+            raise SystemExit("run contains items absent from its dataset")
+        gen = generation()
+        tier = cfg["tier"]
+        if cfg.get("backend") == "opencode_cli":
+            gen, tier = {"backend": "opencode_cli", "judge_model": cfg["model"]}, "judge_model"
+        elif cfg.get("backend", gen["backend"]) != gen["backend"]:
+            raise SystemExit("configured judge backend does not match generation backend")
+        if gen.get("backend") not in ("opencode_cli", "claude_cli", "anthropic_api") or not gen.get(
+            tier
+        ):
+            raise SystemExit("invalid judge backend or tier")
+        score_run(args.run_id, items, results, runs / f"{args.run_id}.judge.jsonl", gen, tier)
+        return
     items = {it["item_id"]: it for p in CANDIDATES for it in read_jsonl(p)}
     run = read_jsonl(REPO_ROOT / "eval" / "runs" / f"{cfg['label_run']}.results.jsonl")
     answers = {r["item_id"]: r for r in run}

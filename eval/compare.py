@@ -24,7 +24,6 @@ import yaml
 from api.config import REPO_ROOT
 
 NOT_IN_REPORT = {
-    "answer_correctness": "pending: judge answer correctness (F-105)",
     "natural_phrasing_gap": "pending: hand-written natural-phrasing items (F-103)",
 }
 
@@ -38,6 +37,11 @@ def _abst(key):
 
 
 METRICS = {
+    "answer_correctness": lambda c: (
+        (c.get("answer_correctness") or {}).get("normalized_mean")
+        if (c.get("answer_correctness") or {}).get("complete") is True
+        else None
+    ),
     "sufficiency_at_10": lambda c: c.get("sufficiency@10"),
     "faithfulness_pre": _gen("faithfulness_pre"),
     "claim_retention": _gen("claim_retention"),

@@ -363,6 +363,20 @@ def format_report(report: dict) -> str:
         lines.append(f"{name:32}" + "".join(f"{x:>17}" for x in cells))
     gap = report.get("natural_phrasing_gap", "pending definition (F-20)")
     lines.append(f"natural_phrasing_gap: {gap}")
+    if "answer_correctness" in report:
+        correctness = report["answer_correctness"]
+        lines.append(f"answer correctness ({correctness['scale']}):")
+        for scope, summary in [
+            ("aggregate", correctness["aggregate"]),
+            *correctness["by_source"].items(),
+            *correctness["by_type"].items(),
+        ]:
+            value = summary["normalized_mean"] if summary["complete"] else "pending"
+            lines.append(
+                f"  {scope}: {summary['judged']}/{summary['eligible']} judged; "
+                f"mean score (1-5) {summary['mean_score']}; normalized mean {value}; "
+                f"share >=4 {summary['share_at_least_4']}"
+            )
     for source in COLUMNS:
         if cols[source]:
             lines.append(f"abstention 2x2 {source}: {cols[source]['abstention'].get('counts')}")
