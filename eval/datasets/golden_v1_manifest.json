@@ -1,0 +1,31 @@
+{
+  "dataset_version": "golden_v1",
+  "selection_rule": "Latest review decisions applied; rejected generated items excluded; LLM-seeded items require human review; handwritten items always included; undecided XBRL-generated items included",
+  "require_decision": false,
+  "input_sha256": {
+    "/Users/apple/FillingQA/eval/candidates/comparison_candidates.jsonl": "e8f78af34061ba4fe05c10facc6f9dcab2d4e30219dcad40806616614dbb0eef",
+    "/Users/apple/FillingQA/eval/candidates/llm_seeded_candidates.jsonl": "f1b7849ab81e52991b8d5ea9b46e420da81198d6010675949a74c8d25937cf33",
+    "/Users/apple/FillingQA/eval/candidates/xbrl_numeric_candidates.jsonl": "19fb355d8134c9504a654282354c13e92a453c450e67b87c9e9a25a9aaf638e7",
+    "/Users/apple/FillingQA/eval/handwritten/adversarial.jsonl": "5426bab38d6f9984db6e8cf73b4490527f3e5817406181f9e267f9d2667fa5ad",
+    "/Users/apple/FillingQA/eval/handwritten/comparison.jsonl": "f7c2fc9056b87eb9d8286f50b7b3a4d0acfaf75d7f461b3480e1365c0f3be558",
+    "/Users/apple/FillingQA/eval/handwritten/natural_phrasing.jsonl": "4847f3fb20c073b700a1b2a739ab1207107355420f4c4fa77a1234d1c8b52671",
+    "/Users/apple/FillingQA/eval/handwritten/unanswerable.jsonl": "8e2231b2d104f32a210892eaf0e1a8c17e19ff82132a5c0c90f553b86498bd3e",
+    "/Users/apple/FillingQA/eval/review/decisions_v1.jsonl": "0a3200e9ca5dda9866fdc60195d2e4e50f0ca6ce991c283ec92664c3c02cda7d"
+  },
+  "decision_record_count": 140,
+  "item_count": 392,
+  "counts_by_source": {
+    "handwritten": 120,
+    "llm_seeded": 72,
+    "xbrl_auto": 200
+  },
+  "counts_by_type": {
+    "adversarial": 20,
+    "comparison": 60,
+    "natural_phrasing": 30,
+    "synthesis": 33,
+    "table": 39,
+    "unanswerable": 50,
+    "xbrl_numeric": 160
+  }
+}

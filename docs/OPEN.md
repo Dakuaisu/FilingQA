@@ -7,12 +7,12 @@ this file is the complete record rather than a to-do list.
 `docs/TRADEOFFS.md` carries the reasoning behind each resolution. This file
 carries the state.
 
-**Last updated: 2026-11-25**
+**Last updated: 2026-11-26**
 
 | Status | Count |
 |---|---|
-| OPEN | 78 |
-| RESOLVED | 66 |
+| OPEN | 77 |
+| RESOLVED | 67 |
 | **Total** | **144** |
 
 ---
@@ -53,7 +53,6 @@ carries the state.
 | F-101 | Gated (any figure) vs strict (first figure) numeric accuracy diverge by 11 items: aggregate 0.435 vs 0.388; mean 4.2 figures per numeric answer, up to 20. Answers list many numbers, so any-figure credits some answers whose leading figure is wrong. Reported as decided (TRADEOFFS F-81); not a reason to pick either number | OPEN |
 | F-102 | Dev run latency: p50 7.88 s, p95 16.39 s, max 98.75 s (xbrl_0064); 8 items over 3x p50. claude_cli wall time, model load and retrieval included; not comparable with anthropic_api latency | OPEN |
 | F-103 | PRD 11.1 requires independently handwritten items. On 2026-11-25, `python -m scripts.handwritten_validate` ran cache-only against the running Docker rebuild: 120 items in `eval/handwritten/`, with 50 unanswerable, 20 adversarial, 30 natural phrasing, and 20 comparison; 0 problems. This verifies the files, not their authorship: the items were model-drafted in chat, not independently handwritten. Authoring and provenance remain unresolved | OPEN |
-| F-106 | The golden dataset freeze (PRD 11.1 Stage 6) is still pending. The scoped review is complete (F-104), but handwritten authoring and provenance remain unresolved (F-103). Naming is inconsistent in the PRD: 11.1 Stage 6 commits `eval/datasets/golden_v1.jsonl`, 14's Phase 3 checklist says "freeze `golden_v3`", and 11.1's item example carries `dataset_version: "v2"`. The freeze will be `golden_v1` (supervisor), read through the review overlay (`eval/review_decisions.effective`) | OPEN |
 | F-107 | Answer relevance (PRD 11.2: cosine of the question and a model-reconstructed question) is not built; it is not on PRD 14's Phase 3 checklist and needs a model call per item. Answer correctness and context precision are judge metrics and wait on the judge's validation (F-105) | OPEN |
 | F-110 | BM25 inflates the `llm_seeded` slice, as PRD 11.1 warns: seeded questions copy their chunk's vocabulary and header (F-92), so BM25 alone reaches Sufficiency@10 0.892 on llm_seeded against 0.175 on xbrl_auto (retrieval run 01019ff395ec), and hybrid's gain on that slice (0.699 -> 0.892) is lexical overlap, not retrieval quality. The natural-phrasing control (F-103, OWNER-BLOCKED) is the measurement that separates the two | OPEN |
 | F-112 | The rerank score floor (0.30, `rerank.floor_calibration: pending`) is calibrated only on reviewed items, which wait on review (F-104). At 0.30 it empties no candidate's list (rerank run 4aef651ade44). In eval run 63cf35c328e2 it emptied none and shortened two generator inputs (xbrl_0015 7 of 8, seed_0075 9 of 10); floor abstentions are now tagged `abstain_reason: score_floor`. OWNER-BLOCKED | OPEN |
@@ -134,6 +133,7 @@ carries the state.
 
 | ID | Finding | Resolution | Date |
 |---|---|---|---|
+| F-106 | Freeze the golden dataset (PRD 11.1 Stage 6); the PRD also refers to `golden_v3` and uses `v2` in its item example | Owner approved `eval/datasets/golden_v1.jsonl` and `eval/datasets/golden_v1_manifest.json`: 392 items after applying the latest review decisions, retaining 147 undecided XBRL-generated items and the 120 model-drafted items in the `handwritten` slice. The freeze does not resolve independent authorship (F-103). See TRADEOFFS for the selection and scoring details | 2026-11-26 |
 | F-104 | PRD 11.1 Stage 5 human review of the XBRL numeric spot-check plus flagged items, comparison spot-check, and all seeded candidates | Review complete for the 136 unique worksheet items (44 / 9 / 83). The latest outcomes in `eval/review/decisions_v1.jsonl` are 120 accepts, 11 rejects, and 5 evidence edits across 140 append-only records. `python -m scripts.review status` also shows 147 undecided outside the worksheets (116 XBRL numeric and 31 comparison); those were not selected for review, not pending worksheet decisions. PRD 11.7 ablations still use only reviewed items | 2026-11-25 |
 | F-105 | PRD 11.3 needs 50 owner-labelled answer pairs and judge agreement of at least 0.6 | Labels and verdicts are in `eval/judge/labels_v1.yaml` and `eval/judge/verdicts_v1.jsonl`. The sample is from dev run `19693d4aa874` (seed 20261005), with rejected `seed_0020` replaced by `seed_0028`. `python -m scripts.judge kappa` reports 0.818 on 50 active pairs, above the reliability threshold | 2026-11-25 |
 | F-125 | PRD 7.5 needs 40 owner-labelled prose claim and cited-chunk pairs to decide whether to retain NLI | `eval/nli/auc_v1.json` records AUC 0.766 on 40 pairs (33 supporting) from `a4e39a65c2c8`. NLI stays under the PRD rule (AUC ≥ 0.75); `api/config.yaml` sets the Youden threshold to `0.0010178742231801152`. This is a nearly open gate: 27 of 33 supporting pairs scored below 0.06, only seven negatives make the AUC margin fragile, and all pairs are seeded prose. This is not evidence of a strong filter or a passing CI gate | 2026-11-25 |

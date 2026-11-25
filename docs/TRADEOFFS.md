@@ -3422,3 +3422,30 @@ Validation on the owner's 50 labels (`seed_0020` excluded and replaced by
 by PRD 11.3. Exact agreement 44 of 50, within one point 49 of 50; the one
 two-point gap is xbrl_0057 (owner 4, judge 2). Verdicts in
 `eval/judge/verdicts_v1.jsonl`.
+
+## 2026-11-26 — Golden dataset freeze (F-106)
+
+- Decided by: owner
+- Status: OWNER DECISION
+
+Freeze `eval/datasets/golden_v1.jsonl` under the Stage 6 name, with input
+hashes and counts in `eval/datasets/golden_v1_manifest.json`. Apply the latest
+review decisions, exclude rejected generated items, and require human review
+for LLM-seeded items. PRD 11.1 specifies a 10% spot-check for XBRL-derived
+items, not a decision on every item. Retain the 147 undecided `xbrl_auto`
+items (116 numeric, 31 comparison); they are not human-reviewed.
+Requiring a decision for every generated item (`--require-decision`) would
+produce 245 items instead of the approved 392.
+
+| Source | Question types | Total |
+|---|---|---:|
+| `xbrl_auto` | `xbrl_numeric`: 160; `comparison`: 40 | 200 |
+| `llm_seeded` | `table`: 39; `synthesis`: 33 | 72 |
+| `handwritten` | `unanswerable`: 50; `natural_phrasing`: 30; `adversarial`: 20; `comparison`: 20 | 120 |
+| **Total** | 60 comparisons across both sources | **392** |
+
+Keep `seed_0040` in the dataset, but exclude it from numeric scoring because
+it is tagged `unit_scale_unknown`. The 120 items labelled `handwritten` were
+model-drafted in chat, not independently handwritten. Their inclusion is
+approved for this freeze; independent authoring and provenance remain open
+under F-103.
