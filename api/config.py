@@ -97,7 +97,11 @@ def retrieval(path: Path = CORPUS_FILE) -> dict:
 
 def verification(path: Path = CORPUS_FILE) -> dict:
     """The `verification:` block of api/config.yaml (PRD 7.5)."""
-    return yaml.safe_load(path.read_text(encoding="utf-8"))["verification"]
+    cfg = yaml.safe_load(path.read_text(encoding="utf-8"))["verification"]
+    cfg.setdefault("prose_check", "llm_judge")
+    if cfg["prose_check"] not in ("llm_judge", "nli"):
+        raise ConfigError(f"unknown prose_check {cfg['prose_check']!r}")
+    return cfg
 
 
 def router(path: Path = CORPUS_FILE) -> dict:

@@ -151,9 +151,14 @@ def current_meta(gen: dict, run_cfg: dict, datasets: dict | None = None,
         from api.config import verification
         from api.verify import nli
 
-        meta["verification"] = {**verification(), "nli_model": nli.MODEL,
-                                "nli_revision": nli.REVISION,
-                                "nli_threshold": run_cfg["nli_threshold"]}  # fmt: skip
+        vcfg = verification()
+        meta["verification"] = {**vcfg}
+        if vcfg["prose_check"] == "nli":
+            meta["verification"].update(
+                nli_model=nli.MODEL,
+                nli_revision=nli.REVISION,
+                nli_threshold=run_cfg.get("nli_threshold"),
+            )
     else:
         meta["generation_contract"] = {"kind": "plain prompt, free text (Phase 2 baseline)"}
     if pipeline == "config_4_routed":
@@ -209,7 +214,7 @@ def answer_one(conn, ctx: Context, it: dict, gen: dict, run_cfg: dict) -> dict:
     a = call_model(chunks, it["question"], gen, TIER)
     return {
         **record, **answer_fields(a, c["generator_input"], ctx, it["question"], texts,
-                                  run_cfg["nli_threshold"]),
+                                  run_cfg.get("nli_threshold")),
         "model_served": a.model, "backend": a.backend,
         "usage": {"input_tokens": a.input_tokens, "output_tokens": a.output_tokens,
                   "cache_read_tokens": a.cache_read_tokens,
@@ -457,10 +462,10 @@ def smoke(items: dict, gen: dict, run_cfg: dict, seed: int, datasets: dict | Non
         checks["meta_disagreements"] = depth_disagreements(meta, results, items)
         try:
             format_report(build_report(items, results, meta, run_cfg["k"],
-                                       run_cfg["nli_threshold"]))  # fmt: skip
+                                       run_cfg.get("nli_threshold")))  # fmt: skip
             checks["report"] = "built and formatted"
         except ValueError as e:
-            refused = run_cfg["nli_threshold"] is None and "nli_threshold" in str(e)
+            refused = run_cfg.get("nli_threshold") is None and "nli_threshold" in str(e)
             checks["report"] = ("refused: claims present and nli_threshold null (expected, "
                                 "PRD 7.5 gate)" if refused else f"ValueError: {e}")  # fmt: skip
         except Exception as e:
@@ -488,7 +493,7 @@ def rebuild_report(runs: Path, run_id: str, items: dict, run_cfg: dict) -> dict:
     saved = json.loads((runs / f"{run_id}.meta.json").read_text(encoding="utf-8"))
     results = finished_results(runs, run_id, saved)
     report_meta = {k: v for k, v in saved.items() if k != "item_order"}
-    report = build_report(items, results, report_meta, saved["k"], run_cfg["nli_threshold"])
+    report = build_report(items, results, report_meta, saved["k"], run_cfg.get("nli_threshold"))
     from eval.judge.run import aggregate, eligible, identity, validate_records
 
     records = read_jsonl(runs / f"{run_id}.judge.jsonl")
@@ -612,7 +617,7 @@ def main() -> None:
             sys.exit(code)
     results = read_jsonl(results_path)
     report = build_report(items, results, {**meta, "run_id": run_id}, run_cfg["k"],
-                          run_cfg["nli_threshold"])  # fmt: skip
+                          run_cfg.get("nli_threshold"))  # fmt: skip
     (runs / f"{run_id}.json").write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")
     print(format_report(report))
     if baseline_out:

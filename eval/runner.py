@@ -37,11 +37,25 @@ def _mean(xs: list) -> float | None:
 PENDING_NLI = "pending NLI threshold (F-125)"
 
 
-def _generation(results: list[dict], nli_threshold) -> dict:
+def _generation(results: list[dict], nli_threshold, prose_check=None) -> dict:
     """Claim metrics; every one pending while claims exist and the NLI threshold
     is not set (TRADEOFFS: first full run scored before the threshold)."""
     has_claims = any(r.get("claims_pre") or r.get("claims_post") for r in results)
-    if has_claims and nli_threshold is None:
+    needs_nli = any(
+        not c.get("figure") and (c.get("checks") or {}).get("prose_check") != "llm_judge"
+        for r in results
+        for c in (r.get("claims_pre") or [])
+    )
+    has_judge = any(
+        (c.get("checks") or {}).get("prose_check") == "llm_judge"
+        for r in results
+        for c in (r.get("claims_pre") or [])
+    )
+    if (
+        has_claims
+        and nli_threshold is None
+        and (needs_nli or (not has_judge and prose_check != "llm_judge"))
+    ):
         return {"status": PENDING_NLI}
     return generation_metrics(results, nli_threshold if nli_threshold is not None else 0.0)
 
@@ -119,7 +133,9 @@ def _prices() -> dict:
     return PRICING["models"]
 
 
-def _slice(items: dict, results: list[dict], k: int, nli_threshold=None, dev=False) -> dict:
+def _slice(
+    items: dict, results: list[dict], k: int, nli_threshold=None, dev=False, prose_check=None
+) -> dict:
     ret = {"sufficiency": [], "recall": [], "precision": [], "mrr": [], "ndcg": [],
            "sufficiency_post_rerank": []}  # fmt: skip
     scores, abst = [], []
@@ -157,7 +173,7 @@ def _slice(items: dict, results: list[dict], k: int, nli_threshold=None, dev=Fal
         "rerank_fell_back": sum(bool(r.get("rerank_fell_back")) for r in results),
         "numeric": aggregate(scores),
         "abstention": _abstention(abst),
-        "generation": _generation(results, nli_threshold),
+        "generation": _generation(results, nli_threshold, prose_check),
     }
 
 
@@ -167,6 +183,7 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
     served model; `meta`: backend, run_id, dataset files, retrieval stage."""
     by_source = {s: [r for r in results if items[r["item_id"]]["source"] == s] for s in SOURCES}
     dev = meta["backend"] in DEV_BACKENDS
+    prose_check = (meta.get("verification") or {}).get("prose_check")
     handwritten: dict[str, list[dict]] = {}
     for result in by_source["handwritten"]:
         kind = items[result["item_id"]]["question_type"]
@@ -182,7 +199,7 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
         "verdict_by_correctness": verdict_by_correctness(items, results),
         "natural_phrasing_gap": "pending definition (F-20)",
         "handwritten_question_types": {
-            kind: _slice(items, rs, k, nli_threshold, dev)
+            kind: _slice(items, rs, k, nli_threshold, dev, prose_check)
             for kind, rs in sorted(handwritten.items())
         },
         "xbrl": xbrl_summary(results),
@@ -194,10 +211,10 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
         "hardware_dependent": any(r.get("rerank_fell_back") for r in results),
         "columns": {
             **{
-                s: _slice(items, rs, k, nli_threshold, dev) if rs else None
+                s: _slice(items, rs, k, nli_threshold, dev, prose_check) if rs else None
                 for s, rs in by_source.items()
             },
-            "aggregate": _slice(items, results, k, nli_threshold, dev),
+            "aggregate": _slice(items, results, k, nli_threshold, dev, prose_check),
         },
     }
 

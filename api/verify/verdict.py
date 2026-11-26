@@ -21,7 +21,7 @@ def is_figure(claim: dict) -> bool:
     return bool(claim.get("figure"))
 
 
-def supported(claim: dict, nli_threshold: float) -> bool:
+def supported(claim: dict, nli_threshold: float | None) -> bool:
     """PRD 7.5 aggregation, with citation validity on both branches (F-10)."""
     if not check(claim, "citation_valid") or not check(claim, "entity_ok"):
         return False
@@ -32,7 +32,9 @@ def supported(claim: dict, nli_threshold: float) -> bool:
             and check(claim, "period_stated")
             and not check(claim, "xbrl_contradiction")
         )
-    return check(claim, "entail") >= nli_threshold
+    if claim["checks"].get("prose_check") == "llm_judge":
+        return bool(check(claim, "citations_supporting"))
+    return nli_threshold is not None and check(claim, "entail") >= nli_threshold
 
 
 def verdict(claims: list[dict], nli_threshold: float | None) -> tuple[str | None, list | None]:
@@ -40,7 +42,9 @@ def verdict(claims: list[dict], nli_threshold: float | None) -> tuple[str | None
     NLI threshold that is not set."""
     if not claims:
         return ABSTAIN, []
-    if nli_threshold is None and any(not is_figure(c) for c in claims):
+    if nli_threshold is None and any(
+        not is_figure(c) and c["checks"].get("prose_check") != "llm_judge" for c in claims
+    ):
         return None, None
     threshold = nli_threshold if nli_threshold is not None else 0.0
     post = [c for c in claims if supported(c, threshold)]
@@ -78,7 +82,7 @@ def rescore_claims(claims_pre: list[dict], nli_threshold: float) -> list[dict]:
 
     out = copy.deepcopy(claims_pre)
     for c in out:
-        if is_figure(c):
+        if is_figure(c) or c["checks"].get("prose_check") == "llm_judge":
             continue
         by_chunk = c["checks"].get("entail_by_chunk") or []
         c["checks"]["citations_supporting"] = [

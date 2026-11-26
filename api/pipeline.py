@@ -51,11 +51,16 @@ class Context:
             self.period_ends = conn.execute(PERIOD_ENDS_SQL).fetchall()
         self.gate = None
         if generation().get("structured"):
+            from api.config import verification
             from api.verify.gate import Gate
-            from api.verify.nli import Nli
 
             names = yaml.safe_load(TEMPLATES.read_text(encoding="utf-8"))["company_names"]
-            self.gate = Gate(conn, names, Nli())
+            nli = None
+            if verification()["prose_check"] == "nli":
+                from api.verify.nli import Nli
+
+                nli = Nli()
+            self.gate = Gate(conn, names, nli)
 
 
 def texts_for(conn, ids: list[str]) -> dict[str, str]:
@@ -228,7 +233,7 @@ def answer_question(
         gs.model_call(a.model, usage_of(a), a.backend)
         gs.set(tier=budget["tier"], chunks=len(post))
     return {
-        **record, **answer_fields(a, post, ctx, question, texts, run_cfg["nli_threshold"]),
+        **record, **answer_fields(a, post, ctx, question, texts, run_cfg.get("nli_threshold")),
         "model_served": a.model, "backend": a.backend,
         "usage": {"input_tokens": a.input_tokens, "output_tokens": a.output_tokens,
                   "cache_read_tokens": a.cache_read_tokens,

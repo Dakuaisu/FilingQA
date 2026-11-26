@@ -47,6 +47,8 @@ def targets_in(question: str, names: dict[str, list[str]]) -> set[str]:
 class Gate:
     def __init__(self, conn, company_names: dict[str, str], nli=None):
         cfg = verification()
+        self.prose_check = cfg["prose_check"]
+        self.prose_judge_model = cfg.get("prose_judge_model")
         self.conn, self.nli, self.tol = conn, nli, cfg["xbrl_match_tolerance_pct"]
         self.phrases = load_concepts(REPO_ROOT / "eval" / "concepts.yaml",
                                      REPO_ROOT / cfg["concept_synonyms"])  # fmt: skip
@@ -131,7 +133,11 @@ class Gate:
                 "entail": None, "entail_by_chunk": None, "citations_supporting": [],
                 **f,
             }  # fmt: skip
-            if not c.get("figure") and self.nli is not None:
+            if (
+                not c.get("figure")
+                and getattr(self, "prose_check", "nli") == "nli"
+                and self.nli is not None
+            ):
                 cited = [x for x in c["citations"] if x in given_texts]
                 scores = self.nli.score([(given_texts[x], c["text"]) for x in cited])
                 checks["entail_by_chunk"] = [
@@ -144,6 +150,32 @@ class Gate:
                     [x for x, s in zip(cited, scores, strict=True) if s >= nli_threshold]
                     if nli_threshold is not None else []
                 )  # fmt: skip
+            elif not c.get("figure") and getattr(self, "prose_check", "nli") == "llm_judge":
+                from api.verify.prose_judge import check_support
+
+                decisions = []
+                for chunk_id in c["citations"]:
+                    if chunk_id in given_texts:
+                        decision = check_support(
+                            c["text"], given_texts[chunk_id], self.prose_judge_model
+                        )
+                        decisions.append({"chunk_id": chunk_id, **decision})
+                    else:
+                        decisions.append(
+                            {
+                                "chunk_id": chunk_id,
+                                "supported": False,
+                                "error": "citation not available",
+                                "model_requested": self.prose_judge_model,
+                                "model_served": None,
+                                "backend": "opencode_cli",
+                            }
+                        )
+                checks["prose_check"] = "llm_judge"
+                checks["prose_by_chunk"] = decisions
+                checks["citations_supporting"] = [
+                    d["chunk_id"] for d in decisions if d["supported"]
+                ]
             c["checks"] = checks
         v, post = verdict(pre, nli_threshold)
         return {"claims_pre": pre, "claims_post": post, "verify_verdict": v}

@@ -369,6 +369,8 @@ tracing:
 
 # PRD 7.5 verification gate. Appendix A values; decisions in TRADEOFFS.
 verification:
+  prose_check: llm_judge           # llm_judge | nli
+  prose_judge_model: openai/gpt-6.2-sol
   xbrl_match_tolerance_pct: 0.5     # PRD 6.5.4 / Appendix A xbrl.match_tolerance_pct
   concept_synonyms: api/verify/concept_synonyms.yaml
 
