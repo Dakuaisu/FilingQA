@@ -106,6 +106,20 @@ no metrics from the in-progress evaluation are reported here.
   retrieval-only run (`eval/runs/4b5036b69ca0.f112.json`). Timeout fallback uses
   hybrid ordering without applying the floor.
 
+**Historical dashboard snapshot** (the dashboard configuration predates the
+current status above): Config 3 retrieval run `7fa009acac95` reported aggregate
+Sufficiency@10 0.537 (threshold 0.82), xbrl_auto 0.375 (0.90), and llm_seeded
+0.928 (0.80). These are unreviewed candidate retrieval results, not gated scores.
+The dashboard's historical pending list read:
+
+- faithfulness, claim retention, citation coverage and the abstention rates (the NLI threshold needs 40 owner labels, F-125)
+- answer correctness (judge labels, F-105)
+- the natural-phrasing gap and every handwritten-slice threshold (hand-written items, F-103)
+- cost per query (needs a priced run, F-134)
+
+Those statements describe the older dashboard snapshot, not current blockers;
+the newer review, judge validation and NLI results are recorded above.
+
 **PASS is a faithfulness verdict, never a correctness claim.** The verifier
 checks each claim against the evidence it cites (PRD 7.5); whether the answer
 addresses the question is measured separately by numeric accuracy and the
@@ -113,13 +127,25 @@ validated judge. Reports print the two side by side (F-133).
 
 ### What waits on the owner
 
+- `ANTHROPIC_API_KEY` for CI, the `anthropic_api` fast-eval baseline, the first priced run, and the deliberate-regression PR with its failing-check and PR-comment screenshot (F-59, F-134).
+- Independently authored handwritten items and their provenance (unanswerable, adversarial, natural phrasing, comparison); the frozen model-drafted items do not meet this requirement (F-103).
+- Hosting the corpus snapshot for CI (exact command in the finding) (F-135).
+- Non-blocking owner review of the XBRL concept synonym map (F-127).
+- Deploy: hosted snapshot, pgvector Postgres, Fly.io and Vercel accounts, `ANTHROPIC_API_KEY`, LangFuse keys, deployment, first live trace verification, and public URL (exact commands in the finding) (F-143).
+
+**Historical dashboard owner-blocked snapshot** (not the current list above):
+
 | Item | Finding |
 |---|---|
-| `ANTHROPIC_API_KEY` for CI, the `anthropic_api` fast-eval baseline, the first priced run, and the deliberate-regression PR with its failing-check and PR-comment screenshot | F-59, F-134 |
-| Independently authored handwritten items and their provenance (unanswerable, adversarial, natural phrasing, comparison); the frozen model-drafted items do not meet this requirement | F-103 |
+| API key for CI runs, the fast-eval baseline, a priced run, the deliberate-regression PR and its screenshot | F-59, F-134 |
+| Hand-written eval items (unanswerable, adversarial, natural phrasing, comparison) | F-103 |
+| Human review of the candidates; the golden-set freeze; ablations run only on reviewed items | F-104, F-106 |
+| Judge validation labels | F-105 |
+| NLI gate labels (40 pairs, `eval/nli/label_sheet_v1.md`) | F-125 |
+| Rerank score-floor calibration | F-112 |
 | Hosting the corpus snapshot for CI (exact command in the finding) | F-135 |
-| Non-blocking owner review of the XBRL concept synonym map | F-127 |
-| Deploy: hosted snapshot, pgvector Postgres, Fly.io and Vercel accounts, `ANTHROPIC_API_KEY`, LangFuse keys, deployment, first live trace verification, and public URL (exact commands in the finding) | F-143 |
+| Review of the XBRL concept synonym map | F-127 |
+| Deploy: Fly.io and Vercel accounts, LangFuse keys, the deploy itself and the public URL (exact commands in the finding) | F-143 |
 
 Dense search is exact, so any run is reproducible from the corpus snapshot
 (F-136). The reranker runs on whatever device is present; a run where it hit

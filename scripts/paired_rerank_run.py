@@ -47,8 +47,11 @@ def load_rows(path: Path) -> list[dict]:
 
 
 def environment() -> dict:
-    return {"at": datetime.now(UTC).isoformat(), "load_average": os.getloadavg(),
-            "machine": machine()}
+    return {
+        "at": datetime.now(UTC).isoformat(),
+        "load_average": os.getloadavg(),
+        "machine": machine(),
+    }
 
 
 def main() -> None:
@@ -64,9 +67,18 @@ def main() -> None:
     gold = {item["item_id"]: item for item in dataset}
     if len(gold) != 392 or set(gold) != {r["item_id"] for r in traces}:
         raise RuntimeError("source and dataset item IDs differ")
-    inputs = ["api/query/rerank.py", "api/query/bm25.py", "api/chunk/store.py", "api/pipeline.py",
-              "eval/pipeline.py", "eval/metrics/retrieval.py", "eval/paired_rerank.py",
-              "scripts/rerank_run.py", "scripts/paired_rerank_run.py", "api/config.yaml"]
+    inputs = [
+        "api/query/rerank.py",
+        "api/query/bm25.py",
+        "api/chunk/store.py",
+        "api/pipeline.py",
+        "eval/pipeline.py",
+        "eval/metrics/retrieval.py",
+        "eval/paired_rerank.py",
+        "scripts/rerank_run.py",
+        "scripts/paired_rerank_run.py",
+        "api/config.yaml",
+    ]
     fingerprints = {path: sha(ROOT / path) for path in inputs}
     rows = []
     for trace in traces:
@@ -74,14 +86,24 @@ def main() -> None:
         if item["expected_abstain"]:
             continue
         budget = trace["budget"]
-        queries = [{"query": q["query"], "retrieved": q["retrieved"], "measured": {}}
-                   for q in trace["queries"]]
+        queries = [
+            {"query": q["query"], "retrieved": q["retrieved"], "measured": {}}
+            for q in trace["queries"]
+        ]
         if budget is None and (trace["intent"] != "unsupported" or queries):
             raise RuntimeError("invalid unsupported trace")
         if budget is not None and len(queries) != budget["sub_queries"]:
             raise RuntimeError("missing subquery trace")
-        row = {k: item[k] for k in ("item_id", "source", "question_type", "reviewed_by_human",
-                                    "gold_evidence_sets")}
+        row = {
+            k: item[k]
+            for k in (
+                "item_id",
+                "source",
+                "question_type",
+                "reviewed_by_human",
+                "gold_evidence_sets",
+            )
+        }
         row.update({"intent": trace["intent"], "budget": budget, "queries": queries})
         rows.append(row)
     if len(rows) != 332:
@@ -94,8 +116,10 @@ def main() -> None:
         ).fetchone()[0]
         counts = conn.execute("SELECT count(*), count(embedding) FROM chunks").fetchone()
         chunks = conn.execute("SELECT chunk_id, text FROM chunks ORDER BY chunk_id").fetchall()
-        if (counts != (22354, 22354)
-                or corpus_key(chunker_version(), chunks) != meta["bm25_index_key"]):
+        if (
+            counts != (22354, 22354)
+            or corpus_key(chunker_version(), chunks) != meta["bm25_index_key"]
+        ):
             raise RuntimeError("live corpus does not match source retrieval corpus")
         texts = dict(chunks)
         if any(cid not in texts for row in rows for q in row["queries"] for cid in q["retrieved"]):
@@ -122,10 +146,12 @@ def main() -> None:
         top_n = row["budget"]["top_n"] if row["budget"] is not None else 0
         base_lists = [[(cid, 1.0) for cid in q["retrieved"]] for q in row["queries"]]
         baseline = final_context(base_lists, top_n, None)
-        row["outcomes"] = {"none": {
-            "context": baseline,
-            "metrics": item_metrics(baseline, baseline, row["gold_evidence_sets"]),
-        }}
+        row["outcomes"] = {
+            "none": {
+                "context": baseline,
+                "metrics": item_metrics(baseline, baseline, row["gold_evidence_sets"]),
+            }
+        }
         for name in MODELS:
             ranked = [q["measured"][name]["ranked"] for q in row["queries"]]
             for suffix, floor in (("off", None), ("on", 0.5)):
@@ -136,13 +162,27 @@ def main() -> None:
                 }
     summaries = {}
     for variant in variants:
-        summaries[variant] = summarize([
-            {"source": r["source"], "question_type": r["question_type"],
-             "metrics": r["outcomes"][variant]["metrics"]} for r in rows
-        ])
+        summaries[variant] = summarize(
+            [
+                {
+                    "source": r["source"],
+                    "question_type": r["question_type"],
+                    "metrics": r["outcomes"][variant]["metrics"],
+                }
+                for r in rows
+            ]
+        )
     latencies = {
-        name: latency_summary([[q["measured"][name]["seconds"] for q in r["queries"]
-                                if q["measured"][name]["seconds"] is not None] for r in rows])
+        name: latency_summary(
+            [
+                [
+                    q["measured"][name]["seconds"]
+                    for q in r["queries"]
+                    if q["measured"][name]["seconds"] is not None
+                ]
+                for r in rows
+            ]
+        )
         for name in MODELS
     }
     end = environment()
@@ -150,14 +190,21 @@ def main() -> None:
         sha(ROOT / path) != digest for path, digest in fingerprints.items()
     ):
         raise RuntimeError("input changed while measuring")
-    packet = {"source_sha256": {
-        str(path.relative_to(ROOT)): digest for path, digest in PINS.items()},
-              "code_sha256": fingerprints, "corpus_key": meta["bm25_index_key"],
-              "system_identifier": system_id, "models": MODELS, "device": device,
-              "protocol": "completed reranks regardless of time; floor off/on 0.50; "
-                          "per-subquery scores, served interleave and budget; strict >3s timeout",
-              "start": start, "end": end, "latencies": latencies, "summaries": summaries,
-              "items": rows}
+    packet = {
+        "source_sha256": {str(path.relative_to(ROOT)): digest for path, digest in PINS.items()},
+        "code_sha256": fingerprints,
+        "corpus_key": meta["bm25_index_key"],
+        "system_identifier": system_id,
+        "models": MODELS,
+        "device": device,
+        "protocol": "completed reranks regardless of time; floor off/on 0.50; "
+        "per-subquery scores, served interleave and budget; strict >3s timeout",
+        "start": start,
+        "end": end,
+        "latencies": latencies,
+        "summaries": summaries,
+        "items": rows,
+    }
     output = ROOT / "eval/runs" / f"paired-rerank-{uuid.uuid4().hex[:12]}.json"
     with output.open("x") as fh:
         json.dump(packet, fh, ensure_ascii=False, separators=(",", ":"))
