@@ -624,3 +624,40 @@ The run resumed after 48f2b01; 200 rerank fallbacks make it hardware-dependent. 
 | R-542 | reverify-xbrl_off.json aggregate false_answer_rate | 0.0 | development | `eval/runs/35b3efbbfd5d.reverify-xbrl_off.json` | `52318c7` |
 | R-543 | reverify-xbrl_off.json aggregate over_abstention_rate | 0.2469879518072289 | development | `eval/runs/35b3efbbfd5d.reverify-xbrl_off.json` | `52318c7` |
 | R-544 | reverify-xbrl_off.json aggregate abstention_f1 | 0.5940594059405941 | development | `eval/runs/35b3efbbfd5d.reverify-xbrl_off.json` | `52318c7` |
+
+## 2026-11-26 — OWNER DECISION: single-chunk prose support fallback
+
+The owner directed `verification.prose_check: llm_judge` as the served default,
+retaining `nli` as a configurable historical comparator. Each cited passage is
+judged independently; citation validity and entity match remain mandatory, and
+figure verification remains unchanged. This is a development decision, not a
+new gated baseline or a change to the NLI threshold or gold data.
+
+The fresh single-passage check of the 40 labelled pairs in
+`eval/nli/support_judge_v1.json` produced TP 33, TN 6, FP 1, FN 0, zero errors,
+accuracy 0.975 and Cohen's κ 0.9083. All 40 are seeded prose, with only seven
+negative labels, so this is a narrow validation. A pre-existing untracked blind
+review file names the same model and matches all 40 recorded labels; the
+independence of the labels from that prior model review cannot be established
+from these artifacts alone. The new calls received only the claim and one
+passage, not the labels.
+
+The derived development replay
+`eval/runs/35b3efbbfd5d.reverify-support_judge_v1.json` used the corpus whose
+text hash matched the source run, made 165 support calls with zero errors and
+preserved all 381 stored figure checks. No generation, retrieval or reranking
+was repeated. Original run and dataset hashes are recorded in the derived file.
+The per-source pre-verification faithfulness and claim retention were:
+
+| Source | NLI as run | Support judge replay |
+|---|---:|---:|
+| aggregate | 0.8504 | 0.9311 |
+| xbrl_auto | 0.9386 | 0.9342 |
+| llm_seeded | 0.8267 | 0.9533 |
+| handwritten | 0.7231 | 0.9000 |
+
+Among 30 natural-phrasing items, abstentions changed from 19 to 11. This is an
+observed verdict change, not a correctness improvement: support/faithfulness is
+not answer correctness, and the newly retained answers have not been separately
+scored for correctness. The handwritten slice is model-drafted (F-103), and the
+development run cannot pass the CI gate.
