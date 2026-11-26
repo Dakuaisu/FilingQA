@@ -661,3 +661,113 @@ observed verdict change, not a correctness improvement: support/faithfulness is
 not answer correctness, and the newly retained answers have not been separately
 scored for correctness. The handwritten slice is model-drafted (F-103), and the
 development run cannot pass the CI gate.
+
+## Golden v1 final development run 13fc0fa4eb72
+
+Development only; 142 timeout fallbacks make the run hardware-dependent. `null` is not zero.
+
+| id | what was measured | value | kind | run id or artifact | commit |
+|---|---|---|---|---|---|
+| R-545 | xbrl_auto columns.xbrl_auto.sufficiency@10 | 0.71 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-546 | xbrl_auto columns.xbrl_auto.cost_per_query | `cost n/a (dev backend)` | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-547 | xbrl_auto columns.xbrl_auto.rerank_fell_back | 67 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-548 | xbrl_auto columns.xbrl_auto.numeric.numeric_accuracy | 0.66 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-549 | xbrl_auto columns.xbrl_auto.generation.answer_rate | 0.81 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-550 | xbrl_auto columns.xbrl_auto.generation.faithfulness_pre | 0.8991596638655462 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-551 | xbrl_auto columns.xbrl_auto.generation.claim_retention | 0.8991596638655462 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-552 | xbrl_auto columns.xbrl_auto.generation.citation_coverage | 1.0 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-553 | xbrl_auto columns.xbrl_auto.generation.xbrl_contradiction_rate | 0.01293103448275862 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-554 | xbrl_auto columns.xbrl_auto.abstention.false_answer_rate | null | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-555 | xbrl_auto columns.xbrl_auto.abstention.over_abstention_rate | 0.26 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-556 | xbrl_auto columns.xbrl_auto.abstention.abstention_f1 | null | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-557 | llm_seeded columns.llm_seeded.sufficiency@10 | 0.9583333333333334 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-558 | llm_seeded columns.llm_seeded.cost_per_query | `cost n/a (dev backend)` | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-559 | llm_seeded columns.llm_seeded.rerank_fell_back | 47 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-560 | llm_seeded columns.llm_seeded.numeric.numeric_accuracy | 0.8421052631578947 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-561 | llm_seeded columns.llm_seeded.generation.answer_rate | 0.9583333333333334 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-562 | llm_seeded columns.llm_seeded.generation.faithfulness_pre | 0.9370629370629371 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-563 | llm_seeded columns.llm_seeded.generation.claim_retention | 0.9370629370629371 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-564 | llm_seeded columns.llm_seeded.generation.citation_coverage | 1.0 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-565 | llm_seeded columns.llm_seeded.generation.xbrl_contradiction_rate | 0.0 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-566 | llm_seeded columns.llm_seeded.abstention.false_answer_rate | null | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-567 | llm_seeded columns.llm_seeded.abstention.over_abstention_rate | 0.08333333333333333 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-568 | llm_seeded columns.llm_seeded.abstention.abstention_f1 | null | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-569 | handwritten columns.handwritten.sufficiency@10 | 0.7166666666666667 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-570 | handwritten columns.handwritten.cost_per_query | `cost n/a (dev backend)` | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-571 | handwritten columns.handwritten.rerank_fell_back | 28 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-572 | handwritten columns.handwritten.numeric.numeric_accuracy | 0.8 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-573 | handwritten columns.handwritten.generation.answer_rate | 0.35833333333333334 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-574 | handwritten columns.handwritten.generation.faithfulness_pre | 0.9032258064516129 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-575 | handwritten columns.handwritten.generation.claim_retention | 0.9032258064516129 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-576 | handwritten columns.handwritten.generation.citation_coverage | 1.0 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-577 | handwritten columns.handwritten.generation.xbrl_contradiction_rate | 0.0 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-578 | handwritten columns.handwritten.abstention.false_answer_rate | 0.0 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-579 | handwritten columns.handwritten.abstention.over_abstention_rate | 0.3 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-580 | handwritten columns.handwritten.abstention.abstention_f1 | 0.8695652173913044 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-581 | aggregate columns.aggregate.sufficiency@10 | 0.7650602409638554 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-582 | aggregate columns.aggregate.cost_per_query | `cost n/a (dev backend)` | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-583 | aggregate columns.aggregate.rerank_fell_back | 142 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-584 | aggregate columns.aggregate.numeric.numeric_accuracy | 0.6976744186046512 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-585 | aggregate columns.aggregate.generation.answer_rate | 0.6989795918367347 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-586 | aggregate columns.aggregate.generation.faithfulness_pre | 0.9108910891089109 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-587 | aggregate columns.aggregate.generation.claim_retention | 0.9108910891089109 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-588 | aggregate columns.aggregate.generation.citation_coverage | 1.0 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-589 | aggregate columns.aggregate.generation.xbrl_contradiction_rate | 0.008403361344537815 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-590 | aggregate columns.aggregate.abstention.false_answer_rate | 0.0 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-591 | aggregate columns.aggregate.abstention.over_abstention_rate | 0.2289156626506024 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-592 | aggregate columns.aggregate.abstention.abstention_f1 | 0.6122448979591837 | development | `eval/runs/13fc0fa4eb72.json` | `32b04c8` |
+| R-593 | answer_correctness.aggregate.aggregate.eligible | 256 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-594 | answer_correctness.aggregate.aggregate.judged | 256 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-595 | answer_correctness.aggregate.aggregate.mean_score | 4.68359375 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-596 | answer_correctness.aggregate.aggregate.normalized_mean | 0.93671875 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-597 | answer_correctness.aggregate.aggregate.share_at_least_4 | 0.92578125 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-598 | answer_correctness.by_source.handwritten.eligible | 42 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-599 | answer_correctness.by_source.handwritten.judged | 42 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-600 | answer_correctness.by_source.handwritten.mean_score | 4.666666666666667 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-601 | answer_correctness.by_source.handwritten.normalized_mean | 0.9333333333333333 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-602 | answer_correctness.by_source.handwritten.share_at_least_4 | 0.9047619047619048 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-603 | answer_correctness.by_source.llm_seeded.eligible | 66 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-604 | answer_correctness.by_source.llm_seeded.judged | 66 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-605 | answer_correctness.by_source.llm_seeded.mean_score | 4.742424242424242 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-606 | answer_correctness.by_source.llm_seeded.normalized_mean | 0.9484848484848485 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-607 | answer_correctness.by_source.llm_seeded.share_at_least_4 | 0.9393939393939394 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-608 | answer_correctness.by_source.xbrl_auto.eligible | 148 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-609 | answer_correctness.by_source.xbrl_auto.judged | 148 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-610 | answer_correctness.by_source.xbrl_auto.mean_score | 4.662162162162162 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-611 | answer_correctness.by_source.xbrl_auto.normalized_mean | 0.9324324324324325 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-612 | answer_correctness.by_source.xbrl_auto.share_at_least_4 | 0.9256756756756757 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-613 | answer_correctness.by_type.adversarial.eligible | 6 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-614 | answer_correctness.by_type.adversarial.judged | 6 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-615 | answer_correctness.by_type.adversarial.mean_score | 4.833333333333333 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-616 | answer_correctness.by_type.adversarial.normalized_mean | 0.9666666666666667 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-617 | answer_correctness.by_type.adversarial.share_at_least_4 | 1.0 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-618 | answer_correctness.by_type.comparison.eligible | 43 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-619 | answer_correctness.by_type.comparison.judged | 43 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-620 | answer_correctness.by_type.comparison.mean_score | 4.813953488372093 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-621 | answer_correctness.by_type.comparison.normalized_mean | 0.9627906976744186 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-622 | answer_correctness.by_type.comparison.share_at_least_4 | 0.9534883720930233 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-623 | answer_correctness.by_type.natural_phrasing.eligible | 21 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-624 | answer_correctness.by_type.natural_phrasing.judged | 21 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-625 | answer_correctness.by_type.natural_phrasing.mean_score | 4.380952380952381 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-626 | answer_correctness.by_type.natural_phrasing.normalized_mean | 0.8761904761904762 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-627 | answer_correctness.by_type.natural_phrasing.share_at_least_4 | 0.8095238095238095 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-628 | answer_correctness.by_type.synthesis.eligible | 32 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-629 | answer_correctness.by_type.synthesis.judged | 32 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-630 | answer_correctness.by_type.synthesis.mean_score | 4.84375 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-631 | answer_correctness.by_type.synthesis.normalized_mean | 0.96875 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-632 | answer_correctness.by_type.synthesis.share_at_least_4 | 1.0 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-633 | answer_correctness.by_type.table.eligible | 34 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-634 | answer_correctness.by_type.table.judged | 34 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-635 | answer_correctness.by_type.table.mean_score | 4.647058823529412 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-636 | answer_correctness.by_type.table.normalized_mean | 0.9294117647058824 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-637 | answer_correctness.by_type.table.share_at_least_4 | 0.8823529411764706 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-638 | answer_correctness.by_type.unanswerable.eligible | 0 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-639 | answer_correctness.by_type.unanswerable.judged | 0 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-640 | answer_correctness.by_type.unanswerable.mean_score | null | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-641 | answer_correctness.by_type.unanswerable.normalized_mean | null | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-642 | answer_correctness.by_type.unanswerable.share_at_least_4 | null | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-643 | answer_correctness.by_type.xbrl_numeric.eligible | 120 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-644 | answer_correctness.by_type.xbrl_numeric.judged | 120 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-645 | answer_correctness.by_type.xbrl_numeric.mean_score | 4.65 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-646 | answer_correctness.by_type.xbrl_numeric.normalized_mean | 0.93 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+| R-647 | answer_correctness.by_type.xbrl_numeric.share_at_least_4 | 0.925 | development | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |

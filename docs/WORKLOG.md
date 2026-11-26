@@ -5948,3 +5948,7 @@ this commit range.
 
 Fresh development run `13fc0fa4eb72` halted at its first item on an expired Claude CLI OAuth session.
 Owner re-login is required before resuming; no completed result is reported.
+
+## Final golden_v1 development run
+
+Run `13fc0fa4eb72` completed on the rebuild DB after an item 1 OAuth expiry and owner re-login. The as-run artifacts are in `32b04c8`; the complete answer-correctness judge sidecar and derived report are in `4ccf2ad`. The llm_judge prose check and BGE floor 0.30 were active; 142 reranks timed out to RRF, making this run hardware-dependent. This is a fresh run, distinct from saved-answer replay; it is not a gated baseline.

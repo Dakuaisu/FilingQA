@@ -90,10 +90,9 @@ below are model-free retrieval measurements, not this table.
 
 ## Status
 
-**As of 2026-11-26: the latest `golden_v1` development evaluation is halted
-pending the owner's `claude_cli` re-login.** No metrics from the halted run
-are reported here. The [completed development run](docs/RESULTS.md#golden-v1-development-run-35b3efbbfd5d)
-is hardware-dependent because of rerank timeouts and cannot serve as a CI baseline.
+**Latest `golden_v1` development run: [13fc0fa4eb72](docs/RESULTS.md#golden-v1-final-development-run-13fc0fa4eb72).** It completed after the owner re-logged in; 142 rerank timeouts make it hardware-dependent and it cannot serve as a CI baseline. The earlier [35b3efbbfd5d](docs/RESULTS.md#golden-v1-development-run-35b3efbbfd5d) remains the before run.
+
+Natural-phrasing abstentions fell from **19/30 to 9/30**, and aggregate over-abstention from **0.256 to 0.229** ([before](eval/runs/35b3efbbfd5d.json), [fresh run](eval/runs/13fc0fa4eb72.json)). These are different runs, not the saved-answer replay described above; the change is not a controlled causal estimate.
 
 ### Where the gate stands
 
@@ -139,7 +138,6 @@ validated judge. Reports print the two side by side (F-133).
 
 ### What waits on the owner
 
-- Re-login to the subscription-backed `claude_cli` to unblock the halted development run. This does not unblock the CI gate.
 - `ANTHROPIC_API_KEY` for CI, the `anthropic_api` fast-eval baseline, the first priced run, and the deliberate-regression PR with its failing-check and PR-comment screenshot (F-59, F-134).
 - Independently authored handwritten items and their provenance (unanswerable, adversarial, natural phrasing, comparison); the frozen model-drafted items do not meet this requirement (F-103).
 - Hosting the corpus snapshot for CI (exact command in the finding) (F-135).
