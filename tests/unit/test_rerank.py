@@ -16,7 +16,7 @@ def test_order_and_floor():
 def test_top_n_by_type_and_config():
     cfg = rerank_cfg()
     assert top_n_for("synthesis", cfg) == 10 and top_n_for("table", cfg) == 8
-    assert cfg["floor_calibration"] == "calibrated" and cfg["score_floor"] == 0.50
+    assert cfg["floor_calibration"] == "calibrated" and cfg["score_floor"] == 0.30
 
 
 def test_rerank_scores_every_candidate_in_one_pass():

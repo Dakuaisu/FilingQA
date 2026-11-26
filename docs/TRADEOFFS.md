@@ -3519,3 +3519,19 @@ handwritten 0.900); over-abstention 0.217 aggregate (was 0.256) and 0.283
 handwritten (was 0.417); natural-phrasing abstentions 11 of 30 (was 19);
 false-answer rate 0.000. Cost: one judge call per prose claim. The judge
 family (gpt) differs from the generator's (claude).
+
+## 2026-11-26 — Lower the rerank score floor (F-112)
+
+- Decided by: owner
+- Status: OWNER DECISION
+
+Lower the PRD 7.3 sigmoid-normalized floor from 0.50 to 0.30. The saved
+`eval/runs/35b3efbbfd5d.natural_phrasing_diagnosis.json` records four
+natural-phrasing floor abstentions without fallback (0013, 0019, 0022, 0029).
+Their scores are bounded below 0.50, not known to reach 0.30; this change
+does not establish that any of the four will recover.
+
+In `eval/runs/4b5036b69ca0.f112.json`, 0.30 newly removed gold from 0 of 125
+reviewed answerable items, but that slice had no reviewed handwritten
+answerables. The floor emptied 1 of 50 unanswerable lists at 0.30 versus 3 of
+50 at 0.50. Thresholds above 0.50 were not tested.
