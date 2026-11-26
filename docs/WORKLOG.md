@@ -5921,3 +5921,30 @@ runs use the rebuild from 2026-11-25, as recorded by `4b5036b69ca0`.
 - `8481fb4` — Saved CPU ablation `373f11f1949c`; reviewed aggregate equal-weight hybrid at depth 50 had 79 sufficient of 125 scored at cutoff 10.
 - `afe2b54` — Appended 120 count rows (`R-202`–`R-321`) to the results register without recomputing rates.
 - `8ddf786` — Added PRD 11.7 XBRL-off re-verification of stored claims, with corpus identity checks and no model calls; no ablation result was added.
+
+## 2026-11-26 - Golden v1 development run, judges, and reranker decisions
+
+Context: CPU retrieval artifact `retrieval-ablation-373f11f1949c.json` was
+already added in `8481fb4`: equal-weight hybrid at depth 50 had 79 sufficient
+of 125 scored in the reviewed aggregate at cutoff 10. It was not a new run in
+this commit range.
+
+- `48f2b01` — Fixed the null-ticker router failure at item 128; the run resumed after 127 recorded items rather than starting over.
+- `2b4f9bb` — Recorded completed `claude_cli` development run `35b3efbbfd5d` on the rebuild: 392 golden items, 200 rerank fallbacks to RRF, and aggregate Sufficiency@10 of 0.759; hardware-dependent, not a gated baseline.
+- `2b906a8` — Recorded the answer-correctness judge over saved answers: all 247 eligible answers scored, normalized mean 0.941.
+- `52318c7` — Saved four NLI rescoring reports and one XBRL-off re-verification of stored claims, not fresh generation runs.
+- `cc07a0b` — Added 223 results-register rows (`R-322`–`R-544`) for the golden run and its derived reports.
+- `ed66c5a` — Diagnosed 19 abstentions among 30 natural-phrasing items from saved traces, including 4 attributed to the 0.50 score floor; exact scores were not available.
+- `e63003a` — Added paired replay and artifact verification for three reranking options: none, MiniLM, and BGE, using the same routed retrieval inputs.
+- `a3f5e4c` — Saved paired reranker replay `83be50a9dd79`: sufficient out of 332 were 216 with no reranker, 175/170 for MiniLM and 208/207 for BGE (floor off/0.50).
+- `38d146b` — Corrected the README's historical dashboard reference to Config 3 run `7fa009acac95` and formatted both paired-rerank scripts.
+- `04fae49` — Implemented a separate prose-support judge using one cited chunk per call; it checks evidence support, not whole-answer correctness.
+- `abcef85` — Validated the prose-support judge on 40 owner-labelled pairs: 39 correct, one false positive, no false negatives, κ 0.908.
+- `651438b` — Replayed prose-support decisions over historical claims: natural-phrasing abstentions fell from 19/30 to 11/30; this did not regenerate answers.
+- `cf56e8f` — Registered the prose-support validation and historical replay in OPEN and RESULTS, including the 40-pair validation scope.
+- `bc9884c` — Recorded the owner's PRD 7.5 decision to replace NLI with the fallback: each support call compares one prose claim with one cited chunk; replay evidence is not a fresh pipeline result.
+- `0e02dbc` — Lowered the calibrated rerank floor from 0.50 to 0.30: earlier calibration emptied 1/50 instead of 3/50 unanswerable lists, with 0/125 new gold losses and no established recovery of the four diagnosed abstentions.
+- `5ff7c6a` — Kept BGE pending a quiet-machine run: floor-off BGE gained handwritten sufficiency (39/60 vs 35/60) but lost seeded sufficiency (57/72 vs 67/72) against no reranker; BGE per-item p95 was 2.77 s.
+
+Fresh development run `13fc0fa4eb72` halted at its first item on an expired Claude CLI OAuth session.
+Owner re-login is required before resuming; no completed result is reported.
