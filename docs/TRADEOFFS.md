@@ -3535,3 +3535,22 @@ In `eval/runs/4b5036b69ca0.f112.json`, 0.30 newly removed gold from 0 of 125
 reviewed answerable items, but that slice had no reviewed handwritten
 answerables. The floor emptied 1 of 50 unanswerable lists at 0.30 versus 3 of
 50 at 0.50. Thresholds above 0.50 were not tested.
+
+## 2026-11-26 — Keep BGE pending a quiet-machine ablation (PRD 11.7)
+
+- Decided by: owner
+- Status: OWNER DECISION
+
+Keep `BAAI/bge-reranker-base` at the current 0.30 floor pending a paired
+run on a quiet machine. The saved development replay
+(`eval/runs/paired-rerank-83be50a9dd79.json`) tested floor off and 0.50,
+not 0.30. Sufficient items out of 332: no reranker 216, MiniLM 175 off
+and 170 at 0.50, BGE 208 off and 207 at 0.50.
+
+Against no reranker, floor-off BGE improved handwritten sufficiency
+(39/60 vs 35/60; natural phrasing 18/30 vs 17/30 and adversarial 8/10
+vs 5/10), but hurt LLM-seeded sufficiency (57/72 vs 67/72; synthesis
+30/33 vs 33/33 and table 27/39 vs 34/39) and slightly reduced XBRL-auto
+sufficiency (112/200 vs 114/200). BGE's measured per-item rerank p95 was
+2.77 s. The aggregate favors no reranker in this replay, but the slice
+tradeoff and latency need confirmation before changing the model.
