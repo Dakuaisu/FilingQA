@@ -24,8 +24,8 @@ Full specification in [`docs/PRD.md`](docs/PRD.md).
    (`api/generate/claims.py`).
 7. **Verify** numeric grounding against the cited chunk
    (`api/verify/grounding.py`), figures against the cited filing's XBRL fact
-   (`api/verify/xbrl_check.py`), prose by NLI, pending its threshold
-   (`api/verify/nli.py`).
+   (`api/verify/xbrl_check.py`), and prose with an LLM judging one cited chunk
+   at a time (NLI remains configurable for comparison).
 8. **Decide** PASS / PARTIAL / ABSTAIN from the checks (`api/verify/verdict.py`).
 9. **Serve** the same function the eval runs (`api/pipeline.py`, `api/server.py`,
    `web/`).
@@ -35,14 +35,24 @@ Full specification in [`docs/PRD.md`](docs/PRD.md).
 
 What the build found, not what the PRD predicted:
 
-- **The XBRL-templated questions are the hard slice.** Retrieval finds the right
-  filing but not the chunk; the misses are ranking and budget, not a defect
-  (F-98, F-138).
-- **The LLM-seeded questions are lexically easy:** they reuse their source
-  chunk's words, which flatters keyword retrieval (F-110).
-- **PASS is a faithfulness verdict, never a correctness claim.** An answer about
-  the wrong line item can be faithful to its chunk; correctness is measured
-  separately (F-133).
+- **Finding the right filing is not enough.** XBRL-templated questions often
+  miss the evidence chunk because of ranking or retrieval budget (F-138).
+  LLM-seeded questions reuse their source chunk's words, flattering keyword
+  retrieval (F-110). The [retrieval ablation](docs/RESULTS.md#retrieval-ablation--373f11f1949c)
+  separates the slices and reports the reviewed subset separately.
+- **Natural phrasing exposed a verifier failure.** Of 30 answerable questions,
+  19 ended in abstention. In [eight verifier abstentions](eval/runs/35b3efbbfd5d.natural_phrasing_diagnosis.json),
+  seven already had a complete accepted evidence set in the generator input.
+  Better retrieval alone would not address that pattern. In the [saved-answer re-verification](docs/RESULTS.md#2026-11-26--owner-decision-single-chunk-prose-support-fallback),
+  natural-phrasing abstentions went from **19/30 to 11/30**. No retrieval,
+  reranking, or generation was repeated, and the newly retained answers were
+  not separately scored for correctness.
+- **Reranking trades gains on one slice for losses on another.** In the
+  [paired replay](eval/runs/paired-rerank-83be50a9dd79.json), BGE with the floor
+  off beat no reranker on the model-drafted handwritten slice (39/60 vs 35/60)
+  but lost on seeded questions (57/72 vs 67/72) and overall (208/332 vs 216/332).
+  The replay did not test the served 0.30 floor; quality and latency still need
+  a paired test on a quiet machine.
 - **Fiscal-year conventions:** NVIDIA's year ending January 2026 is fiscal 2026,
   Target's is fiscal 2025; a model asked to pick the year picked wrong
   confidently, so periods are resolved from the filings' own dates (F-119).
@@ -80,10 +90,10 @@ below are model-free retrieval measurements, not this table.
 
 ## Status
 
-**As of 2026-11-26: a development evaluation on `golden_v1` was in progress.**
-It uses the subscription-backed `claude_cli` and cannot establish a CI baseline
-or pass the gate. See [`docs/RESULTS.md`](docs/RESULTS.md) for recorded results;
-no metrics from the in-progress evaluation are reported here.
+**As of 2026-11-26: the latest `golden_v1` development evaluation is halted
+pending the owner's `claude_cli` re-login.** No metrics from the halted run
+are reported here. The [completed development run](docs/RESULTS.md#golden-v1-development-run-35b3efbbfd5d)
+is hardware-dependent because of rerank timeouts and cannot serve as a CI baseline.
 
 ### Where the gate stands
 
@@ -93,18 +103,20 @@ no metrics from the in-progress evaluation are reported here.
   snapshot (F-59, F-135).
 - Candidate worksheet review is complete. The frozen `golden_v1` dataset has
   **392 items** (`eval/datasets/golden_v1_manifest.json`). The `handwritten`
-   slice contains model-drafted items, so the freeze does not resolve the
-   independent-authorship requirement (F-103). The [retrieval ablation](docs/RESULTS.md#retrieval-ablation--373f11f1949c)
-   reports all answerable items and the reviewed subset separately.
-- The `openai/gpt-6.2-sol` judge reached **Cohen's kappa of 0.818** against the
+  slice contains model-drafted items, so the freeze does not resolve the
+  independent-authorship requirement (F-103).
+- The separate `openai/gpt-6.2-sol` answer-correctness judge reached **Cohen's kappa of 0.818** against the
   owner labels (`eval/judge/verdicts_v1.jsonl`, `eval/judge/labels_v1.yaml`).
-- NLI was retained at **AUC 0.766** (`eval/nli/auc_v1.json`), but the selected
-  threshold leaves the prose gate nearly open. The validation sample contains
-  only seeded prose and few negative pairs; this is not evidence of a strong
-  filter or a passing CI gate.
-- The rerank score floor is **0.50**, calibrated on reviewed items in a local
-  retrieval-only run (`eval/runs/4b5036b69ca0.f112.json`). Timeout fallback uses
-  hybrid ordering without applying the floor.
+- The [single-chunk support judge](docs/RESULTS.md#2026-11-26--owner-decision-single-chunk-prose-support-fallback)
+  is now the default because NLI's selected threshold was nearly open despite
+  AUC 0.766 (`eval/nli/auc_v1.json`). The support judge reached **Cohen's kappa of
+  0.908** on just 40 seeded-prose pairs, seven negative. A prior review naming
+  the same model matches all recorded labels, so label independence is not
+  established. This measures claim support, not answer correctness.
+- BGE remains at a **0.30** score floor pending the quiet-machine test. The
+  [floor sweep](eval/runs/4b5036b69ca0.f112.json) covered reviewed answerables
+  but no handwritten answerables; recovery from floor-induced abstentions is
+  not established (F-112). Timeout fallback uses hybrid ordering without the floor.
 
 **Historical dashboard snapshot** (the dashboard configuration predates the
 current status above): Config 3 retrieval run `7fa009acac95` reported aggregate
@@ -127,6 +139,7 @@ validated judge. Reports print the two side by side (F-133).
 
 ### What waits on the owner
 
+- Re-login to the subscription-backed `claude_cli` to unblock the halted development run. This does not unblock the CI gate.
 - `ANTHROPIC_API_KEY` for CI, the `anthropic_api` fast-eval baseline, the first priced run, and the deliberate-regression PR with its failing-check and PR-comment screenshot (F-59, F-134).
 - Independently authored handwritten items and their provenance (unanswerable, adversarial, natural phrasing, comparison); the frozen model-drafted items do not meet this requirement (F-103).
 - Hosting the corpus snapshot for CI (exact command in the finding) (F-135).
