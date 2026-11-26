@@ -3492,3 +3492,30 @@ neither an abstained answer nor an `ABSTAIN` verdict. For both the report and
 baseline, `eval.compare` uses the normalized mean only when the slice has at
 least one eligible answer and all eligible answers have judge scores. An
 empty or incomplete slice leaves the metric pending, not passing.
+
+## 2026-11-26 — Prose claims: PRD 7.5 LLM-judge fallback replaces NLI (F-125)
+
+- Decided by: owner
+- Status: OWNER DECISION (overrides the 2026-11-25 NLI threshold entry)
+
+NLI passed PRD 7.5's check only barely (AUC 0.766 against 0.75, Youden
+threshold 0.00102, `eval/nli/auc_v1.json`), and in development run
+35b3efbbfd5d it still caused 8 of the 19 natural-phrasing abstentions, 7 of
+them with a complete gold set in the generator input
+(`eval/runs/35b3efbbfd5d.natural_phrasing_diagnosis.json`). The owner chose
+PRD 7.5's fallback although the AUC rule did not require it: prose claims pass
+on citation validity and entity match plus a single-chunk support check by
+`openai/gpt-6.2-sol` (`api/verify/prose_judge.py`;
+`verification.prose_check: llm_judge`). NLI code stays, selectable with
+`prose_check: nli`.
+
+Validation before use, on the owner's 40 labels: accuracy 0.975, Cohen's kappa
+0.908 (33 TP, 6 TN, 1 FP, 0 FN; `eval/nli/support_judge_v1.json`).
+
+Re-verification of 35b3efbbfd5d's stored claims with the fallback
+(`eval/runs/35b3efbbfd5d.reverify-support_judge_v1.json`, development run):
+faithfulness (pre) 0.931 aggregate (xbrl_auto 0.934, llm_seeded 0.953,
+handwritten 0.900); over-abstention 0.217 aggregate (was 0.256) and 0.283
+handwritten (was 0.417); natural-phrasing abstentions 11 of 30 (was 19);
+false-answer rate 0.000. Cost: one judge call per prose claim. The judge
+family (gpt) differs from the generator's (claude).
