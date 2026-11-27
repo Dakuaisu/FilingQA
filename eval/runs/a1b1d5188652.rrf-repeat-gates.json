@@ -1,0 +1,12 @@
+{
+  "test": {
+    "exit": 0,
+    "log": "build/rrf-repeat-02-B-test.log",
+    "sha256": "421b84dfeb5d137d0535bb8a85b46250827e33c4bcbfed6d2f21e562cef10552"
+  },
+  "lint": {
+    "exit": 0,
+    "log": "build/rrf-repeat-02-B-lint.log",
+    "sha256": "75cfd8fc8a14ec817192f54b90e6c08a292d4e10b69581547c0d55c5ca785d7f"
+  }
+}
