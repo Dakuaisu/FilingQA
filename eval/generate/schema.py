@@ -9,7 +9,7 @@ QUESTION_TYPES = (
     "xbrl_numeric", "table", "comparison", "synthesis",
     "unanswerable", "adversarial", "natural_phrasing",
 )  # fmt: skip
-SOURCES = ("xbrl_auto", "llm_seeded", "handwritten")
+SOURCES = ("xbrl_auto", "llm_seeded", "handwritten", "heldout")
 DIFFICULTIES = ("easy", "medium", "hard")
 
 
@@ -85,6 +85,9 @@ def validate_item(item: dict) -> list[str]:
             errors.append("gold evidence without gold_accessions")
     if item["source"] == "xbrl_auto" and fact is None:
         errors.append("an xbrl_auto item names its xbrl_fact_id")
-    if item["question_type"] == "natural_phrasing" and item["source"] != "handwritten":
-        errors.append("natural_phrasing items are source handwritten (F-11)")
+    if item["question_type"] == "natural_phrasing" and item["source"] not in (
+        "handwritten",
+        "heldout",
+    ):
+        errors.append("natural_phrasing items are source handwritten or heldout (F-11)")
     return errors

@@ -54,6 +54,11 @@ def test_natural_phrasing_is_handwritten():
     assert not validate_item(with_(question_type="natural_phrasing", source="handwritten"))
 
 
+def test_model_drafted_heldout_natural_phrasing_is_valid():
+    item = with_(question_type="natural_phrasing", source="heldout", tags=["model_drafted"])
+    assert validate_item(item) == []
+
+
 def test_evidence_and_abstain_rules():
     assert validate_item(with_(gold_evidence_sets=[[]]))
     assert validate_item(with_(gold_evidence_sets=[]))
