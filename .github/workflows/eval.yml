@@ -60,14 +60,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PG_EXEC: docker exec -i ${{ job.services.postgres.id }}
         run: |
-          sha=$(python -c "import yaml;print(yaml.safe_load(open('api/corpus_freeze.yaml'))['snapshot']['sha256'])")
+          manifest=api/corpus_snapshot_rebuild.yaml
+          archive=$(python -c "import yaml;print(yaml.safe_load(open('$manifest'))['snapshot']['archive'])")
+          sha=$(python -c "import yaml;print(yaml.safe_load(open('$manifest'))['snapshot']['sha256'])")
           tag="corpus-snapshot-${sha:0:12}"
-          gh release download "$tag" --pattern corpus_snapshot.dump --dir build || {
+          gh release download "$tag" --pattern "$archive" --dir build || {
             printf '### Eval gate: FAILED\n\nCorpus snapshot release %s is not hosted (F-135).\n' "$tag" > build/eval_gate.md
             echo "::error::corpus snapshot $tag not hosted (F-135)"
             exit 1
           }
-          make restore-corpus-snapshot
+          make restore-corpus-snapshot SNAPSHOT_MANIFEST=$manifest SNAPSHOT_ARCHIVE=build/$archive
 
       - name: Fast eval and gate
         env:

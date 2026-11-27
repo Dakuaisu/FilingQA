@@ -11,5 +11,5 @@ snapshot:
   parser_version: d58d26e08e5a
   chunker_version: 964f77f6f9cb
   dumped_at: '2026-11-27T09:49:27+00:00'
-  hosted: null
+  hosted: https://github.com/Dakuaisu/FilingQA/releases/tag/corpus-snapshot-90d2ed368790
   source_system_identifier: '7710731255823212587'

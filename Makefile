@@ -69,10 +69,13 @@ eval-gate:
 		--thresholds eval/thresholds.yaml --md build/eval_gate.md
 
 # CI restores the frozen corpus from the snapshot archive (scripts/corpus_snapshot.py),
-# checked against the sha256 in api/corpus_freeze.yaml, then verify_freeze --snapshot.
-# The archive must be in build/ first; hosting it is OWNER-BLOCKED (F-135).
+# checked against the sha256 in SNAPSHOT_MANIFEST, then verify_freeze --snapshot.
+# CI uses the rebuild archive (api/corpus_snapshot_rebuild.yaml), the database every
+# published result ran on; it is hosted as release corpus-snapshot-90d2ed368790 (F-135).
+SNAPSHOT_MANIFEST ?= api/corpus_snapshot_rebuild.yaml
+SNAPSHOT_ARCHIVE ?= build/corpus_snapshot_rebuild.dump
 restore-corpus-snapshot:
-	python -m scripts.corpus_snapshot restore build/corpus_snapshot.dump
+	python -m scripts.corpus_snapshot restore $(SNAPSHOT_ARCHIVE) --manifest $(SNAPSHOT_MANIFEST)
 
 # PRD 9 API.
 serve:
