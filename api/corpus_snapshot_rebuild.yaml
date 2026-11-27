@@ -1,0 +1,15 @@
+snapshot:
+  archive: corpus_snapshot_rebuild.dump
+  sha256: 90d2ed368790411a1be607f3e0a9bbadc735a6cd7035ba65625d9c1dbedb6b16
+  bytes: 104546952
+  tables:
+  - companies
+  - filings
+  - chunks
+  - xbrl_facts
+  - xbrl_spans
+  parser_version: d58d26e08e5a
+  chunker_version: 964f77f6f9cb
+  dumped_at: '2026-11-27T09:49:27+00:00'
+  hosted: null
+  source_system_identifier: '7710731255823212587'
