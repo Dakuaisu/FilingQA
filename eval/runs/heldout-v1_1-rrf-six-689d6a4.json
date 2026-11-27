@@ -1,0 +1,2940 @@
+{
+  "protocol_commit": "689d6a4",
+  "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+  "runs": [
+    {
+      "arm": "control",
+      "run_id": "8a830995f188",
+      "sufficiency_count": 41,
+      "over_abstention_count": 9,
+      "false_answer_count": 0,
+      "fallback_count": 37,
+      "items": {
+        "ho_ac_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_13": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_ac_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_03": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_04": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_06": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_07": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_bj_01": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_02": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_04": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_13": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_bj_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_04": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_07": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_px_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        }
+      },
+      "verdict_counts": {
+        "PASS": 37,
+        "ABSTAIN": 19,
+        "PARTIAL": 2
+      },
+      "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+      "code_sha256": {
+        "api/config.yaml": "18bda1ec5c6700f555a45a88d97cde3d530142535f54aa58bd72cb791a8f148b",
+        "api/generate/claims.py": "44db36a5ac7a339b2ad5f3e92ed5bb2d111444bdfc4ffd018f47ebcb2fe205d1",
+        "api/generate/generator.py": "984b097b114b44e484560f495dc30067921c779b7b3ab6892926dba6f177b4f7",
+        "api/pipeline.py": "3286e74869013806a9c100b2fb684b7b68ef5cb7b2a6fb6aac60a6f2848eb609",
+        "api/query/router.py": "ad4b24db1eeaee0c7e24b0287d6ce445f64d17e7b07d631dd3f34e7a0031769f",
+        "api/query/retrieve.py": "fc73548765e8537a50d16491f62ddb079f75ca01348609396387ea8d0921c27b",
+        "scripts/eval_run.py": "5072142f865cdfae9cbcd5e50e09de7102639ea391a6d8d9a67da27937b41113",
+        "scripts/eval_rrf_override.py": "64778a2df7e78cb973e020b9a4b6d8a5abbb08db0a94c7bb35614d0a56aca41c",
+        "eval/heldout/rrf_b.yaml": "2dbed469a0ec2c9aecb4569a3461b70bf753cdf3e2858a5cdffa24152eed7246"
+      },
+      "source_sha256": {
+        "eval/runs/8a830995f188.meta.json": "d89a5ff61dbaaa63a8b0a397732dd0ef555e33be3e54c7b56cc7d4dc21806432",
+        "eval/runs/8a830995f188.results.jsonl": "969929f9801324456e793d16c3c823487960e7138431762cc56b01d6a0160354",
+        "eval/runs/8a830995f188.json": "d1fb141385d32e09e48eea12b65fe7a583df454de41f4783ff6fd19314cb924f"
+      },
+      "commit": "43c54fab4093b4af2e356d60850e2c1eee0725d2",
+      "test_gate_evidence": {
+        "test": {
+          "log": "build/rrf-confirm-baseline-test.log",
+          "sha256": "d9a0a6a665d0b27a859a02673ec0a5b3b00138bce64acf053fc8768533617ef5",
+          "evidence": "prior sequencer gated commit on zero exit"
+        },
+        "lint": {
+          "log": "build/rrf-confirm-baseline-lint.log",
+          "sha256": "75cfd8fc8a14ec817192f54b90e6c08a292d4e10b69581547c0d55c5ca785d7f",
+          "evidence": "prior sequencer gated commit on zero exit"
+        }
+      }
+    },
+    {
+      "arm": "B",
+      "run_id": "d4c17a4291c3",
+      "sufficiency_count": 42,
+      "over_abstention_count": 6,
+      "false_answer_count": 0,
+      "fallback_count": 34,
+      "items": {
+        "ho_ac_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_05": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_13": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_ac_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_04": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_06": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_bj_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_02": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_03": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_13": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_bj_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_px_01": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_px_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        }
+      },
+      "verdict_counts": {
+        "PASS": 37,
+        "ABSTAIN": 16,
+        "PARTIAL": 5
+      },
+      "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+      "code_sha256": {
+        "api/config.yaml": "18bda1ec5c6700f555a45a88d97cde3d530142535f54aa58bd72cb791a8f148b",
+        "api/generate/claims.py": "44db36a5ac7a339b2ad5f3e92ed5bb2d111444bdfc4ffd018f47ebcb2fe205d1",
+        "api/generate/generator.py": "984b097b114b44e484560f495dc30067921c779b7b3ab6892926dba6f177b4f7",
+        "api/pipeline.py": "3286e74869013806a9c100b2fb684b7b68ef5cb7b2a6fb6aac60a6f2848eb609",
+        "api/query/router.py": "ad4b24db1eeaee0c7e24b0287d6ce445f64d17e7b07d631dd3f34e7a0031769f",
+        "api/query/retrieve.py": "fc73548765e8537a50d16491f62ddb079f75ca01348609396387ea8d0921c27b",
+        "scripts/eval_run.py": "5072142f865cdfae9cbcd5e50e09de7102639ea391a6d8d9a67da27937b41113",
+        "scripts/eval_rrf_override.py": "64778a2df7e78cb973e020b9a4b6d8a5abbb08db0a94c7bb35614d0a56aca41c",
+        "eval/heldout/rrf_b.yaml": "2dbed469a0ec2c9aecb4569a3461b70bf753cdf3e2858a5cdffa24152eed7246"
+      },
+      "source_sha256": {
+        "eval/runs/d4c17a4291c3.meta.json": "8c94fd0ce76df3d238b272bc54c04bd65d8acaf7b2aefbbc8a6d4225645e016c",
+        "eval/runs/d4c17a4291c3.results.jsonl": "cfbed67d2068c526f6c91e7c2b4944e73c5bf03f1157500d3a32188a3ac93457",
+        "eval/runs/d4c17a4291c3.json": "6ed48e97332b5bafc656c889a7ad1d65ca5af36a95bc248619630b2280d4c4d3"
+      },
+      "commit": "a6bc16419d4912daf8b93fa170fb3e8ad75f3fbb",
+      "test_gate_evidence": {
+        "test": {
+          "log": "build/rrf-confirm-B-test.log",
+          "sha256": "f3e3d325d7acc6aacda0cb411480245b81abb27d0c383dcb95892a70d64f313c",
+          "evidence": "prior sequencer gated commit on zero exit"
+        },
+        "lint": {
+          "log": "build/rrf-confirm-B-lint.log",
+          "sha256": "75cfd8fc8a14ec817192f54b90e6c08a292d4e10b69581547c0d55c5ca785d7f",
+          "evidence": "prior sequencer gated commit on zero exit"
+        }
+      }
+    },
+    {
+      "arm": "control",
+      "run_id": "14391a161402",
+      "sufficiency_count": 43,
+      "over_abstention_count": 10,
+      "false_answer_count": 0,
+      "fallback_count": 29,
+      "items": {
+        "ho_ac_01": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_03": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_ac_13": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_ac_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_nt_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_04": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_06": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_bj_01": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_02": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_03": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_06": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_11": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_13": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_bj_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": true
+        },
+        "ho_bj_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_07": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_12": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_px_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        }
+      },
+      "verdict_counts": {
+        "ABSTAIN": 20,
+        "PASS": 36,
+        "PARTIAL": 2
+      },
+      "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+      "code_sha256": {
+        "api/config.yaml": "18bda1ec5c6700f555a45a88d97cde3d530142535f54aa58bd72cb791a8f148b",
+        "api/generate/claims.py": "44db36a5ac7a339b2ad5f3e92ed5bb2d111444bdfc4ffd018f47ebcb2fe205d1",
+        "api/generate/generator.py": "984b097b114b44e484560f495dc30067921c779b7b3ab6892926dba6f177b4f7",
+        "api/pipeline.py": "3286e74869013806a9c100b2fb684b7b68ef5cb7b2a6fb6aac60a6f2848eb609",
+        "api/query/router.py": "ad4b24db1eeaee0c7e24b0287d6ce445f64d17e7b07d631dd3f34e7a0031769f",
+        "api/query/retrieve.py": "fc73548765e8537a50d16491f62ddb079f75ca01348609396387ea8d0921c27b",
+        "scripts/eval_run.py": "5072142f865cdfae9cbcd5e50e09de7102639ea391a6d8d9a67da27937b41113",
+        "scripts/eval_rrf_override.py": "64778a2df7e78cb973e020b9a4b6d8a5abbb08db0a94c7bb35614d0a56aca41c",
+        "eval/heldout/rrf_b.yaml": "2dbed469a0ec2c9aecb4569a3461b70bf753cdf3e2858a5cdffa24152eed7246"
+      },
+      "source_sha256": {
+        "eval/runs/14391a161402.meta.json": "4fe544cb07f50f3295784b17fdd2670f5c3122e5d48b5c480e1641a5bde70071",
+        "eval/runs/14391a161402.results.jsonl": "49375398c4c49eb7daa91fa660defff8cb3eabd195fd168f0b54d4fa38143f77",
+        "eval/runs/14391a161402.json": "6ed3f1c58125e965f2a5bd87f682070cee18acf81834c22a7f191e5aa1fa1572"
+      },
+      "commit": "0f9586d39e7d1b76ffc596a116eaf892ee6f7062",
+      "test_gate_evidence": {
+        "test": {
+          "exit": 0,
+          "log": "build/rrf-repeat-01-control-test.log",
+          "sha256": "cd105b69081f43e5da4fcea0f3e54526dc9233d79e3f6b867435dfaebce6b62f"
+        },
+        "lint": {
+          "exit": 0,
+          "log": "build/rrf-repeat-01-control-lint.log",
+          "sha256": "75cfd8fc8a14ec817192f54b90e6c08a292d4e10b69581547c0d55c5ca785d7f"
+        }
+      }
+    },
+    {
+      "arm": "B",
+      "run_id": "a1b1d5188652",
+      "sufficiency_count": 43,
+      "over_abstention_count": 6,
+      "false_answer_count": 0,
+      "fallback_count": 2,
+      "items": {
+        "ho_ac_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_13": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_ac_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_04": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_06": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_08": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": true,
+          "expected_abstain": false
+        },
+        "ho_nt_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_bj_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_02": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_03": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_04": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_10": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_13": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_bj_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        }
+      },
+      "verdict_counts": {
+        "PASS": 37,
+        "ABSTAIN": 16,
+        "PARTIAL": 5
+      },
+      "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+      "code_sha256": {
+        "api/config.yaml": "18bda1ec5c6700f555a45a88d97cde3d530142535f54aa58bd72cb791a8f148b",
+        "api/generate/claims.py": "44db36a5ac7a339b2ad5f3e92ed5bb2d111444bdfc4ffd018f47ebcb2fe205d1",
+        "api/generate/generator.py": "984b097b114b44e484560f495dc30067921c779b7b3ab6892926dba6f177b4f7",
+        "api/pipeline.py": "3286e74869013806a9c100b2fb684b7b68ef5cb7b2a6fb6aac60a6f2848eb609",
+        "api/query/router.py": "ad4b24db1eeaee0c7e24b0287d6ce445f64d17e7b07d631dd3f34e7a0031769f",
+        "api/query/retrieve.py": "fc73548765e8537a50d16491f62ddb079f75ca01348609396387ea8d0921c27b",
+        "scripts/eval_run.py": "5072142f865cdfae9cbcd5e50e09de7102639ea391a6d8d9a67da27937b41113",
+        "scripts/eval_rrf_override.py": "64778a2df7e78cb973e020b9a4b6d8a5abbb08db0a94c7bb35614d0a56aca41c",
+        "eval/heldout/rrf_b.yaml": "2dbed469a0ec2c9aecb4569a3461b70bf753cdf3e2858a5cdffa24152eed7246"
+      },
+      "source_sha256": {
+        "eval/runs/a1b1d5188652.meta.json": "1f0700e2b240d1680ad9330ed2a5b850ab714cf32dadbc06ec1082b3b0a51b0d",
+        "eval/runs/a1b1d5188652.results.jsonl": "c8b5b4299c86cba25c913318af8c94d0fb4689f7b1c1516124c14d1b4e279041",
+        "eval/runs/a1b1d5188652.json": "077d37488f5b6059ac3c4deef9325f3971dbe72061f6315c775fecbfdef62b9f"
+      },
+      "commit": "d84e90d0146fea1cd0414963af3c8131792236a7",
+      "test_gate_evidence": {
+        "test": {
+          "exit": 0,
+          "log": "build/rrf-repeat-02-B-test.log",
+          "sha256": "421b84dfeb5d137d0535bb8a85b46250827e33c4bcbfed6d2f21e562cef10552"
+        },
+        "lint": {
+          "exit": 0,
+          "log": "build/rrf-repeat-02-B-lint.log",
+          "sha256": "75cfd8fc8a14ec817192f54b90e6c08a292d4e10b69581547c0d55c5ca785d7f"
+        }
+      }
+    },
+    {
+      "arm": "control",
+      "run_id": "9ffaba1bf23f",
+      "sufficiency_count": 42,
+      "over_abstention_count": 5,
+      "false_answer_count": 0,
+      "fallback_count": 0,
+      "items": {
+        "ho_ac_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_13": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_ac_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_04": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_06": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_08": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_bj_01": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_02": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_03": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_13": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_bj_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_04": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_07": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        }
+      },
+      "verdict_counts": {
+        "PASS": 37,
+        "ABSTAIN": 15,
+        "PARTIAL": 6
+      },
+      "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+      "code_sha256": {
+        "api/config.yaml": "18bda1ec5c6700f555a45a88d97cde3d530142535f54aa58bd72cb791a8f148b",
+        "api/generate/claims.py": "44db36a5ac7a339b2ad5f3e92ed5bb2d111444bdfc4ffd018f47ebcb2fe205d1",
+        "api/generate/generator.py": "984b097b114b44e484560f495dc30067921c779b7b3ab6892926dba6f177b4f7",
+        "api/pipeline.py": "3286e74869013806a9c100b2fb684b7b68ef5cb7b2a6fb6aac60a6f2848eb609",
+        "api/query/router.py": "ad4b24db1eeaee0c7e24b0287d6ce445f64d17e7b07d631dd3f34e7a0031769f",
+        "api/query/retrieve.py": "fc73548765e8537a50d16491f62ddb079f75ca01348609396387ea8d0921c27b",
+        "scripts/eval_run.py": "5072142f865cdfae9cbcd5e50e09de7102639ea391a6d8d9a67da27937b41113",
+        "scripts/eval_rrf_override.py": "64778a2df7e78cb973e020b9a4b6d8a5abbb08db0a94c7bb35614d0a56aca41c",
+        "eval/heldout/rrf_b.yaml": "2dbed469a0ec2c9aecb4569a3461b70bf753cdf3e2858a5cdffa24152eed7246"
+      },
+      "source_sha256": {
+        "eval/runs/9ffaba1bf23f.meta.json": "dd6e935d1e29e54d4852f731b588e3be9e9945d6ec78a9b801991eee650709dc",
+        "eval/runs/9ffaba1bf23f.results.jsonl": "3cbd764f76fd0dc69d9936ac60d0d8f59c165ffade4c4d7c63d26f3b844a0202",
+        "eval/runs/9ffaba1bf23f.json": "2d7d3658b428c3f6cb5738db76372c82f2f0eb77d42c0eeb72d52afefa5370d4"
+      },
+      "commit": "c8a17faa7bd6db00d3e239d1cb8b7832a803b77c",
+      "test_gate_evidence": {
+        "test": {
+          "exit": 0,
+          "log": "build/rrf-repeat-03-control-test.log",
+          "sha256": "212e18edf71c0abc3ea6923b0ab2aa1a6e9ac7d1f2b34777d7482d200ebee489"
+        },
+        "lint": {
+          "exit": 0,
+          "log": "build/rrf-repeat-03-control-lint.log",
+          "sha256": "75cfd8fc8a14ec817192f54b90e6c08a292d4e10b69581547c0d55c5ca785d7f"
+        }
+      }
+    },
+    {
+      "arm": "B",
+      "run_id": "fa3c872084dd",
+      "sufficiency_count": 42,
+      "over_abstention_count": 7,
+      "false_answer_count": 0,
+      "fallback_count": 0,
+      "items": {
+        "ho_ac_01": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_13": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_ac_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_ac_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_04": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_06": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_07": {
+          "sufficient": false,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_08": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_nt_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_nt_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_bj_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_02": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_03": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_04": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_05": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_06": {
+          "sufficient": true,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_11": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_13": {
+          "sufficient": false,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_bj_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_bj_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_01": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_02": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_03": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_04": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_05": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_06": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_07": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_08": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_09": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_10": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_12": {
+          "sufficient": true,
+          "abstained": false,
+          "fallback": false,
+          "expected_abstain": false
+        },
+        "ho_px_13": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_14": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        },
+        "ho_px_15": {
+          "sufficient": null,
+          "abstained": true,
+          "fallback": false,
+          "expected_abstain": true
+        }
+      },
+      "verdict_counts": {
+        "ABSTAIN": 17,
+        "PASS": 35,
+        "PARTIAL": 6
+      },
+      "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+      "code_sha256": {
+        "api/config.yaml": "18bda1ec5c6700f555a45a88d97cde3d530142535f54aa58bd72cb791a8f148b",
+        "api/generate/claims.py": "44db36a5ac7a339b2ad5f3e92ed5bb2d111444bdfc4ffd018f47ebcb2fe205d1",
+        "api/generate/generator.py": "984b097b114b44e484560f495dc30067921c779b7b3ab6892926dba6f177b4f7",
+        "api/pipeline.py": "3286e74869013806a9c100b2fb684b7b68ef5cb7b2a6fb6aac60a6f2848eb609",
+        "api/query/router.py": "ad4b24db1eeaee0c7e24b0287d6ce445f64d17e7b07d631dd3f34e7a0031769f",
+        "api/query/retrieve.py": "fc73548765e8537a50d16491f62ddb079f75ca01348609396387ea8d0921c27b",
+        "scripts/eval_run.py": "5072142f865cdfae9cbcd5e50e09de7102639ea391a6d8d9a67da27937b41113",
+        "scripts/eval_rrf_override.py": "64778a2df7e78cb973e020b9a4b6d8a5abbb08db0a94c7bb35614d0a56aca41c",
+        "eval/heldout/rrf_b.yaml": "2dbed469a0ec2c9aecb4569a3461b70bf753cdf3e2858a5cdffa24152eed7246"
+      },
+      "source_sha256": {
+        "eval/runs/fa3c872084dd.meta.json": "d0031c0d5c1316674901029184bf09c5987d2792462f8cb910095976bed479ba",
+        "eval/runs/fa3c872084dd.results.jsonl": "c5a424fc6001e755da294a6238de048e5bfab45e0f499ac67bc035fae74b872f",
+        "eval/runs/fa3c872084dd.json": "c0fa6d600c52bf1b23c00b3ef51f082eb5b884e91ada5fbe6e94a6e8d0f0b0c4"
+      },
+      "commit": "a478ac30c0bce7fd513c57307e1f19fa92f18d08",
+      "test_gate_evidence": {
+        "test": {
+          "exit": 0,
+          "log": "build/rrf-repeat-04-B-test.log",
+          "sha256": "cbaf9956dd20f9627436ad844e302be518ff43c8943b2fce2f316f514259a57a"
+        },
+        "lint": {
+          "exit": 0,
+          "log": "build/rrf-repeat-04-B-lint.log",
+          "sha256": "75cfd8fc8a14ec817192f54b90e6c08a292d4e10b69581547c0d55c5ca785d7f"
+        }
+      }
+    }
+  ],
+  "per_arm": {
+    "control": {
+      "sufficiency_count": {
+        "mean": "7/8",
+        "min": "41/48",
+        "max": "43/48",
+        "counts": [
+          41,
+          43,
+          42
+        ],
+        "denominator_per_run": 48
+      },
+      "over_abstention_count": {
+        "mean": "1/6",
+        "min": "5/48",
+        "max": "5/24",
+        "counts": [
+          9,
+          10,
+          5
+        ],
+        "denominator_per_run": 48
+      },
+      "false_answer_count": {
+        "mean": "0",
+        "min": "0",
+        "max": "0",
+        "counts": [
+          0,
+          0,
+          0
+        ],
+        "denominator_per_run": 10
+      },
+      "fallback_count": {
+        "mean": "22",
+        "min": "0",
+        "max": "37",
+        "counts": [
+          37,
+          29,
+          0
+        ],
+        "denominator_per_run": 1
+      }
+    },
+    "B": {
+      "sufficiency_count": {
+        "mean": "127/144",
+        "min": "7/8",
+        "max": "43/48",
+        "counts": [
+          42,
+          43,
+          42
+        ],
+        "denominator_per_run": 48
+      },
+      "over_abstention_count": {
+        "mean": "19/144",
+        "min": "1/8",
+        "max": "7/48",
+        "counts": [
+          6,
+          6,
+          7
+        ],
+        "denominator_per_run": 48
+      },
+      "false_answer_count": {
+        "mean": "0",
+        "min": "0",
+        "max": "0",
+        "counts": [
+          0,
+          0,
+          0
+        ],
+        "denominator_per_run": 10
+      },
+      "fallback_count": {
+        "mean": "12",
+        "min": "0",
+        "max": "34",
+        "counts": [
+          34,
+          2,
+          0
+        ],
+        "denominator_per_run": 1
+      }
+    }
+  },
+  "within_arm_flips": {
+    "control": {
+      "8a830995f188:14391a161402": {
+        "sufficient": {
+          "count": 4,
+          "item_ids": [
+            "ho_nt_07",
+            "ho_bj_02",
+            "ho_bj_03",
+            "ho_px_04"
+          ]
+        },
+        "abstained": {
+          "count": 13,
+          "item_ids": [
+            "ho_ac_01",
+            "ho_ac_03",
+            "ho_nt_03",
+            "ho_nt_07",
+            "ho_bj_01",
+            "ho_bj_04",
+            "ho_bj_05",
+            "ho_bj_06",
+            "ho_bj_11",
+            "ho_px_04",
+            "ho_px_05",
+            "ho_px_07",
+            "ho_px_12"
+          ]
+        },
+        "fallback": {
+          "count": 28,
+          "item_ids": [
+            "ho_ac_02",
+            "ho_ac_03",
+            "ho_ac_06",
+            "ho_ac_07",
+            "ho_ac_08",
+            "ho_ac_09",
+            "ho_ac_12",
+            "ho_ac_14",
+            "ho_ac_15",
+            "ho_nt_01",
+            "ho_nt_03",
+            "ho_nt_05",
+            "ho_nt_06",
+            "ho_nt_09",
+            "ho_nt_10",
+            "ho_nt_12",
+            "ho_bj_01",
+            "ho_bj_02",
+            "ho_bj_03",
+            "ho_bj_04",
+            "ho_bj_05",
+            "ho_bj_09",
+            "ho_bj_10",
+            "ho_bj_11",
+            "ho_px_03",
+            "ho_px_07",
+            "ho_px_12",
+            "ho_px_14"
+          ]
+        }
+      },
+      "8a830995f188:9ffaba1bf23f": {
+        "sufficient": {
+          "count": 3,
+          "item_ids": [
+            "ho_nt_07",
+            "ho_bj_02",
+            "ho_bj_03"
+          ]
+        },
+        "abstained": {
+          "count": 8,
+          "item_ids": [
+            "ho_nt_03",
+            "ho_nt_07",
+            "ho_nt_08",
+            "ho_bj_01",
+            "ho_bj_04",
+            "ho_bj_05",
+            "ho_px_04",
+            "ho_px_07"
+          ]
+        },
+        "fallback": {
+          "count": 37,
+          "item_ids": [
+            "ho_ac_02",
+            "ho_ac_03",
+            "ho_ac_04",
+            "ho_ac_05",
+            "ho_nt_01",
+            "ho_nt_02",
+            "ho_nt_03",
+            "ho_nt_04",
+            "ho_nt_08",
+            "ho_nt_09",
+            "ho_nt_10",
+            "ho_nt_11",
+            "ho_nt_12",
+            "ho_nt_15",
+            "ho_bj_01",
+            "ho_bj_02",
+            "ho_bj_03",
+            "ho_bj_04",
+            "ho_bj_05",
+            "ho_bj_06",
+            "ho_bj_09",
+            "ho_bj_10",
+            "ho_bj_11",
+            "ho_bj_12",
+            "ho_bj_13",
+            "ho_bj_14",
+            "ho_px_01",
+            "ho_px_02",
+            "ho_px_03",
+            "ho_px_04",
+            "ho_px_05",
+            "ho_px_06",
+            "ho_px_07",
+            "ho_px_08",
+            "ho_px_09",
+            "ho_px_10",
+            "ho_px_14"
+          ]
+        }
+      },
+      "14391a161402:9ffaba1bf23f": {
+        "sufficient": {
+          "count": 1,
+          "item_ids": [
+            "ho_px_04"
+          ]
+        },
+        "abstained": {
+          "count": 7,
+          "item_ids": [
+            "ho_ac_01",
+            "ho_ac_03",
+            "ho_nt_08",
+            "ho_bj_06",
+            "ho_bj_11",
+            "ho_px_05",
+            "ho_px_12"
+          ]
+        },
+        "fallback": {
+          "count": 29,
+          "item_ids": [
+            "ho_ac_04",
+            "ho_ac_05",
+            "ho_ac_06",
+            "ho_ac_07",
+            "ho_ac_08",
+            "ho_ac_09",
+            "ho_ac_12",
+            "ho_ac_14",
+            "ho_ac_15",
+            "ho_nt_02",
+            "ho_nt_04",
+            "ho_nt_05",
+            "ho_nt_06",
+            "ho_nt_08",
+            "ho_nt_11",
+            "ho_nt_15",
+            "ho_bj_06",
+            "ho_bj_12",
+            "ho_bj_13",
+            "ho_bj_14",
+            "ho_px_01",
+            "ho_px_02",
+            "ho_px_04",
+            "ho_px_05",
+            "ho_px_06",
+            "ho_px_08",
+            "ho_px_09",
+            "ho_px_10",
+            "ho_px_12"
+          ]
+        }
+      }
+    },
+    "B": {
+      "d4c17a4291c3:a1b1d5188652": {
+        "sufficient": {
+          "count": 3,
+          "item_ids": [
+            "ho_ac_05",
+            "ho_bj_04",
+            "ho_px_01"
+          ]
+        },
+        "abstained": {
+          "count": 6,
+          "item_ids": [
+            "ho_ac_05",
+            "ho_nt_06",
+            "ho_nt_08",
+            "ho_bj_02",
+            "ho_bj_05",
+            "ho_bj_10"
+          ]
+        },
+        "fallback": {
+          "count": 32,
+          "item_ids": [
+            "ho_ac_03",
+            "ho_ac_04",
+            "ho_ac_05",
+            "ho_ac_09",
+            "ho_ac_11",
+            "ho_ac_12",
+            "ho_nt_02",
+            "ho_nt_04",
+            "ho_nt_05",
+            "ho_nt_06",
+            "ho_nt_07",
+            "ho_nt_08",
+            "ho_nt_09",
+            "ho_nt_12",
+            "ho_nt_15",
+            "ho_bj_01",
+            "ho_bj_02",
+            "ho_bj_03",
+            "ho_bj_04",
+            "ho_bj_05",
+            "ho_bj_06",
+            "ho_bj_08",
+            "ho_bj_09",
+            "ho_bj_10",
+            "ho_bj_12",
+            "ho_bj_13",
+            "ho_bj_14",
+            "ho_bj_15",
+            "ho_px_02",
+            "ho_px_04",
+            "ho_px_06",
+            "ho_px_13"
+          ]
+        }
+      },
+      "d4c17a4291c3:fa3c872084dd": {
+        "sufficient": {
+          "count": 4,
+          "item_ids": [
+            "ho_ac_05",
+            "ho_nt_07",
+            "ho_bj_04",
+            "ho_px_01"
+          ]
+        },
+        "abstained": {
+          "count": 9,
+          "item_ids": [
+            "ho_ac_01",
+            "ho_ac_05",
+            "ho_nt_06",
+            "ho_nt_07",
+            "ho_nt_08",
+            "ho_bj_02",
+            "ho_bj_05",
+            "ho_bj_06",
+            "ho_px_05"
+          ]
+        },
+        "fallback": {
+          "count": 34,
+          "item_ids": [
+            "ho_ac_03",
+            "ho_ac_04",
+            "ho_ac_05",
+            "ho_ac_09",
+            "ho_ac_11",
+            "ho_ac_12",
+            "ho_nt_02",
+            "ho_nt_04",
+            "ho_nt_05",
+            "ho_nt_06",
+            "ho_nt_07",
+            "ho_nt_08",
+            "ho_nt_09",
+            "ho_nt_10",
+            "ho_nt_11",
+            "ho_nt_12",
+            "ho_nt_15",
+            "ho_bj_01",
+            "ho_bj_02",
+            "ho_bj_03",
+            "ho_bj_04",
+            "ho_bj_05",
+            "ho_bj_06",
+            "ho_bj_08",
+            "ho_bj_09",
+            "ho_bj_10",
+            "ho_bj_12",
+            "ho_bj_13",
+            "ho_bj_14",
+            "ho_bj_15",
+            "ho_px_02",
+            "ho_px_04",
+            "ho_px_06",
+            "ho_px_13"
+          ]
+        }
+      },
+      "a1b1d5188652:fa3c872084dd": {
+        "sufficient": {
+          "count": 1,
+          "item_ids": [
+            "ho_nt_07"
+          ]
+        },
+        "abstained": {
+          "count": 5,
+          "item_ids": [
+            "ho_ac_01",
+            "ho_nt_07",
+            "ho_bj_06",
+            "ho_bj_10",
+            "ho_px_05"
+          ]
+        },
+        "fallback": {
+          "count": 2,
+          "item_ids": [
+            "ho_nt_10",
+            "ho_nt_11"
+          ]
+        }
+      }
+    }
+  },
+  "paired_flips": {
+    "8a830995f188:d4c17a4291c3": {
+      "sufficient": {
+        "count": 7,
+        "item_ids": [
+          "ho_ac_05",
+          "ho_nt_07",
+          "ho_bj_01",
+          "ho_bj_03",
+          "ho_px_01",
+          "ho_px_04",
+          "ho_px_07"
+        ]
+      },
+      "abstained": {
+        "count": 9,
+        "item_ids": [
+          "ho_ac_05",
+          "ho_nt_03",
+          "ho_nt_06",
+          "ho_nt_07",
+          "ho_bj_01",
+          "ho_bj_04",
+          "ho_px_04",
+          "ho_px_05",
+          "ho_px_07"
+        ]
+      },
+      "fallback": {
+        "count": 21,
+        "item_ids": [
+          "ho_ac_02",
+          "ho_ac_09",
+          "ho_ac_11",
+          "ho_ac_12",
+          "ho_nt_01",
+          "ho_nt_03",
+          "ho_nt_05",
+          "ho_nt_06",
+          "ho_nt_07",
+          "ho_bj_08",
+          "ho_bj_11",
+          "ho_bj_15",
+          "ho_px_01",
+          "ho_px_03",
+          "ho_px_05",
+          "ho_px_07",
+          "ho_px_08",
+          "ho_px_09",
+          "ho_px_10",
+          "ho_px_13",
+          "ho_px_14"
+        ]
+      }
+    },
+    "14391a161402:a1b1d5188652": {
+      "sufficient": {
+        "count": 4,
+        "item_ids": [
+          "ho_bj_01",
+          "ho_bj_02",
+          "ho_bj_04",
+          "ho_px_07"
+        ]
+      },
+      "abstained": {
+        "count": 8,
+        "item_ids": [
+          "ho_ac_01",
+          "ho_ac_03",
+          "ho_nt_08",
+          "ho_bj_02",
+          "ho_bj_06",
+          "ho_bj_10",
+          "ho_bj_11",
+          "ho_px_12"
+        ]
+      },
+      "fallback": {
+        "count": 29,
+        "item_ids": [
+          "ho_ac_04",
+          "ho_ac_05",
+          "ho_ac_06",
+          "ho_ac_07",
+          "ho_ac_08",
+          "ho_ac_09",
+          "ho_ac_12",
+          "ho_ac_14",
+          "ho_ac_15",
+          "ho_nt_02",
+          "ho_nt_04",
+          "ho_nt_05",
+          "ho_nt_06",
+          "ho_nt_08",
+          "ho_nt_10",
+          "ho_nt_15",
+          "ho_bj_06",
+          "ho_bj_12",
+          "ho_bj_13",
+          "ho_bj_14",
+          "ho_px_01",
+          "ho_px_02",
+          "ho_px_04",
+          "ho_px_05",
+          "ho_px_06",
+          "ho_px_08",
+          "ho_px_09",
+          "ho_px_10",
+          "ho_px_12"
+        ]
+      }
+    },
+    "9ffaba1bf23f:fa3c872084dd": {
+      "sufficient": {
+        "count": 6,
+        "item_ids": [
+          "ho_nt_07",
+          "ho_bj_01",
+          "ho_bj_02",
+          "ho_bj_04",
+          "ho_px_04",
+          "ho_px_07"
+        ]
+      },
+      "abstained": {
+        "count": 4,
+        "item_ids": [
+          "ho_ac_01",
+          "ho_nt_07",
+          "ho_bj_02",
+          "ho_bj_06"
+        ]
+      },
+      "fallback": {
+        "count": 0,
+        "item_ids": []
+      }
+    }
+  },
+  "conditions": [
+    true,
+    false,
+    true,
+    true
+  ],
+  "adopt_B": false,
+  "decision_basis": "exact integer counts with fixed denominators"
+}

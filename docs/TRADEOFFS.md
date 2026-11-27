@@ -3709,3 +3709,10 @@ flips within each arm and across the three control/B pairs. Retain 1:1 if any
 condition fails. If any run is incomplete, stop without adopting; do not
 replace or reroll it. No tuning, selective exclusion, or changes to the rule
 after seeing outcomes.
+
+## 2026-11-28 — OWNER DECISION: six-run RRF confirmation (689d6a4)
+
+- Decided by: owner
+- Status: OWNER DECISION (preregistered rule)
+
+Retain dense:sparse 1:1. The six-run evidence, exact count comparisons, item flips, fallback counts and gate records are in `eval/runs/heldout-v1_1-rrf-six-689d6a4.json`. All four preregistered conditions were evaluated; 10 negatives per run remain a narrow safety check.
