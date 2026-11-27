@@ -1,7 +1,7 @@
 """Corpus snapshot for CI (PRD 11.5 "restore-corpus-snapshot"; F-135).
 
-python -m scripts.corpus_snapshot dump [--out build/corpus_snapshot.dump]
-python -m scripts.corpus_snapshot restore build/corpus_snapshot.dump
+python -m scripts.corpus_snapshot dump [--out build/corpus_snapshot.dump] [--manifest PATH]
+python -m scripts.corpus_snapshot restore build/corpus_snapshot.dump [--manifest PATH]
 
 `dump`: `pg_dump --data-only -Fc` of the frozen tables (companies, filings,
 chunks with their embeddings, xbrl_facts, xbrl_spans) and records the archive's
@@ -36,7 +36,8 @@ DEFAULT_OUT = REPO_ROOT / "build" / "corpus_snapshot.dump"
 
 def pg(tool: str, *args: str) -> list[str]:
     prefix = shlex.split(os.environ.get("PG_EXEC", "docker compose exec -T postgres"))
-    return [*prefix, tool, "-U", "filingqa", "-d", os.environ.get("PG_DB", "filingqa"), *args]
+    return [*prefix, tool, "-U", os.environ.get("PGUSER", "filingqa"),
+            "-d", os.environ.get("PG_DB", "filingqa"), *args]  # fmt: skip
 
 
 def sha256(path: Path) -> str:
@@ -55,23 +56,35 @@ def snapshot_block(path: Path, record: dict) -> dict:
             "hosted": None}  # fmt: skip
 
 
-def dump(out: Path) -> None:
+def dump(out: Path, manifest: Path | None = None) -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     args = ["-Fc", "--data-only", *(x for t in TABLES for x in ("-t", t))]
     with out.open("wb") as fh:
         subprocess.run(pg("pg_dump", *args), stdout=fh, check=True)
     record = yaml.safe_load(FREEZE_FILE.read_text(encoding="utf-8"))
     block = snapshot_block(out, record)
-    text = FREEZE_FILE.read_text(encoding="utf-8")
-    head = text.split("\nsnapshot:\n", 1)[0].rstrip("\n")
-    FREEZE_FILE.write_text(head + "\n" + yaml.safe_dump({"snapshot": block}, sort_keys=False),
-                           encoding="utf-8")  # fmt: skip
+    target = manifest if manifest is not None else FREEZE_FILE
+    if target.resolve() == FREEZE_FILE.resolve():
+        text = FREEZE_FILE.read_text(encoding="utf-8")
+        head = text.split("\nsnapshot:\n", 1)[0].rstrip("\n")
+        target.write_text(head + "\n" + yaml.safe_dump({"snapshot": block}, sort_keys=False),
+                          encoding="utf-8")  # fmt: skip
+    else:
+        source = subprocess.run(
+            pg("psql", "-At", "-c", "SELECT system_identifier FROM pg_control_system()"),
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        block["source_system_identifier"] = source
+        target.write_text(yaml.safe_dump({"snapshot": block}, sort_keys=False), encoding="utf-8")
     print(f"wrote {out} ({block['bytes']} bytes, sha256 {block['sha256']}); recorded in "
-          f"{FREEZE_FILE.relative_to(REPO_ROOT)}")  # fmt: skip
+          f"{target}")  # fmt: skip
 
 
-def restore(path: Path) -> int:
-    record = yaml.safe_load(FREEZE_FILE.read_text(encoding="utf-8"))
+def restore(path: Path, manifest: Path | None = None) -> int:
+    record = yaml.safe_load((manifest if manifest is not None else FREEZE_FILE).read_text(
+        encoding="utf-8"))  # fmt: skip
     want = (record.get("snapshot") or {}).get("sha256")
     got = sha256(path)
     if got != want:
@@ -86,11 +99,14 @@ def restore(path: Path) -> int:
 
 
 def main() -> None:
+    manifest = (
+        Path(sys.argv[sys.argv.index("--manifest") + 1]) if "--manifest" in sys.argv else None
+    )
     if len(sys.argv) > 1 and sys.argv[1] == "dump":
         out = Path(sys.argv[sys.argv.index("--out") + 1]) if "--out" in sys.argv else DEFAULT_OUT
-        dump(out)
+        dump(out, manifest)
     elif len(sys.argv) > 2 and sys.argv[1] == "restore":
-        sys.exit(restore(Path(sys.argv[2])))
+        sys.exit(restore(Path(sys.argv[2]), manifest))
     else:
         raise SystemExit(__doc__)
 
