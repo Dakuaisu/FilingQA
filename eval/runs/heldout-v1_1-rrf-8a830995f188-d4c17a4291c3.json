@@ -1,0 +1,64 @@
+{
+  "baseline": "8a830995f188",
+  "B": "d4c17a4291c3",
+  "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+  "flip_ids": {
+    "sufficiency": [
+      "ho_ac_05",
+      "ho_nt_07",
+      "ho_bj_01",
+      "ho_bj_03",
+      "ho_px_01",
+      "ho_px_04",
+      "ho_px_07"
+    ],
+    "verdict": [
+      "ho_ac_05",
+      "ho_nt_03",
+      "ho_nt_06",
+      "ho_nt_07",
+      "ho_nt_11",
+      "ho_bj_01",
+      "ho_bj_04",
+      "ho_px_04",
+      "ho_px_05",
+      "ho_px_07"
+    ]
+  },
+  "baseline_endpoints": {
+    "sufficiency_at_10": {
+      "numerator": 41,
+      "denominator": 48,
+      "value": 0.8541666666666666
+    },
+    "over_abstention": {
+      "numerator": 9,
+      "denominator": 48,
+      "value": 0.1875
+    },
+    "false_answer_rate": {
+      "numerator": 0,
+      "denominator": 10,
+      "value": 0.0
+    }
+  },
+  "B_endpoints": {
+    "sufficiency_at_10": {
+      "numerator": 42,
+      "denominator": 48,
+      "value": 0.875
+    },
+    "over_abstention": {
+      "numerator": 6,
+      "denominator": 48,
+      "value": 0.125
+    },
+    "false_answer_rate": {
+      "numerator": 0,
+      "denominator": 10,
+      "value": 0.0
+    }
+  },
+  "qualifies_under_preregistered_rule": true,
+  "adopted": false
+}
