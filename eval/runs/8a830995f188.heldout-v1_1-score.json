@@ -1,0 +1,333 @@
+{
+  "arm": "baseline",
+  "run_id": "8a830995f188",
+  "dataset_sha256": "5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193",
+  "code_sha256": {
+    "api/config.yaml": "18bda1ec5c6700f555a45a88d97cde3d530142535f54aa58bd72cb791a8f148b",
+    "api/generate/claims.py": "44db36a5ac7a339b2ad5f3e92ed5bb2d111444bdfc4ffd018f47ebcb2fe205d1",
+    "api/generate/generator.py": "984b097b114b44e484560f495dc30067921c779b7b3ab6892926dba6f177b4f7",
+    "api/pipeline.py": "3286e74869013806a9c100b2fb684b7b68ef5cb7b2a6fb6aac60a6f2848eb609",
+    "api/query/router.py": "ad4b24db1eeaee0c7e24b0287d6ce445f64d17e7b07d631dd3f34e7a0031769f",
+    "api/query/retrieve.py": "fc73548765e8537a50d16491f62ddb079f75ca01348609396387ea8d0921c27b",
+    "scripts/eval_run.py": "5072142f865cdfae9cbcd5e50e09de7102639ea391a6d8d9a67da27937b41113",
+    "scripts/eval_rrf_override.py": "64778a2df7e78cb973e020b9a4b6d8a5abbb08db0a94c7bb35614d0a56aca41c",
+    "eval/heldout/rrf_b.yaml": "2dbed469a0ec2c9aecb4569a3461b70bf753cdf3e2858a5cdffa24152eed7246"
+  },
+  "source_sha256": {
+    "eval/runs/8a830995f188.meta.json": "d89a5ff61dbaaa63a8b0a397732dd0ef555e33be3e54c7b56cc7d4dc21806432",
+    "eval/runs/8a830995f188.results.jsonl": "969929f9801324456e793d16c3c823487960e7138431762cc56b01d6a0160354",
+    "eval/runs/8a830995f188.json": "d1fb141385d32e09e48eea12b65fe7a583df454de41f4783ff6fd19314cb924f"
+  },
+  "sufficiency_at_10": {
+    "numerator": 41,
+    "denominator": 48,
+    "value": 0.8541666666666666
+  },
+  "over_abstention": {
+    "numerator": 9,
+    "denominator": 48,
+    "value": 0.1875
+  },
+  "false_answer_rate": {
+    "numerator": 0,
+    "denominator": 10,
+    "value": 0.0
+  },
+  "verdict_counts": {
+    "PASS": 37,
+    "ABSTAIN": 19,
+    "PARTIAL": 2
+  },
+  "items": {
+    "ho_ac_01": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_02": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_03": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_04": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_05": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_06": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_07": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_08": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_09": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_10": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_11": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_12": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_13": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_ac_14": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_ac_15": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_nt_01": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_nt_02": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_nt_03": {
+      "sufficient": true,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_nt_04": {
+      "sufficient": true,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_nt_05": {
+      "sufficient": true,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_nt_06": {
+      "sufficient": false,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_nt_07": {
+      "sufficient": false,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_nt_08": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_nt_09": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_nt_10": {
+      "sufficient": true,
+      "verdict": "PARTIAL",
+      "expected_abstain": false
+    },
+    "ho_nt_11": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_nt_12": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_nt_13": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_nt_14": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_nt_15": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_bj_01": {
+      "sufficient": false,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_bj_02": {
+      "sufficient": false,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_bj_03": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_04": {
+      "sufficient": true,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_bj_05": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_06": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_08": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_09": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_10": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_11": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_12": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_13": {
+      "sufficient": false,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_bj_14": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_bj_15": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_px_01": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_px_02": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_px_03": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_px_04": {
+      "sufficient": false,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_px_05": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_px_06": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_px_07": {
+      "sufficient": false,
+      "verdict": "ABSTAIN",
+      "expected_abstain": false
+    },
+    "ho_px_08": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_px_09": {
+      "sufficient": true,
+      "verdict": "PARTIAL",
+      "expected_abstain": false
+    },
+    "ho_px_10": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_px_12": {
+      "sufficient": true,
+      "verdict": "PASS",
+      "expected_abstain": false
+    },
+    "ho_px_13": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_px_14": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    },
+    "ho_px_15": {
+      "sufficient": null,
+      "verdict": "ABSTAIN",
+      "expected_abstain": true
+    }
+  }
+}
