@@ -1,0 +1,4 @@
+retrieval:
+  weights:
+    dense: 1.5
+    sparse: 1.0
