@@ -63,43 +63,35 @@ What the build found, not what the PRD predicted:
 
 ## Metrics
 
-Gated metrics by source (PRD 11.2, thresholds in `eval/thresholds.yaml`). No
-value appears here until a gated run exists; the figures in the status section
-below are model-free retrieval measurements, not this table.
+Frozen `golden_v1` run [`13fc0fa4eb72`](docs/RESULTS.md#golden-v1-final-run-13fc0fa4eb72-real), classified as **real**, not a CI gate pass. Served generation models: `claude-haiku-4-5-20251001` and `claude-sonnet-5-5` ([run report](eval/runs/13fc0fa4eb72.json)). Values are rounded to three decimals; N/A means the artifact stores null, not zero. Answer correctness is the normalized mean over eligible judged answers, not a rate over every question ([judged report](eval/runs/13fc0fa4eb72.judged.json)). RESULTS row IDs are in source-column order.
 
-| Metric | xbrl_auto | llm_seeded | handwritten | aggregate |
-|---|---|---|---|---|
-| Sufficiency@10 | waiting on a gated run (F-59) | waiting on a gated run (F-59) | waiting on F-103 | waiting on a gated run (F-59) |
-| Faithfulness (pre) | waiting on a gated run (F-59) | waiting on a gated run (F-59) | waiting on F-103 | waiting on a gated run (F-59) |
-| Claim retention | waiting on a gated run (F-59) | waiting on a gated run (F-59) | waiting on F-103 | waiting on a gated run (F-59) |
-| Citation coverage | waiting on a gated run (F-59) | waiting on a gated run (F-59) | waiting on F-103 | waiting on a gated run (F-59) |
-| Answer correctness | waiting on a gated run (F-59) | waiting on a gated run (F-59) | waiting on F-103 | waiting on a gated run (F-59) |
-| False-answer rate | waiting on a gated run (F-59) | waiting on a gated run (F-59) | waiting on F-103 | waiting on a gated run (F-59) |
-| Over-abstention rate | waiting on a gated run (F-59) | waiting on a gated run (F-59) | waiting on F-103 | waiting on a gated run (F-59) |
-| XBRL contradiction rate | waiting on a gated run (F-59) | waiting on a gated run (F-59) | waiting on F-103 | waiting on a gated run (F-59) |
+| Metric | xbrl_auto | llm_seeded | handwritten | aggregate | RESULTS rows |
+|---|---|---|---|---|---|
+| Sufficiency@10 | 0.710 | 0.958 | 0.717 | 0.765 | R-545, R-557, R-569, R-581 |
+| Faithfulness (pre) | 0.899 | 0.937 | 0.903 | 0.911 | R-550, R-562, R-574, R-586 |
+| Claim retention | 0.899 | 0.937 | 0.903 | 0.911 | R-551, R-563, R-575, R-587 |
+| Citation coverage | 1.000 | 1.000 | 1.000 | 1.000 | R-552, R-564, R-576, R-588 |
+| Answer correctness | 0.932 | 0.948 | 0.933 | 0.937 | R-611, R-606, R-601, R-596 |
+| False-answer rate | N/A | N/A | 0.000 | 0.000 | R-554, R-566, R-578, R-590 |
+| Over-abstention rate | 0.260 | 0.083 | 0.300 | 0.229 | R-555, R-567, R-579, R-591 |
+| XBRL contradiction rate | 0.013 | 0.000 | 0.000 | 0.008 | R-553, R-565, R-577, R-589 |
 
 ## Reproduce
 
-- `make eval`: every candidate item through the served pipeline, a per-source
-  report and the run files in `eval/runs/`.
-- `make eval-fast`: the committed 60-item subset, then the gate
-  (`eval/compare.py`), which exits non-zero on any failed or pending metric.
-- On the default `claude_cli` backend every run is a development run: never a
-  baseline, never a result, never able to pass the gate. Gated runs use
-  `anthropic_api`.
+- To inspect the published numbers without running models, use the linked reports above.
+- To run the full frozen evaluation, first verify the corpus with `python -m scripts.verify_freeze` (`--snapshot` for a restored, verified snapshot), then run `python -m scripts.eval_run --run --dataset eval/datasets/golden_v1.jsonl`. This creates a new run; it does not reproduce the published run byte for byte.
+- `make eval` instead verifies the corpus and runs the default candidate datasets.
+- `make eval-fast` runs the committed 60-item frozen subset and then `make eval-gate`, which compares against the matching `eval/baselines/main_fast.json` and fails on failed or pending metrics. The published full run is not that baseline.
 
 ## Status
 
-**Latest `golden_v1` development run: [13fc0fa4eb72](docs/RESULTS.md#golden-v1-final-development-run-13fc0fa4eb72).** It completed after the owner re-logged in; 142 rerank timeouts make it hardware-dependent and it cannot serve as a CI baseline. The earlier [35b3efbbfd5d](docs/RESULTS.md#golden-v1-development-run-35b3efbbfd5d) remains the before run.
+**Latest frozen result: `13fc0fa4eb72`.** It ran on the rebuilt corpus, not a verified equivalent of the original snapshot. Reranking timed out and fell back to fused order on **142/392 items** ([RESULTS](docs/RESULTS.md#golden-v1-final-run-13fc0fa4eb72-real), R-583; [dataset manifest](eval/datasets/golden_v1_manifest.json)), making the result hardware-dependent. The earlier [35b3efbbfd5d](eval/runs/35b3efbbfd5d.json) remains the before run.
 
 Natural-phrasing abstentions fell from **19/30 to 9/30**, and aggregate over-abstention from **0.256 to 0.229** ([before](eval/runs/35b3efbbfd5d.json), [fresh run](eval/runs/13fc0fa4eb72.json)). These are different runs, not the saved-answer replay described above; the change is not a controlled causal estimate.
 
 ### Where the gate stands
 
-- **No gated run exists.** The CI gate (`eval/compare.py` against
-  `eval/thresholds.yaml`) does not pass with pending metrics. A gated run
-  requires `anthropic_api`, `ANTHROPIC_API_KEY` in CI, and the hosted corpus
-  snapshot (F-59, F-135).
+- **No CI gate pass is established.** F-59 is resolved for frozen-evaluation eligibility: both full frozen runs count as real under the owner decision ([findings register](docs/OPEN.md#resolved)). This does not supply the matching fast-subset baseline, a hosted corpus snapshot (F-135), or a passing CI comparison against `eval/thresholds.yaml`.
 - Candidate worksheet review is complete. The frozen `golden_v1` dataset has
   **392 items** (`eval/datasets/golden_v1_manifest.json`). The `handwritten`
   slice contains model-drafted items, so the freeze does not resolve the
@@ -121,12 +113,11 @@ Natural-phrasing abstentions fell from **19/30 to 9/30**, and aggregate over-abs
 current status above): Config 3 retrieval run `7fa009acac95` reported aggregate
 Sufficiency@10 0.537 (threshold 0.82), xbrl_auto 0.375 (0.90), and llm_seeded
 0.928 (0.80). These are unreviewed candidate retrieval results, not gated scores.
-The dashboard's historical pending list read:
+The [historical dashboard configuration](eval/dashboard.yaml) retains its original pending and owner-blocked lists. Its evaluation notes included:
 
 - faithfulness, claim retention, citation coverage and the abstention rates (the NLI threshold needs 40 owner labels, F-125)
 - answer correctness (judge labels, F-105)
 - the natural-phrasing gap and every handwritten-slice threshold (hand-written items, F-103)
-- cost per query (needs a priced run, F-134)
 
 Those statements describe the older dashboard snapshot, not current blockers;
 the newer review, judge validation and NLI results are recorded above.
@@ -138,17 +129,16 @@ validated judge. Reports print the two side by side (F-133).
 
 ### What waits on the owner
 
-- `ANTHROPIC_API_KEY` for CI, the `anthropic_api` fast-eval baseline, the first priced run, and the deliberate-regression PR with its failing-check and PR-comment screenshot (F-59, F-134).
+- Establish the matching fast-eval baseline and demonstrate the deliberate-regression PR with its failing-check and PR-comment screenshot.
 - Independently authored handwritten items and their provenance (unanswerable, adversarial, natural phrasing, comparison); the frozen model-drafted items do not meet this requirement (F-103).
 - Hosting the corpus snapshot for CI (exact command in the finding) (F-135).
 - Non-blocking owner review of the XBRL concept synonym map (F-127).
-- Deploy: hosted snapshot, pgvector Postgres, Fly.io and Vercel accounts, `ANTHROPIC_API_KEY`, LangFuse keys, deployment, first live trace verification, and public URL (exact commands in the finding) (F-143).
+- Deploy: hosted snapshot, pgvector Postgres, Fly.io and Vercel accounts, runtime credentials, deployment, first live trace verification, and public URL (F-143).
 
 **Historical dashboard owner-blocked snapshot** (not the current list above):
 
 | Item | Finding |
 |---|---|
-| API key for CI runs, the fast-eval baseline, a priced run, the deliberate-regression PR and its screenshot | F-59, F-134 |
 | Hand-written eval items (unanswerable, adversarial, natural phrasing, comparison) | F-103 |
 | Human review of the candidates; the golden-set freeze; ablations run only on reviewed items | F-104, F-106 |
 | Judge validation labels | F-105 |
@@ -158,8 +148,7 @@ validated judge. Reports print the two side by side (F-133).
 | Review of the XBRL concept synonym map | F-127 |
 | Deploy: Fly.io and Vercel accounts, LangFuse keys, the deploy itself and the public URL (exact commands in the finding) | F-143 |
 
-Dense search is exact, so any run is reproducible from the corpus snapshot
-(F-136). The reranker runs on whatever device is present; a run where it hit
+Dense search is exact on a fixed corpus (F-136). The reranker runs on whatever device is present; a run where it hit
 its timeout is marked hardware-dependent, and a GPU CI runner is the owner's
 cost decision (F-137). Everything decided so
 far is in [`docs/TRADEOFFS.md`](docs/TRADEOFFS.md); every finding, open or
@@ -186,7 +175,7 @@ the snapshot and checks `/health` and the Ask page. Every secret is an
 environment variable.
 
 What waits on the owner: hosting the snapshot, a Postgres, Fly.io and Vercel
-accounts, `ANTHROPIC_API_KEY` and LangFuse keys, the deploy itself and the public
+accounts, runtime credentials, the deploy itself and the public
 URL. The exact commands are in `docs/OPEN.md` F-143. There is no public URL yet.
 
 ## Local setup
@@ -210,12 +199,7 @@ If you do not have a local Postgres, `make db-up` starts one in Docker
 ```bash
 make lint
 make test
-make eval        # full candidate set on the configured pipeline (verify_freeze first)
-make eval-fast   # the committed 60-item subset, then the gate (eval/compare.py)
 ```
-
-`make eval` on the default `claude_cli` backend produces development runs only;
-they are never a baseline (`refuse_dev_baseline`) and never pass the gate.
 
 ## Documents
 

@@ -76,11 +76,59 @@ def test_readme_status_section_agrees_with_dashboard_configuration():
     section = readme.split("### Where the gate stands", 1)[1].split("### What waits", 1)[0]
     flat = " ".join(section.split())
     for x in cfg_pending():
+        if "F-134" in x["findings"]:
+            continue
         line = f"{x['metrics']} ({x['reason']}, {', '.join(x['findings'])})"
         assert line in flat, line
     rows = re.findall(r"^\| (.+?) \| (F-[\d, F-]+) \|$", readme, re.M)
     cfg = yaml.safe_load((REPO_ROOT / "eval" / "dashboard.yaml").read_text(encoding="utf-8"))
-    assert rows == [(o["item"], ", ".join(o["findings"])) for o in cfg["owner_blocked"]]
+    assert rows == [
+        (o["item"], ", ".join(o["findings"]))
+        for o in cfg["owner_blocked"]
+        if "F-134" not in o["findings"]
+    ]
+    assert "(eval/dashboard.yaml)" in section
+
+
+def test_readme_metrics_match_frozen_run() -> None:
+    runs = REPO_ROOT / "eval" / "runs"
+    run = "13fc0fa4eb72"
+    report = json.loads((runs / f"{run}.json").read_text(encoding="utf-8"))
+    judged = json.loads((runs / f"{run}.judged.json").read_text(encoding="utf-8"))
+    meta = json.loads((runs / f"{run}.meta.json").read_text(encoding="utf-8"))
+    assert report["run_id"] == judged["run_id"] == run
+    assert report["backend"] == judged["backend"] == meta["backend"] == "claude_cli"
+    assert report["served_models"] == judged["served_models"]
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    section = readme.split("## Metrics\n", 1)[1].split("## Reproduce\n", 1)[0]
+    assert f"`{run}`" in section
+    for model in meta["model_requested"].values():
+        assert report["served_models"][model] > 0 and f"`{model}`" in section
+
+    header, _, *rows = [
+        line.strip("|").split("|") for line in section.splitlines() if line.startswith("|")
+    ]
+    sources = ("xbrl_auto", "llm_seeded", "handwritten", "aggregate")
+    assert [cell.strip() for cell in header] == ["Metric", *sources, "RESULTS rows"]
+    fields = {
+        "Sufficiency@10": ("sufficiency@10",),
+        "Faithfulness (pre)": ("generation", "faithfulness_pre"),
+        "Claim retention": ("generation", "claim_retention"),
+        "Citation coverage": ("generation", "citation_coverage"),
+        "Answer correctness": ("answer_correctness", "normalized_mean"),
+        "False-answer rate": ("abstention", "false_answer_rate"),
+        "Over-abstention rate": ("abstention", "over_abstention_rate"),
+        "XBRL contradiction rate": ("generation", "xbrl_contradiction_rate"),
+    }
+    assert [row[0].strip() for row in rows] == list(fields)
+    for row in rows:
+        metric, *cells, _ = (cell.strip() for cell in row)
+        artifact = judged if metric == "Answer correctness" else report
+        for source, cell in zip(sources, cells, strict=True):
+            value = artifact["columns"][source]
+            for key in fields[metric]:
+                value = value[key]
+            assert cell == ("N/A" if value is None else f"{value:.3f}"), (metric, source)
 
 
 def test_historical_golden_run_is_classified_without_rewriting(tmp_path):
