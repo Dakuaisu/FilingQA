@@ -3664,3 +3664,23 @@ rate remains zero. A/B observe sufficiency only; over-abstention and
 false-answer rate are unobserved, not zero, so even a retrieval improvement
 is inconclusive for adoption until full-pipeline confirmation. Ten negatives
 are a narrow safety check: 0/10 does not establish a generally zero rate.
+
+## 2026-11-27 — Preregister full-pipeline RRF comparison on heldout v1.1
+
+Use the fixed, model-reviewed questions in `eval/heldout/heldout_v1_1.jsonl`
+from `82519cb`, SHA-256
+`5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193`.
+Run both arms fresh through the full pipeline, not as a retrieval replay:
+control at the current dense:sparse RRF weights of 1:1, treatment at 1.5:1
+via a run-local override only. Keep the corpus, questions, prompts, models,
+other settings, and scoring fixed. Temperature is unpinned, so identical
+settings do not guarantee identical outputs. Do not change production defaults.
+
+Record paired score files for the same item IDs. Use Sufficiency@10 and
+over-abstention over the 48 answerable items, and false-answer rate over the
+10 unanswerable items. Under the prior rule, the treatment qualifies only if
+Sufficiency@10 strictly increases or over-abstention strictly decreases versus
+control, and the false-answer rate stays at 0/10. Ten negatives are a narrow
+check, not evidence of a generally zero rate. Report the pair without adopting
+the treatment. Do not tune on golden, tune individual items, or change the
+questions, endpoints, or decision rule after seeing outcomes.
