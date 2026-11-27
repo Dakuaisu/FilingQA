@@ -772,3 +772,44 @@ that classification does not imply a CI pass.
 | R-645 | answer_correctness.by_type.xbrl_numeric.mean_score | 4.65 | real | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
 | R-646 | answer_correctness.by_type.xbrl_numeric.normalized_mean | 0.93 | real | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
 | R-647 | answer_correctness.by_type.xbrl_numeric.share_at_least_4 | 0.925 | real | `eval/runs/13fc0fa4eb72.judged.json` | `4ccf2ad` |
+
+## First frozen fast baseline e3e380984bad
+
+`e829152` added `eval/baselines/main_fast.json` (SHA-256
+`2037f5967f8e4448257740b3863dc1bfe829f86cda46c065c6cc618f2f92731f`). Gate
+outcomes below come from the local self-comparison, not a separately committed
+gate report:
+
+```sh
+python -m eval.compare --report eval/baselines/main_fast.json --baseline eval/baselines/main_fast.json
+```
+
+The comparator's literal natural-phrasing pending message cites F-103; the
+undefined gap formula is tracked separately by F-20. Cost is pending because
+no per-query price is available (F-134).
+
+| id | what was measured | value | kind | run id or artifact | commit |
+|---|---|---|---|---|---|
+| R-648 | baseline subset items (`subset.items`) | 60 | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-649 | self-comparison outcome counts | 16 pass, 3 fail, 2 pending (exit 1) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-650 | aggregate faithfulness_pre, minimum gate | 0.9230769230769231 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-651 | handwritten faithfulness_pre, minimum gate | 0.8571428571428571 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-652 | aggregate sufficiency_at_10, minimum gate | 0.8431372549019608 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-653 | handwritten sufficiency_at_10, minimum gate | 0.7777777777777778 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-654 | aggregate claim_retention, minimum gate | 0.9230769230769231 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-655 | handwritten claim_retention, minimum gate | 0.8571428571428571 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-656 | aggregate citation_coverage, minimum gate | 1.0 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-657 | handwritten citation_coverage, minimum gate | 1.0 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-658 | aggregate false_answer_rate, maximum gate | 0.0 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-659 | handwritten false_answer_rate, maximum gate | 0.0 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-660 | aggregate over_abstention_rate, maximum gate | 0.21568627450980393 (fail) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-661 | handwritten over_abstention_rate, maximum gate | 0.4444444444444444 (fail) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-662 | aggregate xbrl_contradiction, maximum gate | 0.0 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-663 | handwritten xbrl_contradiction, maximum gate | 0.0 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-664 | llm_seeded sufficiency_at_10, minimum gate | 1.0 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-665 | xbrl_auto sufficiency_at_10, minimum gate | 0.8 (fail) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-666 | aggregate faithfulness_pre, regression gate | 0.9230769230769231 vs 0.9230769230769231 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-667 | aggregate sufficiency_at_10, regression gate | 0.8431372549019608 vs 0.8431372549019608 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-668 | aggregate answer_correctness, regression gate | 0.915 vs 0.915 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-669 | aggregate natural_phrasing_gap, regression gate | `pending: hand-written natural-phrasing items (F-103)` | real | `eval/baselines/main_fast.json` | `e829152` |
+| R-670 | aggregate cost_per_query, regression gate | `pending: cost n/a (no per-query price)` | real | `eval/baselines/main_fast.json` | `e829152` |

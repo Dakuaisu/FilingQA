@@ -5952,3 +5952,5 @@ Owner re-login is required before resuming; no completed result is reported.
 ## Final golden_v1 development run
 
 Run `13fc0fa4eb72` completed on the rebuild DB after an item 1 OAuth expiry and owner re-login. The as-run artifacts are in `32b04c8`; the complete answer-correctness judge sidecar and derived report are in `4ccf2ad`. The llm_judge prose check and BGE floor 0.30 were active; 142 reranks timed out to RRF, making this run hardware-dependent. This is a fresh run, distinct from saved-answer replay; it is not a gated baseline.
+
+- 2026-11-27: `e829152` recorded the first 60-item frozen fast baseline `e3e380984bad` (SHA-256 `2037f5967f8e4448257740b3863dc1bfe829f86cda46c065c6cc618f2f92731f`); self-comparison failed with 16 pass, 3 fail, and 2 pending ([RESULTS](RESULTS.md#first-frozen-fast-baseline-e3e380984bad)).

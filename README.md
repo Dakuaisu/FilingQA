@@ -65,6 +65,8 @@ What the build found, not what the PRD predicted:
 
 Frozen `golden_v1` run [`13fc0fa4eb72`](docs/RESULTS.md#golden-v1-final-run-13fc0fa4eb72-real), classified as **real**, not a CI gate pass. Served generation models: `claude-haiku-4-5-20251001` and `claude-sonnet-5-5` ([run report](eval/runs/13fc0fa4eb72.json)). Values are rounded to three decimals; N/A means the artifact stores null, not zero. Answer correctness is the normalized mean over eligible judged answers, not a rate over every question ([judged report](eval/runs/13fc0fa4eb72.judged.json)). RESULTS row IDs are in source-column order.
 
+Generation temperature was not pinned (F-60). No per-query price is available (F-134), so cost is N/A, not zero.
+
 | Metric | xbrl_auto | llm_seeded | handwritten | aggregate | RESULTS rows |
 |---|---|---|---|---|---|
 | Sufficiency@10 | 0.710 | 0.958 | 0.717 | 0.765 | R-545, R-557, R-569, R-581 |
@@ -91,7 +93,7 @@ Natural-phrasing abstentions fell from **19/30 to 9/30**, and aggregate over-abs
 
 ### Where the gate stands
 
-- **No CI gate pass is established.** F-59 is resolved for frozen-evaluation eligibility: both full frozen runs count as real under the owner decision ([findings register](docs/OPEN.md#resolved)). This does not supply the matching fast-subset baseline, a hosted corpus snapshot (F-135), or a passing CI comparison against `eval/thresholds.yaml`.
+- **The gate still fails.** The first 60-item frozen fast baseline, [`e3e380984bad`](eval/baselines/main_fast.json), has SHA-256 `2037f5967f8e4448257740b3863dc1bfe829f86cda46c065c6cc618f2f92731f`. Comparing it to itself yields **16 pass, 3 fail, 2 pending** ([RESULTS](docs/RESULTS.md#first-frozen-fast-baseline-e3e380984bad)). The failures are aggregate over-abstention `0.21568627450980393` and handwritten over-abstention `0.4444444444444444` (both maximum `0.15`), and XBRL-auto Sufficiency@10 `0.8` (minimum `0.9`). Natural-phrasing gap (formula unresolved, F-20) and cost (no per-query price, F-134) are pending. This local comparison does not establish a CI pass or supply a hosted corpus snapshot (F-135).
 - Candidate worksheet review is complete. The frozen `golden_v1` dataset has
   **392 items** (`eval/datasets/golden_v1_manifest.json`). The `handwritten`
   slice contains model-drafted items, so the freeze does not resolve the
@@ -129,7 +131,7 @@ validated judge. Reports print the two side by side (F-133).
 
 ### What waits on the owner
 
-- Establish the matching fast-eval baseline and demonstrate the deliberate-regression PR with its failing-check and PR-comment screenshot.
+- Demonstrate the deliberate-regression PR with its failing-check and PR-comment screenshot; the matching fast-eval baseline is already committed.
 - Independently authored handwritten items and their provenance (unanswerable, adversarial, natural phrasing, comparison); the frozen model-drafted items do not meet this requirement (F-103).
 - Hosting the corpus snapshot for CI (exact command in the finding) (F-135).
 - Non-blocking owner review of the XBRL concept synonym map (F-127).
