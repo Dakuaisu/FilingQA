@@ -3684,3 +3684,28 @@ control, and the false-answer rate stays at 0/10. Ten negatives are a narrow
 check, not evidence of a generally zero rate. Report the pair without adopting
 the treatment. Do not tune on golden, tune individual items, or change the
 questions, endpoints, or decision rule after seeing outcomes.
+
+## 2026-11-28 — Owner decision: repeat the full-pipeline RRF comparison
+
+Use the same 58 unique IDs in `eval/heldout/heldout_v1_1.jsonl` (48 answerable,
+10 unanswerable), SHA-256
+`5396b7a80c8ac6e115ed9a1f384aed1b42b00b7d8faba13e2e58ffd150df2193`.
+Keep the original control `8a830995f188` (1:1) and B `d4c17a4291c3` (1.5:1)
+as pair 1. Run four fresh full-pipeline measurements in this fixed order:
+**control, B, control, B**, forming pairs 2 and 3 and yielding three runs per
+arm. The only intervention is B's run-local dense:sparse RRF weight override.
+Keep the other settings and scoring fixed; temperature remains unpinned.
+
+Adopt B if and only if all four conditions hold across the six runs:
+
+1. B's mean over-abstention rate is strictly lower than control's.
+2. B's worst over-abstention rate is no higher than control's best.
+3. B's mean Sufficiency@10 is no lower than control's.
+4. Every run has zero false answers out of 10.
+
+Compute both answerable metrics over 48 items per run. Record per-item rerank
+fallback counts and match by item ID to report sufficiency and answer/abstain
+flips within each arm and across the three control/B pairs. Retain 1:1 if any
+condition fails. If any run is incomplete, stop without adopting; do not
+replace or reroll it. No tuning, selective exclusion, or changes to the rule
+after seeing outcomes.
