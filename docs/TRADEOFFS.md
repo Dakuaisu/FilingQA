@@ -3620,3 +3620,47 @@ Hosting remains an owner action in F-135. CI downloads an archive name and reads
 the canonical hash separately before calling the Makefile restore target; none
 of those steps has been partially switched to the alternate manifest. A future
 switch must change the filename, hash source and invocation together.
+
+## 2026-11-27 — Held-out experiment preregistration
+
+Step 1 assembled 60 model-drafted held-out items (50 answerable, 10
+unanswerable), with provenance and an owner worksheet under `eval/heldout/`.
+This is not an independently authored or owner-reviewed set. The authoritative
+input is `eval/heldout/heldout_v1.jsonl`, SHA-256
+`194b80816e0223e788411aa6179b1897910495a97e57d6e22ff7e1ae2367d441`.
+Use it unchanged for every arm. Do not tune on golden, tune individual items,
+or revise the candidates or adoption rule after seeing outcomes.
+
+Compare each candidate independently against the current production default;
+do not combine arms. Hold the corpus, item set, scoring, and all settings
+other than the named intervention fixed. Keep production defaults unchanged.
+
+- **A, retrieval only:** reuse baseline routes and change only lookup `k`
+  from 20 to 50; other intents retain their baseline budgets.
+- **B, retrieval only:** reuse baseline routes and change only RRF
+  dense:sparse weights from 1:1 to 1.5:1.
+- **C, full pipeline:** run the current prompt baseline and the treatment
+  separately via `python -m scripts.eval_run --run --dataset eval/heldout/heldout_v1.jsonl`.
+  Change only rule 5 of `claims.SYSTEM_PROMPT` in the treatment:
+
+```diff
+--- a/api/generate/claims.py
++++ b/api/generate/claims.py
+@@ -67,2 +67,5 @@
+-5. If the evidence does not support an answer, set sufficient_evidence
+-   to false and explain what is missing. Do not guess. Do not approximate.
++5. If the evidence directly supports some requested facts, set sufficient_evidence
++   to true and answer only the supported parts. Do not guess or approximate
++   unsupported facts. If none of the requested facts are directly supported,
++   set sufficient_evidence to false, decline to answer, and explain what is
++   missing.
+```
+
+Primary endpoints: Sufficiency@10 (items with a complete gold evidence set in
+the top 10 / 50 answerable items), over-abstention (abstentions / 50 answerable
+items), and false-answer rate (answers / 10 unanswerable items). Adopt only if
+at least one primary endpoint improves relative to baseline and false-answer
+rate remains zero. A/B observe sufficiency only; over-abstention and
+false-answer rate are unobserved, not zero, so even a retrieval improvement
+is inconclusive for adoption until full-pipeline confirmation. Ten negatives
+are a narrow safety check: 0/10 does not establish a generally zero rate.
