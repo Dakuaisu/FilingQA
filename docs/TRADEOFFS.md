@@ -3606,3 +3606,17 @@ The fast subset `eval/fast_subset_v2.yaml` has SHA-256
 Historical reports and `eval/baselines/main_fast.json` are not rewritten. That
 baseline predates the gap field, so its regression delta remains pending until
 an explicit, separately authorized baseline refresh.
+
+## 2026-11-27 — AUTONOMOUS DECISION - owner to review: rebuild snapshot (F-135)
+
+Keep the rebuild snapshot separate from the canonical freeze: published golden
+runs used PostgreSQL system ID `7710731255823212587`, not the original snapshot.
+The original archive recorded in the canonical manifest was 104,583,437 bytes,
+SHA-256 `9a8a82719f6daddfc31b91608d6ac01746aa14082ca1c06f20a89904af528775`.
+`api/corpus_snapshot_rebuild.yaml` records the rebuild archive and its digest;
+the canonical `api/corpus_freeze.yaml` remains unchanged. An isolated pgvector:pg18
+restore matched all five source table counts and passed snapshot freeze checks.
+Hosting remains an owner action in F-135. CI downloads an archive name and reads
+the canonical hash separately before calling the Makefile restore target; none
+of those steps has been partially switched to the alternate manifest. A future
+switch must change the filename, hash source and invocation together.
