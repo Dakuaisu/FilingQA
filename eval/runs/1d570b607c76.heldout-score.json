@@ -1,0 +1,39 @@
+{
+  "arm": "baseline",
+  "run_id": "1d570b607c76",
+  "dataset_sha256": "194b80816e0223e788411aa6179b1897910495a97e57d6e22ff7e1ae2367d441",
+  "prompt_sha256": "eecd3f3eba9be659b5881bc8d40520390f686aede14d1ceac963dd1e7408faf2",
+  "config_and_code_sha256": {
+    "api/config.yaml": "18bda1ec5c6700f555a45a88d97cde3d530142535f54aa58bd72cb791a8f148b",
+    "api/generate/claims.py": "44db36a5ac7a339b2ad5f3e92ed5bb2d111444bdfc4ffd018f47ebcb2fe205d1",
+    "api/generate/generator.py": "984b097b114b44e484560f495dc30067921c779b7b3ab6892926dba6f177b4f7",
+    "scripts/eval_run.py": "5072142f865cdfae9cbcd5e50e09de7102639ea391a6d8d9a67da27937b41113",
+    "api/pipeline.py": "3286e74869013806a9c100b2fb684b7b68ef5cb7b2a6fb6aac60a6f2848eb609",
+    "api/query/router.py": "ad4b24db1eeaee0c7e24b0287d6ce445f64d17e7b07d631dd3f34e7a0031769f"
+  },
+  "source_sha256": {
+    "eval/runs/1d570b607c76.meta.json": "1c13371ae07c4251c728156c27b9a9219632e8d90d905bd70738ac131a6f4e07",
+    "eval/runs/1d570b607c76.results.jsonl": "e1e331fdee67fb70cac9626e4834b1fa6ddd6d70fd14b26d1f2d37719229649a",
+    "eval/runs/1d570b607c76.json": "86187ef90b3a752fdc60b3347c107cc151ba28b436961023cf6ecb7bee7aa371"
+  },
+  "sufficiency_at_10": {
+    "numerator": 45,
+    "denominator": 50,
+    "value": 0.9
+  },
+  "over_abstention": {
+    "numerator": 5,
+    "denominator": 50,
+    "value": 0.1
+  },
+  "false_answer_rate": {
+    "numerator": 0,
+    "denominator": 10,
+    "value": 0.0
+  },
+  "verdict_counts": {
+    "PASS": 39,
+    "PARTIAL": 6,
+    "ABSTAIN": 15
+  }
+}
