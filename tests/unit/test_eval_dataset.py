@@ -260,7 +260,8 @@ def test_handwritten_report_has_counts_and_pending_gap():
         "abstained_unanswerable": 1,
         "pending": 0,
     }
-    assert report["natural_phrasing_gap"] == "pending definition (F-20)"
+    assert report["natural_phrasing_gap"]["gap"] is None
+    assert report["natural_phrasing_gap"]["natural"]["no_gold"] == 1
     text = format_report(report)
     for value in ("unanswerable", "adversarial", "natural_phrasing", "answered_unanswerable"):
         assert value in text

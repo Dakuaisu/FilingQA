@@ -13,6 +13,7 @@ from api.generate.generator import DEV_BACKENDS, UNPRICED_BACKENDS
 from eval.metrics.abstention import rates, two_by_two
 from eval.metrics.cost import cost_per_query, tokens
 from eval.metrics.generation import NA, generation_metrics
+from eval.metrics.natural_phrasing import natural_phrasing_gap
 from eval.metrics.numeric import aggregate, score_item
 from eval.metrics.retrieval import mrr, ndcg_at_k, precision_at_k, recall_at_k, sufficiency_at_k
 from eval.pipeline import depth_disagreements
@@ -198,7 +199,7 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
         "retrieval_latency_s": stage_latency(results),
         "intent_matrix": intent_matrix(items, results),
         "verdict_by_correctness": verdict_by_correctness(items, results),
-        "natural_phrasing_gap": "pending definition (F-20)",
+        "natural_phrasing_gap": natural_phrasing_gap(items, results),
         "handwritten_question_types": {
             kind: _slice(items, rs, k, nli_threshold, unpriced, prose_check)
             for kind, rs in sorted(handwritten.items())

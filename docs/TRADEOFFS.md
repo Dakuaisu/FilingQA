@@ -3573,3 +3573,36 @@ temperature was not pinned and cost is N/A, not zero. Both runs used the
 rebuild, not the original snapshot; 200 and 142 rerank timeout fallbacks,
 respectively, make the observations hardware-dependent. The saved artifacts
 and their original metadata are unchanged.
+
+## 2026-11-27 — AUTONOMOUS DECISION - owner to review: natural-phrasing gap (F-20)
+
+Measure the pooled Sufficiency@10 of answerable `xbrl_auto` and `llm_seeded`
+items, minus the Sufficiency@10 of answerable handwritten `natural_phrasing`
+items. Pool individual items, not source averages. Use the stored pre-rerank
+retrieval list and exclude answerable items without gold evidence, reporting
+excluded counts alongside each cohort's hits and denominator. The cutoff is 10
+regardless of the report's configured k. A missing measurable cohort yields a
+pending gap. Positive means worse natural-phrasing retrieval. These are unpaired
+cohorts; the dataset contains no matching relation, so this is not a causal or
+paired phrasing effect. PRD 11.1 discusses recall; this decision explicitly uses
+sufficiency and does not change any threshold. The existing +0.05 gate is a
+maximum regression in the gap relative to a same-subset baseline.
+
+Read-only `python -m scripts.eval_run --report` reconstructions (no model calls):
+
+| Run | Generated hits / eligible | Natural hits / eligible | No-gold excluded (generated / natural) | Gap |
+|---|---:|---:|---:|---:|
+| `13fc0fa4eb72` | 211 / 272 | 20 / 30 | 0 / 0 | 0.10906862745098045 |
+| `e3e380984bad` | 36 / 42 | 4 / 5 | 0 / 0 | 0.05714285714285705 |
+
+The source results in `eval/runs/13fc0fa4eb72.results.jsonl` and
+`eval/runs/e3e380984bad.results.jsonl` have SHA-256
+`7168ccf81cde06ae6e4ce448c0353db08563843033a3b8f04ec611bf3ac424ed` and
+`d9f9825d91dfd16282578f2a82b8e7af3c4fd9f4876cc39335d3e0de07538769`;
+`eval/datasets/golden_v1.jsonl` has SHA-256
+`7d17972fa7e54c6f9cba64e26c5d7c27d021b58ac3a6ec355d1342a5ba4ec74a`.
+The fast subset `eval/fast_subset_v2.yaml` has SHA-256
+`2afc47d430f1c32345c3a0fab6ac8b72ec44c7239c90a79505fad010676fc696`.
+Historical reports and `eval/baselines/main_fast.json` are not rewritten. That
+baseline predates the gap field, so its regression delta remains pending until
+an explicit, separately authorized baseline refresh.

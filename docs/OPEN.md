@@ -93,7 +93,7 @@ carries the state.
 | F-48 | 101 of 3,881 linked facts (2.6%) are tagged only in `ix:hidden` (shares authorized, par value, segment counts), so they have no span and no gold chunk; PRD 6.5.3 routes them to human labeling Measured on the frozen 90: 476 linked facts with no visible non-dimensional span, across 33 concepts (preferred/common share counts, segment counts, zero write-offs ...), none among the 28 listed tags (`python -m scripts.concept_coverage`: human-label queue 0). Queue: `eval/human_label_queue.csv`. Labeling OWNER-BLOCKED | OPEN |
 | F-07 | All seven gated thresholds have drifted between §11.2 prose and `thresholds.yaml`. 2026-10-02: `eval/thresholds.yaml` did not exist; created as a byte-for-byte copy of PRD 11.5's block, the file the gate reads (TRADEOFFS, CI gate). The §11.2 prose drift stands | OPEN |
 | F-08 | `faithfulness_pre` is undefined for Configs 1–4, yet §11.6 plots it there | OPEN |
-| F-20 | `natural_phrasing_gap` is gated in `thresholds.yaml` but never defined as a metric | OPEN |
+| F-20 | `natural_phrasing_gap` is gated in `thresholds.yaml` but never defined as a metric | Decided autonomously 2026-11-27; owner review pending. Pooled answerable generated Sufficiency@10 minus answerable handwritten natural-phrasing Sufficiency@10; no-gold items excluded and counted. See TRADEOFFS; historical baseline requires an explicit refresh to compare this metric. |
 
 ## Blocking Phase 4
 
@@ -249,8 +249,9 @@ items only, and never publish it without `answer_rate` beside it.
 **F-15 — curated concepts.** Done 2026-10-01: `eval/concepts.yaml`, measured by
 `scripts/concept_coverage.py`, with bank supplements.
 
-**F-20 — natural_phrasing_gap.** Define the formula in Appendix B — which metric,
-against which comparison population — before it can be gated.
+**F-20 — natural_phrasing_gap.** Defined in TRADEOFFS as an unpaired difference
+of cohort-level Sufficiency@10, not recall or a matched-item comparison. The
+existing baseline predates the metric; its delta remains pending until refreshed.
 
 **F-10 — `supported()`.** Add `citation_valid` to the figure branch.
 

@@ -24,10 +24,6 @@ import yaml
 from api.config import REPO_ROOT
 from eval.golden_policy import complete_golden_report, eligible_report
 
-NOT_IN_REPORT = {
-    "natural_phrasing_gap": "pending: hand-written natural-phrasing items (F-103)",
-}
-
 
 def _gen(key):
     return lambda c: (c.get("generation") or {}).get(key, (c.get("generation") or {}).get("status"))
@@ -60,10 +56,15 @@ NO_BASELINE = "pending: no baseline report"
 
 def value(report: dict | None, scope: str, metric: str, missing: str = NO_BASELINE):
     """(number, None) or (None, why it cannot be evaluated)."""
-    if metric in NOT_IN_REPORT:
-        return None, NOT_IN_REPORT[metric]
     if report is None:
         return None, missing
+    if metric == "natural_phrasing_gap":
+        gap = report.get("natural_phrasing_gap")
+        if scope == "aggregate" and isinstance(gap, dict):
+            v = gap.get("gap")
+            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                return float(v), None
+        return None, "pending: natural-phrasing gap unavailable; rebuild report"
     col = report["columns"].get(scope)
     if col is None:
         why = (

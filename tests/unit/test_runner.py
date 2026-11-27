@@ -81,6 +81,24 @@ def test_partial_verdict_counts_as_answered():
     assert r["columns"]["aggregate"]["abstention"]["partial_rate"] == 1.0
 
 
+def test_natural_phrasing_gap_always_uses_ten_even_when_report_k_is_one():
+    natural = {
+        **ITEMS["s1"],
+        "item_id": "n",
+        "source": "handwritten",
+        "question_type": "natural_phrasing",
+        "gold_evidence_sets": [["target"]],
+    }
+    natural_result = result("n", ["first", "target"], "answer")
+    report = build_report(
+        {"x1": ITEMS["x1"], "n": natural},
+        [result("x1", ["b"], "answer"), natural_result],
+        meta("anthropic_api"),
+        1,
+    )
+    assert report["natural_phrasing_gap"]["gap"] == 0.0
+
+
 def test_results_are_appended_per_item_and_a_failed_call_halts(tmp_path):
     from api.generate.claude_cli import CliError
     from scripts.eval_run import read_jsonl, run_items
