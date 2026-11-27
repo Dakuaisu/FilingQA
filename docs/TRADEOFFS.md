@@ -3554,3 +3554,22 @@ vs 5/10), but hurt LLM-seeded sufficiency (57/72 vs 67/72; synthesis
 sufficiency (112/200 vs 114/200). BGE's measured per-item rerank p95 was
 2.77 s. The aggregate favors no reranker in this replay, but the slice
 tradeoff and latency need confirmation before changing the model.
+
+## 2026-11-27 — Frozen evaluation eligibility (F-59)
+
+- Decided by: owner
+- Status: OWNER DECISION
+
+For frozen evaluation only, this decision overrides the PRD definition of
+`real` results, the 2026-10-01 generation decision, and DEC-002 where they
+would exclude frozen results. The two complete `golden_v1` runs,
+`35b3efbbfd5d` and `13fc0fa4eb72` (392 items each), and their judged and
+derived results count as `real`. Older candidate and model-free retrieval
+results remain `development`. Eligibility does not mean a CI gate passed;
+same-subset baseline and metric requirements still apply.
+
+Generation used `claude-haiku-4-5` and the `claude-sonnet-5-5` tier. Generation
+temperature was not pinned and cost is N/A, not zero. Both runs used the
+rebuild, not the original snapshot; 200 and 142 rerank timeout fallbacks,
+respectively, make the observations hardware-dependent. The saved artifacts
+and their original metadata are unchanged.
