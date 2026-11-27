@@ -1,0 +1,178 @@
+{
+ "backend": "claude_cli",
+ "model_requested": {
+  "tier_small": "claude-haiku-4-5-20251001",
+  "tier_large": "claude-sonnet-5-5"
+ },
+ "tier": "tier_small",
+ "pipeline": "config_4_routed",
+ "retrieval_stage": "PRD 7.1 router, metadata filters and intent budgets in front of Config 4; pre-rerank list per query (RRF over a comparison's sub-queries), reranked lists beside",
+ "retrieve_depth": {
+  "lookup": 20,
+  "comparison": 100,
+  "synthesis": 50,
+  "unrouted": 50
+ },
+ "generator_top_k": {
+  "lookup": 5,
+  "comparison": 8,
+  "synthesis": 10,
+  "unrouted": 8
+ },
+ "hnsw_ef_search": 100,
+ "k_dense": 50,
+ "dense_search": "exact",
+ "parser_version": "d58d26e08e5a",
+ "chunker_version": "964f77f6f9cb",
+ "datasets": {
+  "/Users/apple/FillingQA/eval/datasets/golden_v1.jsonl": "7d17972fa7e54c6f9cba64e26c5d7c27d021b58ac3a6ec355d1342a5ba4ec74a"
+ },
+ "retrieval": {
+  "k_dense": 50,
+  "k_sparse": 50,
+  "rrf_k": 60,
+  "weights": {
+   "dense": 1.0,
+   "sparse": 1.0
+  },
+  "hnsw_ef_search": 100,
+  "dense_search": "exact",
+  "metadata_filter": true,
+  "filter_confidence_min": 0.6,
+  "sparse": {
+   "backend": "bm25",
+   "k1": 1.2,
+   "b": 0.75
+  }
+ },
+ "bm25_index_key": "5a33c360a77f5bdf6f47912f850dda20c5cf15d0cbc3ecc40c124a5486723a67",
+ "rerank": {
+  "model": "BAAI/bge-reranker-base",
+  "revision": "2cfc18c9415c912f9d8155881c133215df768a70",
+  "top_n": 8,
+  "top_n_synthesis": 10,
+  "score_floor": 0.3,
+  "floor_calibration": "calibrated",
+  "timeout_ms": 3000,
+  "device": "auto",
+  "device_used": "mps"
+ },
+ "machine": {
+  "torch": "2.14.1",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "cpu": "Apple M1 Pro",
+  "gpu": "Apple M1 Pro (16 GPU cores)",
+  "ram_gb": 16.0,
+  "mps_available": true
+ },
+ "generation_contract": {
+  "kind": "PRD 7.4 structured claims, schema enforced by the backend",
+  "schema_sha256": "9f057fe4f2da28c4e08f4771ae4b782054666b2387e11f57311050d054492cff",
+  "system_prompt_sha256": "eecd3f3eba9be659b5881bc8d40520390f686aede14d1ceac963dd1e7408faf2"
+ },
+ "verification": {
+  "prose_check": "llm_judge",
+  "prose_judge_model": "openai/gpt-6.2-sol",
+  "xbrl_match_tolerance_pct": 0.5,
+  "concept_synonyms": "api/verify/concept_synonyms.yaml"
+ },
+ "router": {
+  "tier": "tier_small",
+  "budgets": {
+   "lookup": {
+    "tier": "tier_small",
+    "k": 20,
+    "top_n": 5,
+    "sub_queries": 1
+   },
+   "comparison": {
+    "tier": "tier_large",
+    "k": 50,
+    "top_n": 8,
+    "sub_queries": 2
+   },
+   "synthesis": {
+    "tier": "tier_large",
+    "k": 50,
+    "top_n": 10,
+    "sub_queries": 1
+   },
+   "unrouted": {
+    "tier": "tier_small",
+    "k": 50,
+    "top_n": 8,
+    "sub_queries": 1
+   }
+  }
+ },
+ "templates_sha256": "2031f559084e9fc70914df4ce52ad1e3eba021ee702aaf3417db2af8752780d8",
+ "subset": {
+  "file": "eval/fast_subset_v2.yaml",
+  "items": 60,
+  "sha256": "2afc47d430f1c32345c3a0fab6ac8b72ec44c7239c90a79505fad010676fc696"
+ },
+ "run_id": "e3e380984bad",
+ "k": 10,
+ "item_order": [
+  "hw_adversarial_0003",
+  "hw_adversarial_0008",
+  "hw_adversarial_0012",
+  "hw_comparison_0004",
+  "hw_comparison_0010",
+  "hw_comparison_0019",
+  "hw_natural_phrasing_0005",
+  "hw_natural_phrasing_0009",
+  "hw_natural_phrasing_0017",
+  "hw_natural_phrasing_0027",
+  "hw_natural_phrasing_0028",
+  "hw_unanswerable_0001",
+  "hw_unanswerable_0007",
+  "hw_unanswerable_0031",
+  "hw_unanswerable_0036",
+  "hw_unanswerable_0041",
+  "hw_unanswerable_0048",
+  "hw_unanswerable_0049",
+  "seed_0052",
+  "seed_0054",
+  "seed_0062",
+  "seed_0066",
+  "seed_0070",
+  "seed_0007",
+  "seed_0009",
+  "seed_0018",
+  "seed_0031",
+  "seed_0033",
+  "seed_0036",
+  "seed_0043",
+  "cmp_0001",
+  "cmp_0008",
+  "cmp_0011",
+  "cmp_0012",
+  "cmp_0013",
+  "cmp_0035",
+  "xbrl_0001",
+  "xbrl_0005",
+  "xbrl_0007",
+  "xbrl_0010",
+  "xbrl_0011",
+  "xbrl_0013",
+  "xbrl_0015",
+  "xbrl_0023",
+  "xbrl_0029",
+  "xbrl_0051",
+  "xbrl_0055",
+  "xbrl_0061",
+  "xbrl_0068",
+  "xbrl_0081",
+  "xbrl_0087",
+  "xbrl_0093",
+  "xbrl_0117",
+  "xbrl_0124",
+  "xbrl_0131",
+  "xbrl_0140",
+  "xbrl_0145",
+  "xbrl_0148",
+  "xbrl_0149",
+  "xbrl_0154"
+ ]
+}
