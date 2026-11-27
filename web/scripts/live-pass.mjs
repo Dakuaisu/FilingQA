@@ -1,6 +1,5 @@
-// Manual live pass: drives the real frontend against the real API (development
-// backend). Screenshots and a text summary go to ../build/web-live/ (git-ignored);
-// nothing here is committed output or README material (F-59).
+// Manual live pass: drives the real frontend against the real API.
+// Screenshots and a text summary go to ../build/web-live/ (git-ignored).
 // Usage: make serve; make web-dev; node scripts/live-pass.mjs [http://localhost:3000] [--browse-only]
 // --browse-only: Ask, Corpus and Dashboard only (no generation calls).
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -42,7 +41,7 @@ await page.getByTestId("gate-status").waitFor({ timeout: 30_000 });
 await page.screenshot({ path: `${OUT}dashboard.png`, fullPage: true });
 summary.screens.push({ screen: "dashboard", gate: await text("gate-status"),
   gate_rows: await page.getByTestId("gate-row").count(),
-  retrieval: await text("retrieval-current"), development: await text("development-runs"),
+  retrieval: await text("retrieval-current"), historical_runs: await text("historical-runs"),
   owner_blocked: await page.getByTestId("owner-blocked").locator("tr").allInnerTexts() });
 if (process.argv.includes("--browse-only")) {
   summary.page_errors = errors;
@@ -57,7 +56,7 @@ for (const [name, q] of QUESTIONS) {
   await page.goto(`${BASE}/answer?q=${encodeURIComponent(q)}`, { timeout: 180_000 });
   await page.locator('[data-testid="answer"], [data-testid="abstention"], [data-testid="error"]').first().waitFor({ timeout: 180_000 });
   const s = { screen: `answer:${name}`, question: q, seconds: (Date.now() - t0) / 1000 };
-  for (const id of ["dev-banner", "verdict", "confidence", "pending-note", "claim", "xbrl-badge", "citations", "abstention", "error", "latency-cost"]) {
+  for (const id of ["generator-model", "verdict", "confidence", "pending-note", "claim", "xbrl-badge", "citations", "abstention", "error", "latency-cost"]) {
     s[id] = await text(id);
   }
   await page.screenshot({ path: `${OUT}answer-${name}.png`, fullPage: true });

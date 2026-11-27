@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 
-import { DevBanner } from "@/components/dev-banner";
 import { SourcePanel } from "@/components/source-panel";
 import { Badge } from "@/components/ui/badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
@@ -68,19 +67,19 @@ function Marker({ n, citation, onOpen }: { n: number; citation: Citation | undef
   );
 }
 
-export function AnswerView({ data }: { data: QueryResponse }) {
+type AnswerData = Pick<
+  QueryResponse,
+  "verdict" | "confidence" | "verification_pending" | "abstain_reason" | "nearest_evidence" | "claims" | "citations"
+>;
+
+export function AnswerView({ data }: { readonly data: AnswerData }) {
   const [open, setOpen] = useState<string | null>(null);
   // Citations numbered in reading order: first appearance across the claims.
   const order = [...new Set(data.claims.flatMap((c) => c.citations))];
   const byId = new Map(data.citations.map((c) => [c.chunk_id, c]));
   const listed = order.map((id) => byId.get(id)).filter((c): c is Citation => c !== undefined);
-  const seconds = (data.metadata.latency_ms / 1000).toFixed(1);
-  const cost = data.metadata.cost_usd !== null ? `$${data.metadata.cost_usd.toFixed(4)}` : data.metadata.cost_note ?? "cost n/a";
-
   return (
     <div className="space-y-6">
-      {data.development && <DevBanner backend={data.backend} model={data.model_served} />}
-
       {data.verdict === "ABSTAIN" ? (
         <section
           data-testid="abstention"
@@ -149,12 +148,6 @@ export function AnswerView({ data }: { data: QueryResponse }) {
           </ol>
         </section>
       )}
-
-      <p className="text-xs text-muted-foreground" data-testid="latency-cost">
-        {data.development ? "Development backend · " : ""}
-        {seconds} s · {cost} · intent {data.metadata.intent ?? "?"} · {data.metadata.chunks_used} of{" "}
-        {data.metadata.chunks_retrieved} retrieved chunks used
-      </p>
 
       <SourcePanel chunkId={open} onClose={() => setOpen(null)} />
     </div>

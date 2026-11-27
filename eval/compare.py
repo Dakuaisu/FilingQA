@@ -9,8 +9,8 @@ on the aggregate and on the handwritten slice (`by_source.handwritten` overrides
 for that slice), the other `by_source` slices on their own keys, and
 `regression_tolerance` on the aggregate against a baseline drawn from the same
 subset (F-12). A metric that is pending, not measured or missing fails: a gate
-that cannot evaluate a gated metric does not pass. A development-backend report
-(claude_cli) never passes. Exit status 1 on any failure.
+that cannot evaluate a gated metric does not pass. Development reports cannot
+pass. Exit status 1 on any failure.
 """
 
 from __future__ import annotations
@@ -22,6 +22,7 @@ from pathlib import Path
 import yaml
 
 from api.config import REPO_ROOT
+from eval.golden_policy import complete_golden_report, eligible_report
 
 NOT_IN_REPORT = {
     "natural_phrasing_gap": "pending: hand-written natural-phrasing items (F-103)",
@@ -53,8 +54,8 @@ METRICS = {
 }
 
 
-NO_RUN = "pending: no gated run exists (F-59)"
-NO_BASELINE = "pending: no baseline report (F-59)"
+NO_RUN = "pending: no eligible evaluation run"
+NO_BASELINE = "pending: no baseline report"
 
 
 def value(report: dict | None, scope: str, metric: str, missing: str = NO_BASELINE):
@@ -119,15 +120,24 @@ def rows(report: dict | None, thresholds: dict, baseline: dict | None) -> list[d
             why = "baseline is not from the same subset (F-12)"
         ok = why is None and ((v - b) >= tol if tol < 0 else (v - b) <= tol)
         out.append(_row(metric, "aggregate", f"delta {tol:+}", tol, v, why, ok, b))
-    if report is not None and report.get("development_run"):
-        out.append(_row("backend", "run", "not a development backend", None,
-                        report.get("backend"), "development run (claude_cli) cannot pass (F-59)",
+    if report is not None and "datasets" in report and not complete_golden_report(report):
+        out.append(_row("dataset", "run", "complete frozen golden", None, None,
+                        "pending: not a complete frozen-golden report", False))  # fmt: skip
+    if report is not None and report.get("development_run") and not eligible_report(report):
+        out.append(_row("backend", "run", "eligible evaluation", None,
+                        report.get("backend"), "development run is not an eligible evaluation",
                         False))  # fmt: skip
+    if baseline is not None and (
+        ("datasets" in baseline and not complete_golden_report(baseline))
+        or (baseline.get("development_run") and not eligible_report(baseline))
+    ):
+        out.append(_row("baseline", "run", "complete non-development report", None, None,
+                        "pending: baseline is incomplete or development-only", False))  # fmt: skip
     return out
 
 
 def passed(table: list[dict]) -> bool:
-    return all(r["status"] == "pass" for r in table)
+    return bool(table) and all(r["status"] == "pass" for r in table)
 
 
 def _f(v) -> str:
@@ -144,7 +154,7 @@ def format_table(table: list[dict], markdown: bool = False) -> str:
                  "|" + "---|" * len(head)]  # fmt: skip
         lines += ["| " + " | ".join(c) + " |" for c in cells]
         return "\n".join(lines) + "\n"
-    widths = [max(len(head[i]), *(len(c[i]) for c in cells)) for i in range(len(head) - 1)]
+    widths = [max([len(head[i]), *(len(c[i]) for c in cells)]) for i in range(len(head) - 1)]
 
     def fmt(row):
         return "  ".join(x.ljust(w) for x, w in zip(row, widths, strict=False)) + "  " + row[-1]

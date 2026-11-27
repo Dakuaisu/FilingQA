@@ -91,5 +91,5 @@ def test_without_a_gated_run_every_row_is_pending_for_that_reason():
     assert not passed(t) and {r["status"] for r in t} == {"pending"}
     assert all(r["why"].startswith("pending:") for r in t)
     assert next(r for r in t if r["metric"] == "faithfulness_pre")["why"] == (
-        "pending: no gated run exists (F-59)"
+        "pending: no eligible evaluation run"
     )

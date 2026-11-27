@@ -1,7 +1,6 @@
 """Eval run scoring and the report (PRD 11.2, 11.4). Pure: no retrieval, no model call.
 
-Every report is stamped with the generation backend; a `claude_cli` run is marked
-a development run (F-59) and carries the models actually served per item (F-60).
+Every report records the generation backend and the models served per item.
 Metrics are broken out by `source` and aggregated (PRD 11.2).
 """
 
@@ -10,7 +9,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import asdict
 
-from api.generate.generator import DEV_BACKENDS
+from api.generate.generator import DEV_BACKENDS, UNPRICED_BACKENDS
 from eval.metrics.abstention import rates, two_by_two
 from eval.metrics.cost import cost_per_query, tokens
 from eval.metrics.generation import NA, generation_metrics
@@ -25,8 +24,7 @@ NOTE_F110 = ("F-110: llm_seeded retrieval numbers reflect lexical overlap betwee
 NOTE_F118 = ("F-118: retrieval numbers on this filtered run come from candidate questions that "
              "name their company and period; the router's job here is easier than on real "
              "questions")  # fmt: skip
-DEV_BANNER = ("DEVELOPMENT RUN (claude_cli): not a CI baseline, not publishable, not comparable "
-              "with anthropic_api runs (F-59)")  # fmt: skip
+DEV_BANNER = "DEVELOPMENT RUN: not eligible as a frozen evaluation result"
 
 
 def _mean(xs: list) -> float | None:
@@ -134,7 +132,7 @@ def _prices() -> dict:
 
 
 def _slice(
-    items: dict, results: list[dict], k: int, nli_threshold=None, dev=False, prose_check=None
+    items: dict, results: list[dict], k: int, nli_threshold=None, unpriced=False, prose_check=None
 ) -> dict:
     ret = {"sufficiency": [], "recall": [], "precision": [], "mrr": [], "ndcg": [],
            "sufficiency_post_rerank": []}  # fmt: skip
@@ -169,7 +167,7 @@ def _slice(
         "declined_unsupported": sum(r.get("abstain_reason") == "unsupported" for r in results),
         "pending_nli": sum(r.get("verdict") == "PENDING_NLI" for r in results),
         "tokens": tokens(results),
-        "cost_per_query": cost_per_query(results, _prices(), dev),
+        "cost_per_query": cost_per_query(results, _prices(), unpriced),
         "rerank_fell_back": sum(bool(r.get("rerank_fell_back")) for r in results),
         "numeric": aggregate(scores),
         "abstention": _abstention(abst),
@@ -182,7 +180,10 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
     retrieved_post_rerank (or None), answer {text, claims, abstained}, verdict and
     served model; `meta`: backend, run_id, dataset files, retrieval stage."""
     by_source = {s: [r for r in results if items[r["item_id"]]["source"] == s] for s in SOURCES}
-    dev = meta["backend"] in DEV_BACKENDS
+    from eval.golden_policy import eligible_report
+
+    unpriced = meta["backend"] in UNPRICED_BACKENDS
+    dev = not eligible_report(meta) if "datasets" in meta else meta["backend"] in DEV_BACKENDS
     prose_check = (meta.get("verification") or {}).get("prose_check")
     handwritten: dict[str, list[dict]] = {}
     for result in by_source["handwritten"]:
@@ -190,7 +191,7 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
         handwritten.setdefault(kind, []).append(result)
     return {
         **meta,
-        "development_run": meta["backend"] in DEV_BACKENDS,
+        "development_run": dev,
         "k": k,
         "served_models": dict(Counter(r["model_served"] for r in results)),
         "anomalies": anomalies(results),
@@ -199,7 +200,7 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
         "verdict_by_correctness": verdict_by_correctness(items, results),
         "natural_phrasing_gap": "pending definition (F-20)",
         "handwritten_question_types": {
-            kind: _slice(items, rs, k, nli_threshold, dev, prose_check)
+            kind: _slice(items, rs, k, nli_threshold, unpriced, prose_check)
             for kind, rs in sorted(handwritten.items())
         },
         "xbrl": xbrl_summary(results),
@@ -211,10 +212,10 @@ def build_report(items: dict, results: list[dict], meta: dict, k: int, nli_thres
         "hardware_dependent": any(r.get("rerank_fell_back") for r in results),
         "columns": {
             **{
-                s: _slice(items, rs, k, nli_threshold, dev, prose_check) if rs else None
+                s: _slice(items, rs, k, nli_threshold, unpriced, prose_check) if rs else None
                 for s, rs in by_source.items()
             },
-            "aggregate": _slice(items, results, k, nli_threshold, dev, prose_check),
+            "aggregate": _slice(items, results, k, nli_threshold, unpriced, prose_check),
         },
     }
 

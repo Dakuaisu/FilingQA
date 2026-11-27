@@ -2,9 +2,8 @@
 
 One trace per `POST /query` and per eval item (callers open it with `trace()`),
 spans for router, retrieval, rerank, generation and gate (`span()` in
-api/pipeline.py). Model spans carry token counts, and cost from eval/pricing.yaml
-when the backend is `anthropic_api`; on `claude_cli` the cost is "n/a (dev
-backend)". Question and chunk text leave the process only when
+api/pipeline.py). Model spans carry token counts and available per-query cost.
+Question and chunk text leave the process only when
 `tracing.include_content` is true (default false).
 
 Export: OTLP/HTTP JSON to LangFuse's `/api/public/otel/v1/traces` with
@@ -30,7 +29,7 @@ import yaml
 from api.config import CORPUS_FILE, REPO_ROOT
 
 log = logging.getLogger(__name__)
-DEV_COST = "n/a (dev backend)"
+UNPRICED_COST = "n/a (no per-query price)"
 DEFAULT_HOST = "https://cloud.langfuse.com"
 
 
@@ -53,7 +52,7 @@ class Span:
             self.attrs[key] = text
 
     def model_call(self, model: str | None, usage: dict | None, backend: str) -> None:
-        """Token counts on every model span; cost from eval/pricing.yaml on the API backend."""
+        """Token counts on every model span; cost when pricing is available."""
         from eval.metrics.cost import call_cost
 
         u = usage or {}
@@ -65,7 +64,7 @@ class Span:
             cost, why = call_cost(model, usage, _prices())
             self.set(cost_details={"total": cost} if why is None else None, cost_note=why)
         else:
-            self.set(cost_note=DEV_COST)
+            self.set(cost_note=UNPRICED_COST)
 
 
 class _NullSpan(Span):

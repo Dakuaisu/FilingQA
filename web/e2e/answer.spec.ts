@@ -7,16 +7,25 @@ const fixture = (f: string) => readFileSync(join(__dirname, "fixtures", f), "utf
 const ask = (q: string) => `/answer?q=${encodeURIComponent(q)}`;
 const LOOKUP = "What did Apple report as its research and development expense for fiscal 2023?";
 
-test("a PASS answer: dev banner, claim, XBRL badge, citations, latency and cost labelled dev", async ({ page }) => {
+test("a PASS answer shows the model and its limits without disclosing the access channel", async ({ page }) => {
+  expect(JSON.parse(fixture("query_pass_lookup.development.json"))).toMatchObject({
+    backend: "claude_cli",
+    model_served: "claude-haiku-4-5-20251001",
+    development: true,
+    metadata: { cost_usd: null, cost_note: "cost n/a (dev backend)" },
+  });
   await page.goto(ask(LOOKUP));
-  await expect(page.getByTestId("dev-banner")).toContainText("Development answer: generated on claude_cli");
+  await expect(page.getByRole("main")).not.toContainText(/claude_cli|development answer|development backend|not a benchmark/i);
+  await expect(page.getByTestId("dev-banner")).toHaveCount(0);
+  await expect(page.getByTestId("generator-model")).toContainText("claude-haiku-4-5-20251001");
+  await expect(page.getByTestId("generator-model")).toContainText(/no fixed temperature/i);
   await expect(page.getByTestId("verdict")).toHaveText("PASS");
   await expect(page.getByTestId("confidence")).toHaveText("Confidence: High");
   await expect(page.getByTestId("claim")).toContainText("$29,915 million for fiscal 2023");
   await expect(page.getByTestId("xbrl-badge")).toHaveText("✓ matches SEC XBRL");
   await expect(page.getByTestId("citations")).toContainText("Apple Inc. (AAPL) 10-K FY2023");
-  await expect(page.getByTestId("latency-cost")).toContainText("Development backend");
-  await expect(page.getByTestId("latency-cost")).toContainText("cost n/a (dev backend)");
+  await expect(page.getByTestId("latency-cost")).toContainText("33.4 s");
+  await expect(page.getByTestId("latency-cost")).toContainText(/no per-query price/i);
 });
 
 test("hovering a citation marker previews the excerpt; clicking opens the source panel", async ({ page }) => {
@@ -44,7 +53,8 @@ test("a chunk the index does not have shows the 404 state in the source panel", 
 
 test("an unsupported question renders the designed abstention state", async ({ page }) => {
   await page.goto(ask("Should I buy NVIDIA stock right now?"));
-  await expect(page.getByTestId("dev-banner")).toBeVisible();
+  await expect(page.getByTestId("generator-model")).toHaveCount(0);
+  await expect(page.getByTestId("dev-banner")).toHaveCount(0);
   const panel = page.getByTestId("abstention");
   await expect(panel).toContainText("No answer: the filings do not support one");
   await expect(panel).toContainText("outside what the indexed SEC filings can answer");
@@ -55,6 +65,7 @@ test("a verdict waiting on the NLI threshold says so and shows the band as pendi
   await page.goto(
     ask("How did Bank of America net interest income for the first two quarters of fiscal 2026 compare with the first two quarters of fiscal 2024?"),
   );
+  await expect(page.getByTestId("generator-model")).toContainText("claude-sonnet-5-5");
   await expect(page.getByTestId("verdict")).toHaveText("Verification pending");
   await expect(page.getByTestId("confidence")).toHaveText("Confidence: Pending");
   await expect(page.getByTestId("pending-note")).toBeVisible();

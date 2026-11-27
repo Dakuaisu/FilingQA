@@ -3,9 +3,7 @@
 `POST /query` calls `api.pipeline.answer_question`, the function the eval runner
 calls, with the same config: the shipped path is the measured path. Only the
 specified pipeline (`config_4_routed`) is served. Responses follow PRD 9's shapes
-plus `backend`, `model_served` and `development` (OWNER DECISION, dev
-generator): a `claude_cli` answer is a development answer and says so. Decisions
-in TRADEOFFS ("HTTP API as first built"). Deferred endpoints: F-140.
+plus `backend`, `model_served` and `development`. Deferred endpoints: F-140.
 """
 
 from __future__ import annotations
@@ -24,9 +22,9 @@ from pydantic import BaseModel
 from api import pipeline, tracing
 from api.config import REPO_ROOT, eval_run, generation
 from api.db import connect
-from api.generate.generator import DEV_BACKENDS
+from api.generate.generator import DEV_BACKENDS, UNPRICED_BACKENDS
 from api.index.embed import EmbeddingCheckError
-from eval.metrics.cost import DEV_NA, cost_per_query
+from eval.metrics.cost import UNPRICED_NA, cost_per_query
 
 FREEZE_FILE = REPO_ROOT / "api" / "corpus_freeze.yaml"
 EXCERPT_CHARS = 400
@@ -112,7 +110,7 @@ def confidence(r: dict) -> float | None:
 def build_response(r: dict, chunks: dict[str, dict], latency_ms: int, prices: dict) -> dict:
     """PRD 9's /query response from a pipeline record."""
     dev = r.get("backend") in DEV_BACKENDS
-    cost = cost_per_query([r], prices, dev)
+    cost = cost_per_query([r], prices, r.get("backend") in UNPRICED_BACKENDS)
     base = {
         "query_id": uuid.uuid4().hex, "verdict": r["verdict"],
         "backend": r.get("backend"), "model_served": r.get("model_served"), "development": dev,
@@ -120,7 +118,8 @@ def build_response(r: dict, chunks: dict[str, dict], latency_ms: int, prices: di
         "metadata": {
             "intent": r.get("intent"), "cache_hit": False, "latency_ms": latency_ms,
             "cost_usd": cost if isinstance(cost, float) else None,
-            "cost_note": DEV_NA if cost == DEV_NA else (None if isinstance(cost, float) else cost),
+            "cost_note": (UNPRICED_NA if cost == UNPRICED_NA else
+                          (None if isinstance(cost, float) else cost)),
             "chunks_retrieved": len(r.get("retrieved") or []),
             "chunks_used": len(r.get("generator_input") or []), "trace_id": None,
         },

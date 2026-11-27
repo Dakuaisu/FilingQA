@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from eval.metrics.cost import DEV_NA, cost_per_query, tokens
+from eval.metrics.cost import UNPRICED_NA, cost_per_query, tokens
 
 PRICES = {"haiku": {"input": 1.0, "output": 5.0, "cache_write": 1.25, "cache_read": 0.1},
           "sonnet": {"input": 2.0, "output": 10.0, "cache_write": None,
@@ -26,7 +26,7 @@ def item(gen_model="haiku", gen=None, router=True):
 def test_router_and_generator_are_priced_and_averaged_over_items():
     # item 1: router 500*1 + 50*5 = 750; generator 1000*1 + 100*5 = 1500 -> 2250e-6
     # item 2: router 750; sonnet generator 1000*2 + 100*10 = 3000 -> 3750e-6
-    c = cost_per_query([item(), item("sonnet")], PRICES, dev_backend=False)
+    c = cost_per_query([item(), item("sonnet")], PRICES, unpriced_backend=False)
     assert c == pytest.approx((2250 + 3750) / 2 / 1e6)
     assert tokens([item(), item("sonnet")])["input_tokens"] == 3000
 
@@ -39,7 +39,7 @@ def test_cache_tokens_priced_when_the_table_has_a_price():
 
 
 def test_dev_backend_unpriced_models_and_missing_tokens_are_never_guessed():
-    assert cost_per_query([item()], PRICES, dev_backend=True) == DEV_NA
+    assert cost_per_query([item()], PRICES, unpriced_backend=True) == UNPRICED_NA
     assert cost_per_query([item("opus")], PRICES, False) == "pending: no price for opus"
     r = item()
     r["router"]["usage"] = None

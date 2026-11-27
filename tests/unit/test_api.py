@@ -73,12 +73,12 @@ def test_query_and_the_eval_runner_go_through_the_same_pipeline_function(client)
     assert calls[1]["item_id"] == "x1" and calls[0]["item_id"] is None
 
 
-def test_pass_response_has_prd_9_shape_and_the_dev_label(client):
+def test_pass_response_preserves_backend_and_model_without_development_label(client):
     body = client[0].post("/api/v1/query", json={"question": "Apple inventories?"}).json()
-    assert body["verdict"] == "PASS" and body["development"] is True
-    assert body["backend"] == "claude_cli" and body["model_served"]
+    assert body["verdict"] == "PASS" and body["development"] is False
+    assert body["backend"] == "claude_cli" and body["model_served"] == "claude-haiku-4-5-20251001"
     assert body["metadata"]["cost_usd"] is None
-    assert body["metadata"]["cost_note"] == "cost n/a (dev backend)"
+    assert body["metadata"]["cost_note"] == "cost n/a (no per-query price)"
     assert body["claims"][0]["xbrl"] == "verified" and body["confidence"] == 1.0
     cit = body["citations"][0]
     assert cit["page_hint"] is None and cit["ticker"] == "AAPL" and "Inventories" in cit["excerpt"]

@@ -8,7 +8,6 @@
 - `development_runs`: run ids and files only, with the banner; no value from a
   development run reaches the payload (enforced here, tested).
 - `owner_blocked`: from `eval/dashboard.yaml`.
-OWNER DECISION, dev generator (TRADEOFFS): the dashboard rule.
 """
 
 from __future__ import annotations
@@ -22,12 +21,13 @@ import yaml
 from api.config import REPO_ROOT
 from api.generate.generator import DEV_BACKENDS
 from eval import compare
+from eval.golden_policy import eligible_report
 
 RUNS = REPO_ROOT / "eval" / "runs"
 DASHBOARD = REPO_ROOT / "eval" / "dashboard.yaml"
 THRESHOLDS = REPO_ROOT / "eval" / "thresholds.yaml"
 BASELINE = REPO_ROOT / "eval" / "baselines" / "main_fast.json"
-BANNER = "development run on `claude_cli`, not a result"
+BANNER = "development run: not an eligible frozen evaluation"
 F110 = "inflated by lexical overlap with the source chunk (F-110)"
 SOURCES = ("xbrl_auto", "llm_seeded", "handwritten", "aggregate")
 RUN_ID = re.compile(r"^([0-9a-f]{12})\.(.+)$")
@@ -38,7 +38,11 @@ def _load(path: Path) -> dict:
 
 
 def is_development(doc: dict) -> bool:
-    """A report, meta or filter/smoke document produced on a development backend."""
+    """Whether a report or metadata describes a development run."""
+    if eligible_report(doc):
+        return False
+    if "datasets" in doc:
+        return True
     if doc.get("development_run"):
         return True
     backend = doc.get("backend") or (doc.get("meta") or {}).get("backend")
@@ -100,11 +104,28 @@ def build(runs: Path = RUNS, dashboard: Path = DASHBOARD, thresholds_path: Path 
             head = rid
             break
     report = _load(runs / f"{head}.json") if head else None
+    if head and (runs / f"{head}.judge.jsonl").exists():
+        from scripts.eval_run import load_datasets, rebuild_report
+
+        saved = _load(runs / f"{head}.meta.json")
+        try:
+            items, _ = load_datasets(None, saved["datasets"])
+            report = rebuild_report(
+                runs,
+                head,
+                items,
+                {"nli_threshold": (saved.get("verification") or {}).get("nli_threshold")},
+            )
+        except (OSError, KeyError, ValueError, SystemExit):
+            report.pop("answer_correctness", None)
+            for column in report.get("columns", {}).values():
+                if column is not None:
+                    column.pop("answer_correctness", None)
     baseline = _load(baseline_path) if baseline_path.exists() else None
     table = compare.rows(report, thresholds, baseline)
     return {
         "gate": {"passed": compare.passed(table), "run_id": head,
-                 "reason": None if head else "no gated run exists (F-59)", "rows": table},
+                 "reason": None if head else "no eligible evaluation run", "rows": table},
         "retrieval_runs": [retrieval_entry(runs, r, cfg["current_retrieval_run"], thresholds)
                            for r in retrieval],
         "gated_runs": gated,

@@ -32,7 +32,33 @@ export default async function AnswerPage({ searchParams }: { searchParams: Promi
         {q}
       </h1>
       {r.ok ? (
-        <AnswerView data={r.body} />
+        <>
+          <AnswerView
+            data={{
+              verdict: r.body.verdict,
+              confidence: r.body.confidence,
+              verification_pending: r.body.verification_pending,
+              abstain_reason: r.body.abstain_reason,
+              nearest_evidence: r.body.nearest_evidence,
+              claims: r.body.claims,
+              citations: r.body.citations,
+            }}
+          />
+          <div className="space-y-1 text-xs text-muted-foreground">
+            {r.body.model_served && (
+              <p data-testid="generator-model">
+                Generator model: <code>{r.body.model_served}</code> · No fixed temperature
+              </p>
+            )}
+            <p data-testid="latency-cost">
+              {(r.body.metadata.latency_ms / 1000).toFixed(1)} s ·{" "}
+              {r.body.metadata.cost_usd === null
+                ? "No per-query price available"
+                : `$${r.body.metadata.cost_usd.toFixed(4)}`} · intent {r.body.metadata.intent ?? "?"} ·{" "}
+              {r.body.metadata.chunks_used} of {r.body.metadata.chunks_retrieved} retrieved chunks used
+            </p>
+          </div>
+        </>
       ) : (
         <div role="alert" data-testid="error" className="rounded-md border border-red-300 bg-red-50 p-4 text-sm text-red-900">
           <p className="font-medium">{ERROR_TEXT[r.status] ?? `The request failed (${r.status}).`}</p>

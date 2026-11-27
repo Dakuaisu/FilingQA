@@ -91,6 +91,51 @@ def test_plan_never_builds_runtime_metadata(tmp_path, monkeypatch, capsys):
     assert str(path.resolve()) in out and "handwritten" in out and "natural_phrasing" in out
 
 
+def test_baseline_refuses_partial_resume_before_model_call(tmp_path, monkeypatch):
+    from eval.golden_policy import GOLDEN_V1_SHA256
+
+    datasets = {"/fixture/golden_v1.jsonl": GOLDEN_V1_SHA256}
+    saved = {"datasets": datasets, "item_order": ["a"], "run_id": "synthetic", "k": 10}
+    (tmp_path / "synthetic.meta.json").write_text(json.dumps(saved))
+    monkeypatch.setattr(eval_run, "eval_run", lambda: {"runs_dir": str(tmp_path)})
+    monkeypatch.setattr(eval_run, "generation", lambda: {"backend": "claude_cli"})
+    monkeypatch.setattr(eval_run, "load_datasets", lambda *args: ({"a": {}, "b": {}}, datasets))
+    monkeypatch.setattr(eval_run, "current_meta", lambda *args: {"datasets": datasets})
+    monkeypatch.setattr(
+        sys, "argv", ["eval_run", "--resume", "synthetic", "--baseline-out", "baseline.json"]
+    )
+    with pytest.raises(SystemExit, match="all selected dataset items"):
+        eval_run.main()
+    assert not (tmp_path / "baseline.json").exists()
+
+
+def test_complete_golden_cli_resume_can_write_baseline(tmp_path, monkeypatch):
+    from eval.golden_policy import GOLDEN_V1_SHA256
+
+    datasets = {"/fixture/golden_v1.jsonl": GOLDEN_V1_SHA256}
+    saved = {
+        "datasets": datasets,
+        "backend": "claude_cli",
+        "item_order": ["a"],
+        "run_id": "synthetic",
+        "k": 10,
+    }
+    (tmp_path / "synthetic.meta.json").write_text(json.dumps(saved))
+    (tmp_path / "synthetic.results.jsonl").write_text(json.dumps({"item_id": "a"}) + "\n")
+    out = tmp_path / "baseline.json"
+    monkeypatch.setattr(eval_run, "eval_run", lambda: {"runs_dir": str(tmp_path), "k": 10})
+    monkeypatch.setattr(eval_run, "generation", lambda: {"backend": "claude_cli"})
+    monkeypatch.setattr(eval_run, "load_datasets", lambda *args: ({"a": {}}, datasets))
+    monkeypatch.setattr(eval_run, "current_meta", lambda *args: {"datasets": datasets})
+    monkeypatch.setattr(eval_run, "build_report", lambda items, results, meta, *args: meta)
+    monkeypatch.setattr(eval_run, "format_report", lambda report: "report")
+    monkeypatch.setattr(
+        sys, "argv", ["eval_run", "--resume", "synthetic", "--baseline-out", str(out)]
+    )
+    eval_run.main()
+    assert json.loads(out.read_text())["backend"] == "claude_cli"
+
+
 @pytest.mark.parametrize("mode", ["--resume", "--report", "--rescore", "--reverify"])
 def test_saved_run_loads_selected_dataset_before_work(tmp_path, monkeypatch, mode):
     path = tmp_path / "data.jsonl"

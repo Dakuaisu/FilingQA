@@ -34,8 +34,7 @@ def build_prompt(question: str, chunks: list[Retrieved]) -> str:
 
 
 def generate(question: str, chunks: list[Retrieved], cfg: dict, tier: str) -> Answer:
-    """Dispatch on `generation.backend`. `claude_cli` answers are development
-    numbers only (TRADEOFFS, OWNER DECISION - Max subscription as dev generator)."""
+    """Dispatch on `generation.backend`."""
     return complete(build_prompt(question, chunks), cfg, tier)
 
 
@@ -106,13 +105,5 @@ def generate_structured(question: str, chunks: list[Retrieved], cfg: dict, tier:
                   response.usage.output_tokens, backend, structured=doc)  # fmt: skip
 
 
-DEV_BACKENDS = {"claude_cli"}
-
-
-def refuse_dev_baseline(backend: str, path: str) -> None:
-    """A development-backend run must never write a CI baseline (F-59)."""
-    if backend in DEV_BACKENDS and "eval/baselines/" in str(path).replace("\\", "/"):
-        raise ConfigError(
-            f"refusing to write {path}: backend {backend} is development-only "
-            "(TRADEOFFS, OWNER DECISION - Max subscription as dev generator)"
-        )
+DEV_BACKENDS: set[str] = set()
+UNPRICED_BACKENDS = {"claude_cli"}

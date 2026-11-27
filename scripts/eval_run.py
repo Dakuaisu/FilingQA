@@ -9,7 +9,8 @@ python -m scripts.eval_run --rescore RUN_ID T   # derived report at nli_threshol
 python -m scripts.eval_run --reverify RUN_ID TAG  # model-free checks again: <id>.reverify-TAG.json
 python -m scripts.eval_run --smoke SEED        # pipeline check, 12 seeded items: <id>.smoke.json
 python -m scripts.eval_run --run --baseline-out eval/baselines/main.json
-python -m scripts.eval_run --run --subset eval/fast_subset_v1.yaml --report-out build/eval_fast.json
+python -m scripts.eval_run --run --dataset eval/datasets/golden_v1.jsonl \
+    --subset eval/fast_subset_v2.yaml --report-out build/eval_fast.json
 
 The pipeline is `eval_run.pipeline` (PRD 11.6 configs: config_1_dense,
 config_3_hybrid, config_4_rerank; eval/pipeline.py). Each result stores the
@@ -20,8 +21,8 @@ completes, so a killed process loses at most the item in flight; --resume skips
 recorded items after checking the backend, datasets and freeze versions still
 match the run's meta. A call with no usable response halts the run (exit 1) with
 the error in <run_id>.errors.jsonl and the item left unrecorded. When no item is
-pending, the report is written to <run_id>.json and printed. Refuses a baseline
-path for a development backend before any work (F-59).
+pending, the report is written to <run_id>.json and printed. Baselines require
+a complete frozen-golden run.
 """
 
 from __future__ import annotations
@@ -41,8 +42,8 @@ import yaml
 from api import pipeline, tracing
 from api.config import REPO_ROOT, baseline, eval_run, generation, rerank, retrieval, router
 from api.generate import claude_cli
-from api.generate.generator import refuse_dev_baseline
 from api.pipeline import TEMPLATES, Context, answer_fields, call_model, texts_for
+from eval.golden_policy import eligible_report
 from eval.pipeline import depths
 from eval.runner import build_report, format_report
 from scripts.write_freeze import FREEZE_FILE
@@ -520,13 +521,22 @@ def rebuild_report(runs: Path, run_id: str, items: dict, run_cfg: dict) -> dict:
 def main() -> None:
     gen, run_cfg = generation(), eval_run()
     baseline_out = arg("--baseline-out")
-    if baseline_out:
-        refuse_dev_baseline(gen["backend"], baseline_out)
     runs = REPO_ROOT / run_cfg["runs_dir"]
     prior_id = arg("--resume") or arg("--report") or arg("--rescore") or arg("--reverify")
     saved = (json.loads((runs / f"{prior_id}.meta.json").read_text(encoding="utf-8"))
              if prior_id else None)  # fmt: skip
     items, datasets = load_datasets(arg("--dataset"), saved.get("datasets") if saved else None)
+    if baseline_out and (
+        not eligible_report({"datasets": datasets, "backend": gen["backend"]})
+        or arg("--limit")
+        or not ("--run" in sys.argv or arg("--resume"))
+    ):
+        raise SystemExit("baseline requires a complete frozen-golden run without --limit")
+    report_out = arg("--report-out")
+    if report_out and (REPO_ROOT / report_out).resolve().is_relative_to(
+        (REPO_ROOT / "eval" / "baselines").resolve()
+    ):
+        raise SystemExit("use --baseline-out to write a baseline")
     subset = None
     subset_meta = None
     if arg("--subset"):
@@ -595,6 +605,11 @@ def main() -> None:
         print("plan only: pass --run to retrieve and generate")
         return
 
+    if baseline_out:
+        expected_count = (meta.get("subset") or {}).get("items", len(items))
+        if len(order) != expected_count or len(set(order)) != len(order):
+            raise SystemExit("baseline requires all selected dataset items")
+
     results_path = runs / f"{run_id}.results.jsonl"
     done = {r["item_id"] for r in read_jsonl(results_path)}
     todo = [i for i in order if i not in done]
@@ -615,7 +630,7 @@ def main() -> None:
         if code:
             print(f"resume with --resume {run_id}")
             sys.exit(code)
-    results = read_jsonl(results_path)
+    results = finished_results(runs, run_id, {"item_order": order})
     report = build_report(items, results, {**meta, "run_id": run_id}, run_cfg["k"],
                           run_cfg.get("nli_threshold"))  # fmt: skip
     (runs / f"{run_id}.json").write_text(json.dumps(report, indent=1) + "\n", encoding="utf-8")

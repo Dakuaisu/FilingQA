@@ -95,7 +95,7 @@ def test_one_trace_with_router_retrieval_rerank_generation_and_gate_spans(monkey
     assert [s.name for s in model_spans] == ["router", "generation"]
     assert model_spans[0].attrs["usage_details"]["input"] == 120
     assert model_spans[1].attrs["usage_details"]["output"] == 60
-    assert all(s.attrs["cost_note"] == "n/a (dev backend)" for s in model_spans)
+    assert all(s.attrs["cost_note"] == "n/a (no per-query price)" for s in model_spans)
     assert children[4].attrs["verdict"] == "PASS"
 
 

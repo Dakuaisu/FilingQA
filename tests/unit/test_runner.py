@@ -35,7 +35,9 @@ def meta(backend):
 
 
 def test_report_breaks_out_by_source_and_aggregates():
-    r = build_report(ITEMS, RESULTS, meta("claude_cli"), 10)
+    r = build_report(
+        ITEMS, RESULTS, {**meta("claude_cli"), "datasets": {"candidates.jsonl": "x"}}, 10
+    )
     assert r["development_run"] and r["served_models"] == {"claude-haiku-4-5-20251001": 3}
     cols = r["columns"]
     assert cols["handwritten"] is None
@@ -48,11 +50,30 @@ def test_report_breaks_out_by_source_and_aggregates():
 
 
 def test_every_report_is_stamped_and_dev_runs_carry_the_banner():
-    dev = format_report(build_report(ITEMS, RESULTS, meta("claude_cli"), 10))
+    dev = format_report(
+        build_report(
+            ITEMS, RESULTS, {**meta("claude_cli"), "datasets": {"candidates.jsonl": "x"}}, 10
+        )
+    )
     api = format_report(build_report(ITEMS, RESULTS, meta("anthropic_api"), 10))
     assert "backend: claude_cli" in dev and DEV_BANNER in dev
     assert "backend: anthropic_api" in api and DEV_BANNER not in api
     assert "excluded unit_scale_unknown" in dev and "served models" in dev
+
+
+def test_golden_cli_report_preserves_backend_model_and_unpriced_cost():
+    from eval.golden_policy import GOLDEN_V1_SHA256
+    from eval.metrics.cost import UNPRICED_NA
+
+    m = {**meta("claude_cli"), "datasets": {"/fixture/golden_v1.jsonl": GOLDEN_V1_SHA256}}
+    report = build_report(ITEMS, RESULTS, m, 10)
+    assert report["backend"] == "claude_cli"
+    assert report["model_requested"] == "m"
+    assert report["served_models"] == {"claude-haiku-4-5-20251001": 3}
+    assert report["development_run"] is False
+    assert report["columns"]["aggregate"]["cost_per_query"] == UNPRICED_NA
+    candidate = build_report(ITEMS, RESULTS, {**m, "datasets": {"candidate.jsonl": "x"}}, 10)
+    assert candidate["development_run"] is True
 
 
 def test_partial_verdict_counts_as_answered():

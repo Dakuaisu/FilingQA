@@ -49,18 +49,19 @@ test:
 	cd web && npm run test:e2e
 
 # One full eval run (PRD 11.4): freeze check first, then every candidate item.
-# The report carries the backend; a claude_cli run is marked a development run.
+# The report records the backend and the evaluation dataset.
 # Resume a stopped run with: python -m scripts.eval_run --resume RUN_ID
 eval:
 	python -m scripts.verify_freeze
 	python -m scripts.eval_run --run
 
-# PRD 11.5 fast eval for PRs: the committed 60-item subset (eval/fast_subset_v1.yaml)
+# PRD 11.5 fast eval for PRs: the committed 60-item subset (eval/fast_subset_v2.yaml)
 # on the same pipeline, then the gate against a baseline from the same subset (F-12).
 # The gate exits non-zero on any failed or pending gated metric.
 eval-fast:
+	rm -f build/eval_fast.json build/eval_fast.md
 	python -m scripts.verify_freeze $(VERIFY_FLAGS)
-	python -m scripts.eval_run --run --subset eval/fast_subset_v1.yaml --report-out build/eval_fast.json
+	python -m scripts.eval_run --run --dataset eval/datasets/golden_v1.jsonl --subset eval/fast_subset_v2.yaml --report-out build/eval_fast.json
 	$(MAKE) eval-gate
 
 eval-gate:
@@ -73,7 +74,7 @@ eval-gate:
 restore-corpus-snapshot:
 	python -m scripts.corpus_snapshot restore build/corpus_snapshot.dump
 
-# PRD 9 API. On claude_cli every answer is labelled development (OWNER DECISION).
+# PRD 9 API.
 serve:
 	uvicorn api.server:app --port 8000
 

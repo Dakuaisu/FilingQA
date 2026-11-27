@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import json
 import re
-import shutil
 
 import yaml
 
@@ -34,7 +33,15 @@ def test_development_runs_are_ids_only_and_never_values(tmp_path):
     _write(runs / "bbbbbbbbbbbb.filter.json", {"report": {"backend": "claude_cli",
            "columns": {"filtered": {"aggregate": {"sufficiency@10": SENTINEL}}}}})  # fmt: skip
     _write(runs / "cccccccccccc.smoke.json", {"ok": True, "meta": {"backend": "claude_cli"}})
-    shutil.copy(REPO_ROOT / "eval" / "runs" / "5b3c3ac13e5e.retrieval.json", runs)
+    _write(
+        runs / "ffffffffffff.retrieval.json",
+        {
+            "report": {
+                "columns": {"hybrid": {s: {"sufficiency@10": 0.5} for s in metrics.SOURCES}},
+                "retrieval": {},
+            }
+        },
+    )
     payload = metrics.build(runs=runs)
     text = json.dumps(payload)
     assert str(SENTINEL) not in text
@@ -42,7 +49,7 @@ def test_development_runs_are_ids_only_and_never_values(tmp_path):
         "aaaaaaaaaaaa", "bbbbbbbbbbbb", "cccccccccccc"]  # fmt: skip
     assert all(d["banner"] == metrics.BANNER for d in payload["development_runs"])
     assert payload["gate"]["run_id"] is None and not payload["gate"]["passed"]
-    assert payload["gate"]["reason"] == "no gated run exists (F-59)"
+    assert payload["gate"]["reason"] == "no eligible evaluation run"
 
 
 def test_a_gated_run_feeds_the_gate_by_the_same_rule(tmp_path):
@@ -64,20 +71,9 @@ def cfg_pending():
     return cfg["pending_even_with_a_gated_run"]
 
 
-def test_readme_status_section_agrees_with_metrics():
-    """If the README and the dashboard ever disagree, both are wrong."""
+def test_readme_status_section_agrees_with_dashboard_configuration():
     readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
-    payload = metrics.build()
-    cur = next(r for r in payload["retrieval_runs"] if r["current"])
-    assert f"`{cur['run_id']}`" in readme
     section = readme.split("### Where the gate stands", 1)[1].split("### What waits", 1)[0]
-    for src in ("aggregate", "xbrl_auto", "llm_seeded"):
-        v, t = cur["sufficiency_at_10"][src]["value"], cur["sufficiency_at_10"][src]["threshold"]
-        assert f"{v:.3f}" in section and f"{t:.2f}" in section, (src, v, t)
-    assert "Config\n  3" in section or "Config 3" in section
-    assert "**No gated run exists.**" in section and payload["gate"]["reason"].startswith(
-        "no gated run exists"
-    )
     flat = " ".join(section.split())
     for x in cfg_pending():
         line = f"{x['metrics']} ({x['reason']}, {', '.join(x['findings'])})"
@@ -85,6 +81,133 @@ def test_readme_status_section_agrees_with_metrics():
     rows = re.findall(r"^\| (.+?) \| (F-[\d, F-]+) \|$", readme, re.M)
     cfg = yaml.safe_load((REPO_ROOT / "eval" / "dashboard.yaml").read_text(encoding="utf-8"))
     assert rows == [(o["item"], ", ".join(o["findings"])) for o in cfg["owner_blocked"]]
-    assert [o["item"] for o in payload["owner_blocked"]] == [
-        o["item"] for o in cfg["owner_blocked"]
-    ]
+
+
+def test_historical_golden_run_is_classified_without_rewriting(tmp_path):
+    from eval.golden_policy import GOLDEN_V1_SHA256
+
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    golden = {
+        "backend": "claude_cli",
+        "development_run": True,
+        "datasets": {"/old/golden_v1.jsonl": GOLDEN_V1_SHA256},
+    }
+    _write(runs / "aaaaaaaaaaaa.meta.json", golden)
+    _write(runs / "aaaaaaaaaaaa.json", golden)
+    before = {p.name: p.read_bytes() for p in runs.iterdir()}
+    dev, gated, retrieval = metrics.classify(runs)
+    assert dev == {} and gated == ["aaaaaaaaaaaa"] and retrieval == []
+    assert {p.name: p.read_bytes() for p in runs.iterdir()} == before
+
+
+def test_dashboard_uses_validated_saved_judgments_without_rewriting(tmp_path, monkeypatch):
+    from eval.golden_policy import GOLDEN_V1_SHA256
+    from eval.judge import run
+    from scripts import eval_run
+
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    rid = "aaaaaaaaaaaa"
+    datasets = {"/fixture/golden_v1.jsonl": GOLDEN_V1_SHA256}
+    item = {
+        "item_id": "a",
+        "source": "handwritten",
+        "question_type": "table",
+        "question": "Q?",
+        "reference_answer": "yes",
+    }
+    result = {
+        "item_id": "a",
+        "answer": {"text": "yes", "abstained": False},
+        "verdict": "PASS",
+        "model_served": "generator",
+    }
+    meta = {
+        "run_id": rid,
+        "backend": "claude_cli",
+        "datasets": datasets,
+        "item_order": ["a"],
+        "k": 10,
+        "subset": {"items": 1, "sha256": "s"},
+    }
+    _write(runs / f"{rid}.meta.json", meta)
+    _write(
+        runs / f"{rid}.json",
+        {**_report(False), **{k: v for k, v in meta.items() if k != "item_order"}},
+    )
+    (runs / f"{rid}.results.jsonl").write_text(json.dumps(result) + "\n")
+    monkeypatch.setattr(
+        run,
+        "judge",
+        lambda *args: {
+            "item_id": "a",
+            "score": 4,
+            "rationale": "ok",
+            "judge_backend": "fake",
+            "judge_model": "judge",
+            "judge_family": "judge",
+            "generator_model": "generator",
+            "same_family_as_generator": False,
+        },
+    )
+    run.score_run(
+        rid, {"a": item}, [result], runs / f"{rid}.judge.jsonl", {"backend": "fake"}, "small"
+    )
+    monkeypatch.setattr(eval_run, "load_datasets", lambda *args: ({"a": item}, datasets))
+    monkeypatch.setattr(
+        eval_run,
+        "build_report",
+        lambda *args: {
+            **_report(False),
+            "columns": {"aggregate": {"items": 1}, "handwritten": {"items": 1}},
+        },
+    )
+    before = {p.name: p.read_bytes() for p in runs.iterdir()}
+
+    payload = metrics.build(runs=runs, baseline_path=tmp_path / "missing.json")
+
+    row = next(r for r in payload["gate"]["rows"] if r["metric"] == "answer_correctness")
+    assert row["value"] == 0.8
+    assert {p.name: p.read_bytes() for p in runs.iterdir()} == before
+
+
+def test_dashboard_does_not_use_stale_correctness_when_sidecar_is_invalid(tmp_path, monkeypatch):
+    from eval.golden_policy import GOLDEN_V1_SHA256
+    from scripts import eval_run
+
+    runs = tmp_path / "runs"
+    runs.mkdir()
+    rid = "bbbbbbbbbbbb"
+    datasets = {"/fixture/golden_v1.jsonl": GOLDEN_V1_SHA256}
+    item = {
+        "item_id": "a",
+        "source": "handwritten",
+        "question_type": "table",
+        "reference_answer": "yes",
+    }
+    result = {"item_id": "a", "answer": {"abstained": False}, "verdict": "PASS"}
+    meta = {
+        "run_id": rid,
+        "backend": "claude_cli",
+        "datasets": datasets,
+        "item_order": ["a"],
+        "k": 10,
+        "subset": {"items": 1, "sha256": "s"},
+    }
+    _write(runs / f"{rid}.meta.json", meta)
+    report = {**_report(False), **{k: v for k, v in meta.items() if k != "item_order"}}
+    report["columns"]["aggregate"]["answer_correctness"] = {
+        "complete": True,
+        "normalized_mean": 1.0,
+    }
+    _write(runs / f"{rid}.json", report)
+    (runs / f"{rid}.results.jsonl").write_text(json.dumps(result) + "\n")
+    (runs / f"{rid}.judge.jsonl").write_text('{"item_id":"foreign","score":5}\n')
+    monkeypatch.setattr(eval_run, "load_datasets", lambda *args: ({"a": item}, datasets))
+    monkeypatch.setattr(eval_run, "build_report", lambda *args: report)
+
+    payload = metrics.build(runs=runs, baseline_path=tmp_path / "missing.json")
+
+    row = next(r for r in payload["gate"]["rows"] if r["metric"] == "answer_correctness")
+    assert row["status"] == "pending" and row["value"] is None

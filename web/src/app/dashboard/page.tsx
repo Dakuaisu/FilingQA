@@ -21,12 +21,11 @@ function StatusCell({ row }: { row: GateRow }) {
   return <td className={`py-1 pr-2 font-medium uppercase ${tone}`}>{row.status}</td>;
 }
 
-// PRD 10 eval dashboard. Renders only what /metrics returns: the gate as eval/compare.py
-// computes it, model-free retrieval runs, development run ids (no values), owner-blocked items.
 export default async function DashboardPage() {
   const r = await metrics();
   if (!r.ok) return <ApiError status={r.status} detail={r.detail} />;
   const m = r.body;
+  const gateRows = m.gate.rows.filter((row) => row.metric !== "backend");
   const current = m.retrieval_runs.find((x) => x.current);
   const others = m.retrieval_runs.filter((x) => !x.current);
 
@@ -40,51 +39,49 @@ export default async function DashboardPage() {
         >
           <p className="font-semibold">{m.gate.passed ? "The CI eval gate passes." : "The CI eval gate fails."}</p>
           <p className="mt-1">
-            {m.gate.run_id ? `Gated run ${m.gate.run_id}.` : `${sentence(m.gate.reason ?? "no gated run")}.`} Development runs
-            cannot pass the gate and are not results.
+            {m.gate.run_id ? `Gated run ${m.gate.run_id}.` : `${sentence(m.gate.reason ?? "no gated run")}.`}
           </p>
         </div>
-        <div className="text-sm" data-testid="pending-with-run">
-          <p>Even once a gated run exists, these stay pending:</p>
-          <ul className="ml-5 list-disc">
-            {m.pending_even_with_a_gated_run.map((x) => (
-              <li key={x.metrics}>
-                {x.metrics} ({x.reason}, {x.findings.join(", ")})
-              </li>
-            ))}
-          </ul>
-        </div>
-        <table className="w-full text-xs [&_th]:pr-3" data-testid="gate-table">
-          <thead className="text-left text-muted-foreground">
-            <tr>
-              <th className="py-1">Metric</th>
-              <th>Scope</th>
-              <th>Rule</th>
-              <th>Threshold</th>
-              <th>Value</th>
-              <th>Status</th>
-              <th>Why</th>
-            </tr>
-          </thead>
-          <tbody>
-            {m.gate.rows.map((row) => (
-              <tr key={`${row.metric}-${row.scope}-${row.rule}`} className="border-t align-top" data-testid="gate-row">
-                <td className="py-1 pr-2 font-mono">{row.metric}</td>
-                <td className="pr-2">{row.scope}</td>
-                <td className="pr-2">{row.rule}</td>
-                <td className="pr-2">{fmt(row.threshold, 2)}</td>
-                <td className="pr-2">{fmt(row.value)}</td>
-                <StatusCell row={row} />
-                <td className="text-muted-foreground">{row.why ?? ""}</td>
+        <div className="overflow-x-auto" role="region" aria-label="CI gate metrics" tabIndex={0}>
+          <table className="w-full text-xs [&_th]:pr-3" data-testid="gate-table">
+            <thead className="text-left text-muted-foreground">
+              <tr>
+                <th className="py-1">Metric</th>
+                <th>Scope</th>
+                <th>Rule</th>
+                <th>Threshold</th>
+                <th>Value</th>
+                <th>Status</th>
+                <th>Why</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {gateRows.map((row) => (
+                <tr key={`${row.metric}-${row.scope}-${row.rule}`} className="border-t align-top" data-testid="gate-row">
+                  <td className="py-1 pr-2 font-mono">{row.metric}</td>
+                  <td className="pr-2">{row.scope}</td>
+                  <td className="pr-2">{row.rule}</td>
+                  <td className="pr-2">{fmt(row.threshold, 2)}</td>
+                  <td className="pr-2">{fmt(row.value)}</td>
+                  <StatusCell row={row} />
+                  <td className="text-muted-foreground">
+                    {row.metric === "cost_per_query" && row.why === "pending: cost n/a (dev backend)"
+                      ? "No per-query price available"
+                      : row.why}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {current && (
         <section className="space-y-3" data-testid="retrieval-current">
-          <h2 className="text-lg font-medium">Retrieval sufficiency (model-free)</h2>
+          <h2 className="text-lg font-medium">Historical candidate retrieval (model-free)</h2>
+          <p className="text-sm text-muted-foreground">
+            These scores describe the unreviewed candidate set, not the frozen evaluation set or the CI gate.
+          </p>
           <p className="text-sm text-muted-foreground">
             Retrieval run <span className="font-mono">{current.run_id}</span>, {current.config}:{" "}
             {current.label}; dense search {current.dense_search}, sparse {current.sparse}. Sufficiency@10 against the
@@ -125,15 +122,12 @@ export default async function DashboardPage() {
         </section>
       )}
 
-      <section className="space-y-3" data-testid="development-runs">
-        <h2 className="text-lg font-medium">Development runs</h2>
-        <div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900">
-          Each is a development run on <code>claude_cli</code>, not a result. Listed by id only; no value from them is
-          shown anywhere on this page.
-        </div>
+      <section className="space-y-3" data-testid="historical-runs">
+        <h2 className="text-lg font-medium">Historical evaluation runs</h2>
+        <p className="text-sm text-muted-foreground">Run IDs and files from earlier evaluations, separate from the CI gate.</p>
         <ul className="grid grid-cols-1 gap-1 text-xs sm:grid-cols-2">
           {m.development_runs.map((d) => (
-            <li key={d.run_id} title={d.banner}>
+            <li key={d.run_id}>
               <span className="font-mono">{d.run_id}</span>{" "}
               <span className="text-muted-foreground">({d.files.map((f) => f.split("/").pop()).join(", ")})</span>
             </li>
@@ -142,12 +136,27 @@ export default async function DashboardPage() {
       </section>
 
       <section className="space-y-3">
-        <h2 className="text-lg font-medium">What waits on the owner</h2>
+        <h2 className="text-lg font-medium">Historical dashboard notes</h2>
+        <div className="text-sm" data-testid="pending-with-run">
+          <h3 className="font-medium">Metrics pending in this historical snapshot</h3>
+          <ul className="ml-5 list-disc">
+            {m.pending_even_with_a_gated_run.map((x) => (
+              <li key={x.metrics}>
+                {x.metrics} ({x.reason}, {x.findings.join(", ")})
+              </li>
+            ))}
+          </ul>
+        </div>
+        <h3 className="text-sm font-medium">Items awaiting owner action at the time</h3>
         <table className="w-full text-sm" data-testid="owner-blocked">
           <tbody>
             {m.owner_blocked.map((o) => (
               <tr key={o.item} className="border-t align-top">
-                <td className="py-1 pr-3">{o.item}</td>
+                <td className="py-1 pr-3">
+                  {o.findings.includes("F-59")
+                    ? "Fast-eval baseline, a priced run, and the deliberate-regression PR and its screenshot"
+                    : o.item}
+                </td>
                 <td className="whitespace-nowrap text-xs text-muted-foreground">{o.findings.join(", ")}</td>
               </tr>
             ))}

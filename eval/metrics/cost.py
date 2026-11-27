@@ -3,8 +3,8 @@
 Per item: every model call made to answer it (router and generator; the judge is
 eval cost and excluded; the local NLI model and reranker cost zero), each call's
 input, output, cache-read and cache-creation tokens priced from eval/pricing.yaml.
-cost_per_query is the mean over items. A development backend has no price
-("cost n/a (dev backend)"); a model without a price, or a call whose tokens were
+cost_per_query is the mean over items. An unpriced backend has no per-query price;
+a model without a price, or a call whose tokens were
 not recorded, makes the cost pending, never a guess.
 """
 
@@ -12,7 +12,7 @@ from __future__ import annotations
 
 KINDS = (("input_tokens", "input"), ("output_tokens", "output"),
          ("cache_read_tokens", "cache_read"), ("cache_creation_tokens", "cache_write"))  # fmt: skip
-DEV_NA = "cost n/a (dev backend)"
+UNPRICED_NA = "cost n/a (no per-query price)"
 
 
 def calls(r: dict) -> list[tuple[str | None, dict | None]]:
@@ -52,10 +52,10 @@ def call_cost(
     return total, None
 
 
-def cost_per_query(results: list[dict], prices: dict, dev_backend: bool):
+def cost_per_query(results: list[dict], prices: dict, unpriced_backend: bool):
     """Mean USD per item, or the reason it cannot be computed."""
-    if dev_backend:
-        return DEV_NA
+    if unpriced_backend:
+        return UNPRICED_NA
     if not results:
         return None
     per_item = []
