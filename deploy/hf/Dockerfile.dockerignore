@@ -1,0 +1,17 @@
+*
+!pyproject.toml
+!api/
+!api/**
+!eval/
+!eval/**
+!scripts/
+!scripts/**
+!infra/
+!infra/**
+!deploy/
+!deploy/hf/
+!deploy/hf/entrypoint.sh
+**/.env
+**/.env.*
+**/__pycache__/
+**/*.pyc

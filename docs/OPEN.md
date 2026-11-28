@@ -95,6 +95,12 @@ carries the state.
 | F-08 | `faithfulness_pre` is undefined for Configs 1–4, yet §11.6 plots it there | OPEN |
 | F-20 | `natural_phrasing_gap` is gated in `thresholds.yaml` but never defined as a metric | Decided autonomously 2026-11-27; owner review pending. Pooled answerable generated Sufficiency@10 minus answerable handwritten natural-phrasing Sufficiency@10; no-gold items excluded and counted. See TRADEOFFS; historical baseline requires an explicit refresh to compare this metric. |
 
+F-143 update (2026-11-28): The alternate [Hugging Face Spaces API and Vercel
+deployment](../deploy/hf/README.md) is prepared offline. Docker build and smoke
+are pending the owner's Docker restart. Hosted startup, snapshot restore,
+keyless behavior, live answers and citations, and public frontend wiring remain
+unverified; F-143 stays open.
+
 ## Blocking Phase 4
 
 | ID | Finding | Status |

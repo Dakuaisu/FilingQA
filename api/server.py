@@ -8,6 +8,7 @@ plus `backend`, `model_served` and `development`. Deferred endpoints: F-140.
 
 from __future__ import annotations
 
+import os
 import threading
 import time
 import uuid
@@ -20,7 +21,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from api import pipeline, tracing
-from api.config import REPO_ROOT, eval_run, generation
+from api.config import REPO_ROOT, eval_run, generation, load_env
 from api.db import connect
 from api.generate.generator import DEV_BACKENDS, UNPRICED_BACKENDS
 from api.index.embed import EmbeddingCheckError
@@ -209,6 +210,13 @@ def create_app() -> FastAPI:
             raise HTTPException(400, "question is empty")
         if req.filters or req.options:
             raise HTTPException(400, "filters and options overrides are not supported yet (F-140)")
+        load_env()
+        gen = generation()
+        if (
+            gen["backend"] == "anthropic_api"
+            and not os.environ.get("ANTHROPIC_API_KEY", "").strip()
+        ):
+            raise HTTPException(503, "ANTHROPIC_API_KEY is not configured")
         run_cfg = eval_run()
         if run_cfg["pipeline"] != pipeline.SERVED_PIPELINE:
             raise HTTPException(503, f"configured pipeline {run_cfg['pipeline']} is not served")
@@ -223,7 +231,7 @@ def create_app() -> FastAPI:
                     if root is not None:
                         root.content("question", req.question)
                     r = pipeline.answer_question(state["conn"], state["ctx"], req.question,
-                                                 generation(), run_cfg)  # fmt: skip
+                                                 gen, run_cfg)  # fmt: skip
                     if root is not None:
                         root.set(verdict=r["verdict"], intent=r.get("intent"),
                                  backend=r.get("backend"))  # fmt: skip

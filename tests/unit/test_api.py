@@ -108,6 +108,21 @@ def test_error_contract(client, monkeypatch):
     assert c.post("/api/v1/query", json={"question": "q"}).status_code == 422
 
 
+def test_api_backend_without_key_rejects_before_context_load(monkeypatch):
+    monkeypatch.setenv("FILINGQA_GENERATION_BACKEND", "anthropic_api")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "")
+    calls = []
+    monkeypatch.setattr(server, "connect", lambda: calls.append("connect"))
+    monkeypatch.setattr(server, "load_context", lambda conn: calls.append("load"))
+    client = TestClient(server.create_app())
+
+    response = client.post("/api/v1/query", json={"question": "What is revenue?"})
+
+    assert response.status_code == 503
+    assert "ANTHROPIC_API_KEY" in response.json()["detail"]
+    assert calls == []
+
+
 class _Facts:
     def facts(self, ticker, tags):
         assert ticker == "AAPL"
