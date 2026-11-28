@@ -69,14 +69,18 @@ def baseline(path: Path = CORPUS_FILE) -> dict:
 
 def generation(path: Path = CORPUS_FILE) -> dict:
     """The `generation:` block of api/config.yaml (PRD Appendix A).
-    FILINGQA_GENERATION_BACKEND overrides `backend` (CI sets anthropic_api); the
-    run meta records the backend used."""
+    Nonempty environment overrides select the backend and tier models. The router
+    shares the model selected by its configured tier; it has no independent override."""
     cfg = yaml.safe_load(path.read_text(encoding="utf-8"))["generation"]
     override = os.environ.get("FILINGQA_GENERATION_BACKEND", "").strip()
     if override:
         if override not in ("claude_cli", "anthropic_api"):
             raise ConfigError(f"FILINGQA_GENERATION_BACKEND={override!r} is not a backend")
         cfg["backend"] = override
+    for tier in ("tier_small", "tier_large"):
+        override = os.environ.get(f"FILINGQA_{tier.upper()}", "").strip()
+        if override:
+            cfg[tier] = override
     return cfg
 
 
@@ -99,6 +103,9 @@ def verification(path: Path = CORPUS_FILE) -> dict:
     """The `verification:` block of api/config.yaml (PRD 7.5)."""
     cfg = yaml.safe_load(path.read_text(encoding="utf-8"))["verification"]
     cfg.setdefault("prose_check", "llm_judge")
+    override = os.environ.get("FILINGQA_PROSE_CHECK", "").strip()
+    if override:
+        cfg["prose_check"] = override
     if cfg["prose_check"] not in ("llm_judge", "nli"):
         raise ConfigError(f"unknown prose_check {cfg['prose_check']!r}")
     return cfg
