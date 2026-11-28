@@ -63,6 +63,8 @@ What the build found, not what the PRD predicted:
 
 ## Metrics
 
+### Haiku 4.5 — published results
+
 Frozen `golden_v1` run [`13fc0fa4eb72`](docs/RESULTS.md#golden-v1-final-run-13fc0fa4eb72-real), classified as **real**, not a CI gate pass. Served generation models: `claude-haiku-4-5-20251001` and `claude-sonnet-5-5` ([run report](eval/runs/13fc0fa4eb72.json)). Values are rounded to three decimals; N/A means the artifact stores null, not zero. Answer correctness is the normalized mean over eligible judged answers, not a rate over every question ([judged report](eval/runs/13fc0fa4eb72.judged.json)). RESULTS row IDs are in source-column order.
 
 Generation temperature was not pinned (F-60). No per-query price is available (F-134), so cost is N/A, not zero.
@@ -78,12 +80,67 @@ Generation temperature was not pinned (F-60). No per-query price is available (F
 | Over-abstention rate | 0.260 | 0.083 | 0.300 | 0.229 | R-555, R-567, R-579, R-591 |
 | XBRL contradiction rate | 0.013 | 0.000 | 0.000 | 0.008 | R-553, R-565, R-577, R-589 |
 
+### Haiku 5.5 — pending
+
+No Haiku 5.5 measurements have been made. The future runs change the small
+tier only; the large tier remains Sonnet 5.5. Do not treat the historical
+Haiku 4.5 results as an apples-to-apples control: verify corpus, dataset,
+subset, pipeline settings, served models, and rerank fallbacks before comparing.
+Report served model names, not the access channel.
+
 ## Reproduce
 
 - To inspect the published numbers without running models, use the linked reports above.
 - To run the full frozen evaluation, first verify the corpus with `python -m scripts.verify_freeze` (`--snapshot` for a restored, verified snapshot), then run `python -m scripts.eval_run --run --dataset eval/datasets/golden_v1.jsonl`. This creates a new run; it does not reproduce the published run byte for byte.
 - `make eval` instead verifies the corpus and runs the default candidate datasets.
 - `make eval-fast` runs the committed 60-item frozen subset and then `make eval-gate`, which compares against the matching `eval/baselines/main_fast.json` and fails on failed or pending metrics. The published full run is not that baseline.
+
+### Future Haiku 5.5 runs
+
+From the repository root, with the intended corpus database selected, run
+the following in Bash. The example verifies corpus and input identities first
+and keeps all exported reports and start logs in a new directory. It does not
+write a baseline or replace any existing Haiku 4.5 report.
+
+```bash
+(
+  set -euo pipefail
+  dataset=eval/datasets/golden_v1.jsonl
+  subset=eval/fast_subset_v2.yaml
+  shasum -a 256 -c <<'SHA256'
+7d17972fa7e54c6f9cba64e26c5d7c27d021b58ac3a6ec355d1342a5ba4ec74a  eval/datasets/golden_v1.jsonl
+2afc47d430f1c32345c3a0fab6ac8b72ec44c7239c90a79505fad010676fc696  eval/fast_subset_v2.yaml
+SHA256
+  python -m scripts.verify_freeze --snapshot
+  unset FILINGQA_GENERATION_BACKEND FILINGQA_TIER_SMALL FILINGQA_TIER_LARGE
+  export FILINGQA_TIER_SMALL=claude-haiku-5-5
+  python -c 'from api.config import generation; g = generation(); assert (g["tier_small"], g["tier_large"]) == ("claude-haiku-5-5", "claude-sonnet-5-5")'
+  mkdir -p build
+  out=$(mktemp -d build/haiku55.XXXXXX)
+
+  run_and_judge() {
+    local name=$1 id
+    shift
+    python -m scripts.eval_run --run --dataset "$dataset" "$@" \
+      --report-out "$out/$name.as-run.json" | tee "$out/$name.start.log" || return
+    id=$(awk '/^run [0-9a-f]+: backend / && length($2) == 13 {
+      id = substr($2, 1, 12); n++
+    } END { if (n != 1) exit 1; print id }' "$out/$name.start.log") || return
+    printf '%s\n' "$id" > "$out/$name.run-id"
+    python -m scripts.judge score "$id" --dataset "$dataset" || return
+    python -m scripts.eval_run --report "$id" --dataset "$dataset" \
+      --report-out "$out/$name.$id.judged.json"
+  }
+
+  run_and_judge full
+  run_and_judge fast --subset "$subset"
+  printf 'Reports and run IDs: %s\n' "$out"
+)
+```
+
+For a local raw corpus rather than a restored snapshot, use
+`python -m scripts.verify_freeze` without `--snapshot`. The saved full and
+fast IDs come from their own runner start lines, not from existing artifacts.
 
 ## Status
 

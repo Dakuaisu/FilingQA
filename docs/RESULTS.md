@@ -813,3 +813,12 @@ no per-query price is available (F-134).
 | R-668 | aggregate answer_correctness, regression gate | 0.915 vs 0.915 (pass) | real | `eval/baselines/main_fast.json` | `e829152` |
 | R-669 | aggregate natural_phrasing_gap, regression gate | `pending: hand-written natural-phrasing items (F-103)` | real | `eval/baselines/main_fast.json` | `e829152` |
 | R-670 | aggregate cost_per_query, regression gate | `pending: cost n/a (no per-query price)` | real | `eval/baselines/main_fast.json` | `e829152` |
+
+## Haiku 5.5 frozen evaluation — pending
+
+The published full and fast results above are historical Haiku 4.5 small-tier
+results. No Haiku 5.5 full or fast measurements, judge scores, or gate outcomes
+exist yet; no result rows are reserved or inferred. The [future run commands](../README.md#future-haiku-55-runs)
+pin `golden_v1` and the fast subset, keep Sonnet 5.5 as the large tier, and
+write new artifacts without replacing the historical results or baseline.
+Do not infer an apples-to-apples comparison from the shared dataset alone.
